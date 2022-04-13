@@ -16,8 +16,8 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
   final format = DateFormat("yyyy-MM-dd HH:mm");
   final _form = GlobalKey<FormState>();
 
-  final _selectedStartDate = TextEditingController();
-  final _selectedEndDate = TextEditingController();
+  // final _selectedStartDate = TextEditingController();
+  // final _selectedEndDate = TextEditingController();
 
   var _editedEntry = TimeBlock(
       id: null, tag: '', startDate: DateTime.now(), endDate: DateTime.now());
@@ -48,13 +48,13 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
     super.didChangeDependencies();
   }
 
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    _selectedEndDate.dispose();
-    _selectedStartDate.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // Clean up the controller when the widget is disposed.
+  //   _selectedEndDate.dispose();
+  //   _selectedStartDate.dispose();
+  //   super.dispose();
+  // }
 
   void _saveForm() {
     final isValid = _form.currentState!.validate();
@@ -110,7 +110,7 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                     height: 20,
                   ),
                   DateTimeField(
-                    controller: _selectedStartDate,
+                    // controller: _selectedStartDate,
                     decoration: InputDecoration(
                       border: UnderlineInputBorder(),
                       filled: true,
@@ -198,6 +198,7 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                           ? null
                           : 'Please provide end date and time';
                     },
+                  
                     onSaved: (value) {
                       _editedEntry = TimeBlock(
                         id: _editedEntry.id,
