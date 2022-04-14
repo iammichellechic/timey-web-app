@@ -2,21 +2,51 @@ import 'package:flutter/material.dart';
 import './timeblock.dart';
 
 class TimeBlocks with ChangeNotifier {
-  List<TimeBlock> _userTimeBlocks = [
+  final List<TimeBlock> _userTimeBlocks = [
     TimeBlock(
         id: '1',
         tag: 'Microservices',
-        startDate: DateTime.now(),
+        startDate: DateTime.now().add(new Duration(days: 1)),
         endDate: DateTime.now().add(new Duration(days: 15))),
     TimeBlock(
         id: '2',
         tag: 'Meeting',
-        startDate: DateTime.now(),
+        startDate: DateTime.now().add(new Duration(days: 3)),
         endDate: DateTime.now().add(new Duration(days: 20))),
     TimeBlock(
         id: '3',
         tag: 'Time Reporting System',
-        startDate: DateTime.now(),
+        startDate: DateTime.now().add(new Duration(days: 2)),
+        endDate: DateTime.now().add(new Duration(days: 25))),
+    TimeBlock(
+        id: '4',
+        tag: 'Microservices',
+        startDate: DateTime.now().add(new Duration(days: 6)),
+        endDate: DateTime.now().add(new Duration(days: 15))),
+    TimeBlock(
+        id: '5',
+        tag: 'Meeting',
+        startDate: DateTime.now().add(new Duration(days: 4)),
+        endDate: DateTime.now().add(new Duration(days: 20))),
+    TimeBlock(
+        id: '6',
+        tag: 'Time Reporting System',
+        startDate: DateTime.now().add(new Duration(days: 7)),
+        endDate: DateTime.now().add(new Duration(days: 25))),
+    TimeBlock(
+        id: '7',
+        tag: 'Microservices',
+        startDate: DateTime.now().add(new Duration(days: 5)),
+        endDate: DateTime.now().add(new Duration(days: 15))),
+    TimeBlock(
+        id: '8',
+        tag: 'Meeting',
+        startDate: DateTime.now().add(new Duration(days: 1)),
+        endDate: DateTime.now().add(new Duration(days: 20))),
+    TimeBlock(
+        id: '9',
+        tag: 'Time Reporting System',
+        startDate: DateTime.now().add(new Duration(days: 2)),
         endDate: DateTime.now().add(new Duration(days: 25))),
   ];
   List<TimeBlock> get userTimeBlock {
@@ -48,7 +78,7 @@ class TimeBlocks with ChangeNotifier {
     }
   }
 
-  void deleteTimeBlock(String id) {
+  void deleteTimeBlock(String? id) {
     _userTimeBlocks.removeWhere((tb) => tb.id == id);
     notifyListeners();
   }
