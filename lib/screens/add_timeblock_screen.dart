@@ -22,11 +22,7 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
   var _editedEntry = TimeBlock(
       id: null, tag: '', startDate: DateTime.now(), endDate: DateTime.now());
 
-  var _initialValues = {
-    'tag': '',
-    'startDate': '',
-    'endDate': '',
-  };
+  TimeBlock? _initialValues;
   var _isInit = true;
 
   @override
@@ -36,12 +32,11 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
       if (tbId != null) {
         _editedEntry = Provider.of<TimeBlocks>(context, listen: false)
             .findById(tbId.toString());
-        _initialValues = {
-          'tag': _editedEntry.tag,
-          'startDate':
-              DateFormat.yMMMMd().add_Hm().format(_editedEntry.startDate),
-          'endDate': DateFormat.yMMMMd().add_Hm().format(_editedEntry.endDate),
-        };
+        _initialValues = TimeBlock(
+            id: _editedEntry.id,
+            tag: _editedEntry.tag,
+            startDate: _editedEntry.startDate,
+            endDate: _editedEntry.endDate);
       }
     }
     _isInit = false;
@@ -85,7 +80,8 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
               child: ListView(
                 children: <Widget>[
                   TextFormField(
-                    initialValue: _initialValues['tag'],
+                    initialValue:
+                        _initialValues != null ? _initialValues!.tag : '',
                     decoration: InputDecoration(
                         filled: true,
                         icon: const Icon(Icons.file_copy),
@@ -111,6 +107,9 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                   ),
                   DateTimeField(
                     // controller: _selectedStartDate,
+                    initialValue: _initialValues != null
+                        ? _initialValues!.startDate
+                        : null,
                     decoration: InputDecoration(
                       border: UnderlineInputBorder(),
                       filled: true,
@@ -147,7 +146,7 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                           ? null
                           : 'Please provide start date and time';
                     },
-                    
+
                     onSaved: (value) {
                       _editedEntry = TimeBlock(
                         id: _editedEntry.id,
@@ -161,6 +160,8 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                     height: 20,
                   ),
                   DateTimeField(
+                    initialValue:
+                        _initialValues != null ? _initialValues!.endDate : null,
                     decoration: InputDecoration(
                       border: UnderlineInputBorder(),
                       filled: true,
@@ -198,7 +199,6 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                           ? null
                           : 'Please provide end date and time';
                     },
-                  
                     onSaved: (value) {
                       _editedEntry = TimeBlock(
                         id: _editedEntry.id,
