@@ -22,11 +22,7 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
   var _editedEntry = TimeBlock(
       id: null, tag: '', startDate: DateTime.now(), endDate: DateTime.now());
 
-  var _initialValues = {
-    'tag': '',
-    'startDate': '',
-    'endDate': '',
-  };
+  TimeBlock? _initialValues;
   var _isInit = true;
 
   @override
@@ -36,12 +32,11 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
       if (tbId != null) {
         _editedEntry = Provider.of<TimeBlocks>(context, listen: false)
             .findById(tbId.toString());
-        _initialValues = {
-          'tag': _editedEntry.tag,
-          'startDate':
-              DateFormat.yMMMMd().add_Hm().format(_editedEntry.startDate),
-          'endDate': DateFormat.yMMMMd().add_Hm().format(_editedEntry.endDate),
-        };
+        _initialValues = TimeBlock(
+            id: _editedEntry.id,
+            tag: _editedEntry.tag,
+            startDate: _editedEntry.startDate,
+            endDate: _editedEntry.endDate);
       }
     }
     _isInit = false;
@@ -86,7 +81,8 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                 child: ListView(
                   children: <Widget>[
                     TextFormField(
-                      initialValue: _initialValues['tag'],
+                      initialValue:
+                        _initialValues != null ? _initialValues!.tag : '',
                       decoration: InputDecoration(
                           filled: true,
                           icon: const Icon(Icons.file_copy),
@@ -108,16 +104,71 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                       },
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 20),
+        
+                  DateTimeField(
+                    // controller: _selectedStartDate,
+                    initialValue: _initialValues != null
+                        ? _initialValues!.startDate
+                        : null,
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(),
+                      filled: true,
+                      icon: const Icon(Icons.calendar_month_outlined),
+                      labelText: 'Start date and time',
                     ),
-                    DateTimeField(
-                      // controller: _selectedStartDate,
-                      decoration: InputDecoration(
-                        border: UnderlineInputBorder(),
-                        filled: true,
-                        icon: const Icon(Icons.calendar_month_outlined),
-                        labelText: 'Start date and time',
-                      ),
+                    format: format,
+                    onShowPicker: (context, currentValue) async {
+                      final date = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime(1900),
+                          initialDate: currentValue ?? DateTime.now(),
+                          lastDate: DateTime(2100));
+                      if (date != null) {
+                        final time = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(
+                              currentValue ?? DateTime.now()),
+                          builder: (BuildContext context, Widget? child) {
+                            return MediaQuery(
+                              data: MediaQuery.of(context)
+                                  .copyWith(alwaysUse24HourFormat: true),
+                              child: child!,
+                            );
+                          },
+                        );
+                        return DateTimeField.combine(date, time);
+                      } else {
+                        return currentValue;
+                      }
+                    },
+                    validator: (value) {
+                      return value != null
+                          ? null
+                          : 'Please provide start date and time';
+                    },
+
+                    onSaved: (value) {
+                      _editedEntry = TimeBlock(
+                        id: _editedEntry.id,
+                        tag: _editedEntry.tag,
+                        startDate: format.parse(value.toString()),
+                        endDate: format.parse(_editedEntry.endDate.toString()),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  DateTimeField(
+                    initialValue:
+                        _initialValues != null ? _initialValues!.endDate : null,
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(),
+                      filled: true,
+                      icon: const Icon(Icons.calendar_month_outlined),
+                      labelText: 'End date and time',
+                    ),
                       format: format,
                       onShowPicker: (context, currentValue) async {
                         final date = await showDatePicker(
