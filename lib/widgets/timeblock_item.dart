@@ -20,60 +20,63 @@ class TimeBlockItem extends StatelessWidget {
           vertical: 8,
           horizontal: 5,
         ),
-        child: ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: 60),
-          //selectedTileColor: Colors.orange,
-          title: Text(
-            tag,
-            style: Theme.of(context).textTheme.headline6,
-          ),
-          subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        child: SizedBox(
+          width: 600,
+          child: ListTile( 
+            contentPadding: EdgeInsets.symmetric(horizontal: 60),
+            //selectedTileColor: Colors.orange,
+            title: Text(
+              tag,
+              style: Theme.of(context).textTheme.headline6,
+            ),
+            subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Start Date: ${DateFormat("EEEE, yyyy/MM/dd HH:mm").format(startDate.toLocal())}',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  Text(
+                    'End Date: ${DateFormat("EEEE, yyyy/MM/dd HH:mm").format(endDate.toLocal())}',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ]),
+            trailing: Wrap(
+              spacing: 12,
               children: <Widget>[
-                Text(
-                  'Start Date: ${DateFormat("EEEE, yyyy/MM/dd HH:mm").format(startDate.toLocal())}',
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  color: Colors.orange,
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed(AddTimeBlockScreen.routeName, arguments: id);
+                  },
                 ),
-                Text(
-                  'End Date: ${DateFormat("EEEE, yyyy/MM/dd HH:mm").format(endDate.toLocal())}',
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  color: Theme.of(context).errorColor,
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                          'Remove selected time report?',
+                        ),
+                        duration: Duration(seconds: 5),
+                        action: SnackBarAction(
+                          label: 'CONFIRM',
+                          onPressed: () {
+                            Provider.of<TimeBlocks>(context, listen: false)
+                                .deleteTimeBlock(id);
+                          },
+                        )));
+                  },
                 ),
-              ]),
-          trailing: Wrap(
-            spacing: 12,
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.edit),
-                color: Colors.orange,
-                onPressed: () {
-                  Navigator.of(context)
-                      .pushNamed(AddTimeBlockScreen.routeName, arguments: id);
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.delete),
-                color: Theme.of(context).errorColor,
-                onPressed: () {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                        'Remove selected time report?',
-                      ),
-                      duration: Duration(seconds: 5),
-                      action: SnackBarAction(
-                        label: 'CONFIRM',
-                        onPressed: () {
-                          Provider.of<TimeBlocks>(context, listen: false)
-                              .deleteTimeBlock(id);
-                        },
-                      )));
-                },
-              ),
-            ],
+              ],
+            ),
           ),
         ));
   }
