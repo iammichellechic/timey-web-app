@@ -6,7 +6,6 @@ import '../shared/menu_drawer.dart';
 import '../providers/timeblocks.dart';
 
 class EditablePage extends StatelessWidget {
-  
   static const routeName = '/user-list';
 
   @override
@@ -48,7 +47,6 @@ class EditablePage extends StatelessWidget {
                           outside:
                               BorderSide(width: 2, color: Colors.deepOrange),
                           inside: BorderSide(width: 2, color: Colors.amber)),
-                      
                       columns: [
                         DataColumn(
                           label: Text('Project'),
@@ -66,7 +64,7 @@ class EditablePage extends StatelessWidget {
                       ],
                       rows: data.userTimeBlock
                           .map((data) => DataRow(cells: [
-                                DataCell(Text(data.tag)),
+                                DataCell(Text(data.tag!.name)),
                                 DataCell(
                                   Text(DateFormat("EEEE, yyyy/MM/dd HH:mm")
                                       .format(data.startDate.toLocal())),
@@ -118,8 +116,6 @@ class EditablePage extends StatelessWidget {
               },
             )),
       ),
-  
     );
-    
   }
 }

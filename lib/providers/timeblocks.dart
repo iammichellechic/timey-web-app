@@ -1,51 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:timey_web_scratch/providers/tags.dart';
 import './timeblock.dart';
 
 class TimeBlocks with ChangeNotifier {
   final List<TimeBlock> _userTimeBlocks = [
     TimeBlock(
         id: '1',
-        tag: 'Microservices',
+        tag: Tags().tags[0],
         startDate: DateTime.now().add(new Duration(days: 1)),
         endDate: DateTime.now().add(new Duration(days: 15))),
     TimeBlock(
         id: '2',
-        tag: 'Meeting',
+        tag: Tags().tags[1],
         startDate: DateTime.now().add(new Duration(days: 3)),
         endDate: DateTime.now().add(new Duration(days: 20))),
     TimeBlock(
         id: '3',
-        tag: 'Time Reporting System',
+        tag: Tags().tags[0],
         startDate: DateTime.now().add(new Duration(days: 2)),
         endDate: DateTime.now().add(new Duration(days: 25))),
     TimeBlock(
         id: '4',
-        tag: 'Microservices',
+        tag: Tags().tags[0],
         startDate: DateTime.now().add(new Duration(days: 6)),
         endDate: DateTime.now().add(new Duration(days: 15))),
     TimeBlock(
         id: '5',
-        tag: 'Meeting',
+        tag: Tags().tags[0],
         startDate: DateTime.now().add(new Duration(days: 4)),
         endDate: DateTime.now().add(new Duration(days: 20))),
     TimeBlock(
         id: '6',
-        tag: 'Time Reporting System',
+        tag: Tags().tags[1],
         startDate: DateTime.now().add(new Duration(days: 7)),
         endDate: DateTime.now().add(new Duration(days: 25))),
     TimeBlock(
         id: '7',
-        tag: 'Microservices',
+        tag: Tags().tags[0],
         startDate: DateTime.now().add(new Duration(days: 5)),
         endDate: DateTime.now().add(new Duration(days: 15))),
     TimeBlock(
         id: '8',
-        tag: 'Meeting',
+        tag: Tags().tags[1],
         startDate: DateTime.now().add(new Duration(days: 1)),
         endDate: DateTime.now().add(new Duration(days: 20))),
     TimeBlock(
         id: '9',
-        tag: 'Time Reporting System',
+        tag: Tags().tags[0],
         startDate: DateTime.now().add(new Duration(days: 2)),
         endDate: DateTime.now().add(new Duration(days: 25))),
   ];

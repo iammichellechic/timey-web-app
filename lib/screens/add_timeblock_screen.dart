@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
+import '../providers/tag.dart';
+import '../providers/tags.dart';
 import '../providers/timeblock.dart';
 import '../providers/timeblocks.dart';
 
@@ -20,10 +22,15 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
   // final _selectedEndDate = TextEditingController();
 
   var _editedEntry = TimeBlock(
-      id: null, tag: '', startDate: DateTime.now(), endDate: DateTime.now());
+      id: null,
+      tag: Tags().tags.first,
+      startDate: DateTime.now(),
+      endDate: DateTime.now());
 
   TimeBlock? _initialValues;
   var _isInit = true;
+  List<Tag> availableTags = Tags().tags;
+  Tag? selectedTag;
 
   @override
   void didChangeDependencies() {
@@ -39,6 +46,9 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
             endDate: _editedEntry.endDate);
       }
     }
+
+    if (availableTags.isNotEmpty) selectedTag = availableTags.first;
+
     _isInit = false;
     super.didChangeDependencies();
   }
@@ -80,9 +90,9 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                 key: _form,
                 child: ListView(
                   children: <Widget>[
-                    TextFormField(
+                    /*TextFormField(
                       initialValue:
-                        _initialValues != null ? _initialValues!.tag : '',
+                          _initialValues != null ? _initialValues!.tag : '',
                       decoration: InputDecoration(
                           filled: true,
                           icon: const Icon(Icons.file_copy),
@@ -99,76 +109,43 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                           tag: value.toString(),
                           startDate:
                               format.parse(_editedEntry.startDate.toString()),
-                          endDate: format.parse(_editedEntry.endDate.toString()),
+                          endDate:
+                              format.parse(_editedEntry.endDate.toString()),
                         );
                       },
-                    ),
-                    SizedBox(
-                      height: 20),
-        
-                  DateTimeField(
-                    // controller: _selectedStartDate,
-                    initialValue: _initialValues != null
-                        ? _initialValues!.startDate
-                        : null,
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
-                      filled: true,
-                      icon: const Icon(Icons.calendar_month_outlined),
-                      labelText: 'Start date and time',
-                    ),
-                    format: format,
-                    onShowPicker: (context, currentValue) async {
-                      final date = await showDatePicker(
-                          context: context,
-                          firstDate: DateTime(1900),
-                          initialDate: currentValue ?? DateTime.now(),
-                          lastDate: DateTime(2100));
-                      if (date != null) {
-                        final time = await showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.fromDateTime(
-                              currentValue ?? DateTime.now()),
-                          builder: (BuildContext context, Widget? child) {
-                            return MediaQuery(
-                              data: MediaQuery.of(context)
-                                  .copyWith(alwaysUse24HourFormat: true),
-                              child: child!,
-                            );
-                          },
-                        );
-                        return DateTimeField.combine(date, time);
-                      } else {
-                        return currentValue;
-                      }
-                    },
-                    validator: (value) {
-                      return value != null
-                          ? null
-                          : 'Please provide start date and time';
-                    },
-
-                    onSaved: (value) {
-                      _editedEntry = TimeBlock(
-                        id: _editedEntry.id,
-                        tag: _editedEntry.tag,
-                        startDate: format.parse(value.toString()),
-                        endDate: format.parse(_editedEntry.endDate.toString()),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  DateTimeField(
-                    initialValue:
-                        _initialValues != null ? _initialValues!.endDate : null,
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
-                      filled: true,
-                      icon: const Icon(Icons.calendar_month_outlined),
-                      labelText: 'End date and time',
-                    ),
+                    ),*/
+                    DropdownButtonFormField<Tag>(
+                        decoration: InputDecoration(
+                          border: UnderlineInputBorder(),
+                          filled: true,
+                          icon: const Icon(Icons.assignment),
+                          labelText: 'Project',
+                        ),
+                        value: selectedTag,
+                        icon: const Icon(Icons.arrow_downward),
+                        elevation: 16,
+                        onChanged: (Tag? newValue) {
+                          setState(() {
+                            selectedTag = newValue!;
+                          });
+                        },
+                        items: availableTags
+                            .map<DropdownMenuItem<Tag>>((tag) =>
+                                DropdownMenuItem<Tag>(
+                                    value: tag, child: Text(tag.name)))
+                            .toList()),
+                    SizedBox(height: 20),
+                    DateTimeField(
+                      // controller: _selectedStartDate,
+                      initialValue: _initialValues != null
+                          ? _initialValues!.startDate
+                          : null,
+                      decoration: InputDecoration(
+                        border: UnderlineInputBorder(),
+                        filled: true,
+                        icon: const Icon(Icons.calendar_month_outlined),
+                        labelText: 'Start date and time',
+                      ),
                       format: format,
                       onShowPicker: (context, currentValue) async {
                         final date = await showDatePicker(
@@ -199,13 +176,14 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                             ? null
                             : 'Please provide start date and time';
                       },
-                      
+
                       onSaved: (value) {
                         _editedEntry = TimeBlock(
                           id: _editedEntry.id,
                           tag: _editedEntry.tag,
                           startDate: format.parse(value.toString()),
-                          endDate: format.parse(_editedEntry.endDate.toString()),
+                          endDate:
+                              format.parse(_editedEntry.endDate.toString()),
                         );
                       },
                     ),
@@ -213,6 +191,9 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                       height: 20,
                     ),
                     DateTimeField(
+                      initialValue: _initialValues != null
+                          ? _initialValues!.endDate
+                          : null,
                       decoration: InputDecoration(
                         border: UnderlineInputBorder(),
                         filled: true,
@@ -239,7 +220,6 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                               );
                             },
                           );
-
                           return DateTimeField.combine(date, time);
                         } else {
                           return currentValue;
@@ -248,16 +228,15 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                       validator: (value) {
                         return value != null
                             ? null
-                            : 'Please provide end date and time';
+                            : 'Please provide start date and time';
                       },
-                    
                       onSaved: (value) {
                         _editedEntry = TimeBlock(
                           id: _editedEntry.id,
                           tag: _editedEntry.tag,
-                          startDate:
-                              format.parse(_editedEntry.startDate.toString()),
-                          endDate: format.parse(value.toString()),
+                          startDate: format.parse(value.toString()),
+                          endDate:
+                              format.parse(_editedEntry.endDate.toString()),
                         );
                       },
                     ),
