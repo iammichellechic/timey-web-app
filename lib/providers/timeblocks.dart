@@ -1,62 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:timey_web_scratch/providers/tags.dart';
 import './timeblock.dart';
 
 class TimeBlocks with ChangeNotifier {
   final List<TimeBlock> _userTimeBlocks = [
     TimeBlock(
         id: '1',
-        tag: 'Microservices',
+        tag: Tags().tags[0],
         startDate: DateTime.now().add(new Duration(days: 1)),
         endDate: DateTime.now().add(new Duration(days:2)), 
         reportHours: 2
         ),
     TimeBlock(
         id: '2',
-        tag: 'Meeting',
-        startDate: DateTime.now().add(new Duration(days: 2)),
-        endDate: DateTime.now().add(new Duration(days: 4)),
+        tag: Tags().tags[1],
+        startDate: DateTime.now().add(new Duration(days: 3)),
+        endDate: DateTime.now().add(new Duration(days: 20)),
         reportHours: 3),
     TimeBlock(
         id: '3',
-        tag: 'Time Reporting System',
-        startDate: DateTime.now().add(new Duration(days: 3)),
-        endDate: DateTime.now().add(new Duration(days: 3)),
-         reportHours: 4),
+        tag: Tags().tags[0],
+        startDate: DateTime.now().add(new Duration(days: 2)),
+        endDate: DateTime.now().add(new Duration(days: 25)),reportHours: 4),
     TimeBlock(
         id: '4',
-        tag: 'Microservices',
-        startDate: DateTime.now().add(new Duration(days: 4)),
-        endDate: DateTime.now().add(new Duration(days: 7)),
+        tag: Tags().tags[0],
+        startDate: DateTime.now().add(new Duration(days: 6)),
+        endDate: DateTime.now().add(new Duration(days: 15)),
          reportHours: 5),
     TimeBlock(
         id: '5',
-        tag: 'Meeting',
-        startDate: DateTime.now().add(new Duration(days: 5)),
-        endDate: DateTime.now().add(new Duration(days: 5)),
+        tag: Tags().tags[0],
+        startDate: DateTime.now().add(new Duration(days: 4)),
+        endDate: DateTime.now().add(new Duration(days: 20)),
          reportHours: 6),
     TimeBlock(
         id: '6',
-        tag: 'Time Reporting System',
-        startDate: DateTime.now().add(new Duration(days: 6)),
-        endDate: DateTime.now().add(new Duration(days: 8)),
+        tag: Tags().tags[1],
+        startDate: DateTime.now().add(new Duration(days: 7)),
+        endDate: DateTime.now().add(new Duration(days: 25)),
          reportHours: 7),
     TimeBlock(
         id: '7',
-        tag: 'Microservices',
-        startDate: DateTime.now().add(new Duration(days: 7)),
-        endDate: DateTime.now().add(new Duration(days: 6)),
+        tag: Tags().tags[0],
+        startDate: DateTime.now().add(new Duration(days: 5)),
+        endDate: DateTime.now().add(new Duration(days: 15))
+        ,
          reportHours: 8),
     TimeBlock(
         id: '8',
-        tag: 'Meeting',
-        startDate: DateTime.now().add(new Duration(days: 8)),
-        endDate: DateTime.now().add(new Duration(days: 2)),
+        tag: Tags().tags[1],
+        startDate: DateTime.now().add(new Duration(days: 1)),
+        endDate: DateTime.now().add(new Duration(days: 20))
+        ,
          reportHours: 3),
     TimeBlock(
         id: '9',
-        tag: 'Time Reporting System',
-        startDate: DateTime.now().add(new Duration(days: 9)),
-        endDate: DateTime.now().add(new Duration(days: 2)),
+        tag: Tags().tags[0],
+        startDate: DateTime.now().add(new Duration(days: 2)),
+        endDate: DateTime.now().add(new Duration(days: 25))
+        ,
          reportHours: 5),
   ];
   List<TimeBlock> get userTimeBlock {

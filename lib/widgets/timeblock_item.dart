@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import '../providers/tag.dart';
 import '../screens/add_timeblock_screen.dart';
 import '../providers/timeblocks.dart';
 
 class TimeBlockItem extends StatelessWidget {
   final String id;
-  final String tag;
+  final Tag? tag;
   final DateTime startDate;
   final DateTime endDate;
 
@@ -22,11 +23,11 @@ class TimeBlockItem extends StatelessWidget {
         ),
         child: SizedBox(
           width: 600,
-          child: ListTile( 
+          child: ListTile(
             contentPadding: EdgeInsets.symmetric(horizontal: 60),
             //selectedTileColor: Colors.orange,
             title: Text(
-              tag,
+              tag!.name,
               style: Theme.of(context).textTheme.headline6,
             ),
             subtitle: Column(
