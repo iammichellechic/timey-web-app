@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
+import '../providers/tag.dart';
+import '../providers/tags.dart';
 import '../providers/timeblock.dart';
 import '../providers/timeblocks.dart';
 
@@ -18,11 +20,18 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
 
 
   var _editedEntry = TimeBlock(
-      id: null, tag: '', startDate: DateTime.now(), endDate: DateTime.now(), reportHours: 0);
+     
       
+      id: null,
+      tag: Tags().tags.first,
+      startDate: DateTime.now(),
+      endDate: DateTime.now(),
+      reportHours: 0);
 
   TimeBlock? _initialValues;
   var _isInit = true;
+  List<Tag> availableTags = Tags().tags;
+  Tag? selectedTag;
 
   @override
   void didChangeDependencies() {
@@ -39,6 +48,9 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
             reportHours: _editedEntry.reportHours);
       }
     }
+
+    if (availableTags.isNotEmpty) selectedTag = availableTags.first;
+
     _isInit = false;
     super.didChangeDependencies();
   }
@@ -72,97 +84,39 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                 key: _form,
                 child: ListView(
                   children: <Widget>[
-                    TextFormField(
-                      initialValue:
-                        _initialValues != null ? _initialValues!.tag : '',
-                      decoration: InputDecoration(
+                   
+                    DropdownButtonFormField<Tag>(
+                        decoration: InputDecoration(
+                          border: UnderlineInputBorder(),
                           filled: true,
-                          icon: const Icon(Icons.file_copy),
-                          labelText: 'Tag'),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please provide a tag.';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _editedEntry = TimeBlock(
-                          id: _editedEntry.id,
-                          tag: value.toString(),
-                          startDate:
-                              format.parse(_editedEntry.startDate.toString()),
-                          endDate: format.parse(_editedEntry.endDate.toString()),
-                          reportHours: _editedEntry.reportHours,
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      height: 20),
-        
-                  DateTimeField(
-                    // controller: _selectedStartDate,
-                    initialValue: _initialValues != null
-                        ? _initialValues!.startDate
-                        : null,
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
-                      filled: true,
-                      icon: const Icon(Icons.calendar_month_outlined),
-                      labelText: 'Start date and time',
-                    ),
-                    format: format,
-                    onShowPicker: (context, currentValue) async {
-                      final date = await showDatePicker(
-                          context: context,
-                          firstDate: DateTime(1900),
-                          initialDate: currentValue ?? DateTime.now(),
-                          lastDate: DateTime(2100));
-                      if (date != null) {
-                        final time = await showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.fromDateTime(
-                              currentValue ?? DateTime.now()),
-                          builder: (BuildContext context, Widget? child) {
-                            return MediaQuery(
-                              data: MediaQuery.of(context)
-                                  .copyWith(alwaysUse24HourFormat: true),
-                              child: child!,
-                            );
-                          },
-                        );
-                        return DateTimeField.combine(date, time);
-                      } else {
-                        return currentValue;
-                      }
-                    },
-                    validator: (value) {
-                      return value != null
-                          ? null
-                          : 'Please provide start date and time';
-                    },
-
-                    onSaved: (value) {
-                      _editedEntry = TimeBlock(
-                        id: _editedEntry.id,
-                        tag: _editedEntry.tag,
-                        startDate: format.parse(value.toString()),
-                        endDate: format.parse(_editedEntry.endDate.toString()),
-                         reportHours: _editedEntry.reportHours,
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  DateTimeField(
-                    initialValue:
-                        _initialValues != null ? _initialValues!.endDate : null,
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
-                      filled: true,
-                      icon: const Icon(Icons.calendar_month_outlined),
-                      labelText: 'End date and time',
-                    ),
+                          icon: const Icon(Icons.assignment),
+                          labelText: 'Project',
+                        ),
+                        value: selectedTag,
+                        icon: const Icon(Icons.arrow_downward),
+                        elevation: 16,
+                        onChanged: (Tag? newValue) {
+                          setState(() {
+                            selectedTag = newValue!;
+                          });
+                        },
+                        items: availableTags
+                            .map<DropdownMenuItem<Tag>>((tag) =>
+                                DropdownMenuItem<Tag>(
+                                    value: tag, child: Text(tag.name)))
+                            .toList()),
+                    SizedBox(height: 20),
+                    DateTimeField(
+                      
+                      initialValue: _initialValues != null
+                          ? _initialValues!.startDate
+                          : null,
+                      decoration: InputDecoration(
+                        border: UnderlineInputBorder(),
+                        filled: true,
+                        icon: const Icon(Icons.calendar_month_outlined),
+                        labelText: 'Start date and time',
+                      ),
                       format: format,
                       onShowPicker: (context, currentValue) async {
                         final date = await showDatePicker(
@@ -193,7 +147,7 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                             ? null
                             : 'Please provide start date and time';
                       },
-                      
+
                       onSaved: (value) {
                         _editedEntry = TimeBlock(
                           id: _editedEntry.id,
@@ -207,7 +161,61 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
 
                     //implement reportHours here enddate-startdate y/m/d/h:m bla bla 
                     //format it
-                   
+
+                    SizedBox(
+                      height: 20,
+                    ),
+                    DateTimeField(
+                      initialValue: _initialValues != null
+                          ? _initialValues!.endDate
+                          : null,
+                      decoration: InputDecoration(
+                        border: UnderlineInputBorder(),
+                        filled: true,
+                        icon: const Icon(Icons.calendar_month_outlined),
+                        labelText: 'End date and time',
+                      ),
+                      format: format,
+                      onShowPicker: (context, currentValue) async {
+                        final date = await showDatePicker(
+                            context: context,
+                            firstDate: DateTime(1900),
+                            initialDate: currentValue ?? DateTime.now(),
+                            lastDate: DateTime(2100));
+                        if (date != null) {
+                          final time = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.fromDateTime(
+                                currentValue ?? DateTime.now()),
+                            builder: (BuildContext context, Widget? child) {
+                              return MediaQuery(
+                                data: MediaQuery.of(context)
+                                    .copyWith(alwaysUse24HourFormat: true),
+                                child: child!,
+                              );
+                            },
+                          );
+                          return DateTimeField.combine(date, time);
+                        } else {
+                          return currentValue;
+                        }
+                      },
+                      validator: (value) {
+                        return value != null
+                            ? null
+                            : 'Please provide start date and time';
+                      },
+                      onSaved: (value) {
+                        _editedEntry = TimeBlock(
+                          id: _editedEntry.id,
+                          tag: _editedEntry.tag,
+                          startDate: format.parse(value.toString()),
+                          endDate:
+                              format.parse(_editedEntry.endDate.toString()),
+                              reportHours: _editedEntry.reportHours,
+                        );
+                      },
+                    ),
                     SizedBox(
                       height: 20,
                     ),

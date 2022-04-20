@@ -5,12 +5,24 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "pwa-chrome",
-      "request": "launch",
-      "name": "Launch Chrome against localhost",
-      "url": "http://localhost:8080",
-      "program": "lib/main.dart",
-      "args": ["-d", "chrome"]
+      "name": "Flutter-All",
+      "preLaunchTask": "Flutter-Launch-All",
+      "type": "dart",
+    },
+    {
+        "name": "Flutter-iOS",
+        "preLaunchTask": "Flutter-Launch-iOS",
+        "type": "dart",
+    },
+    {
+        "name": "Flutter-Android",
+        "preLaunchTask": "Flutter-Launch-Android",
+        "type": "dart",
+    },
+    {
+        "name": "Flutter-Web",
+        "preLaunchTask": "Flutter-Launch-Web",
+        "type": "dart",
     }
   ]
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 
+import 'tag.dart';
+
 class TimeBlock with ChangeNotifier {
   final String? id;
-  final String tag;
+  final Tag? tag;
   final DateTime startDate;
   final DateTime endDate;
   final int reportHours;

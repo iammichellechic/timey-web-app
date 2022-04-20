@@ -5,6 +5,7 @@ import 'package:timey_web_scratch/screens/table_timeblock_screen.dart';
 import './screens/timeblock_detail_screen.dart';
 import './providers/timeblocks.dart';
 import './widgets/overview.dart';
+import 'providers/tags.dart';
 
 void main() => runApp(const MyApp());
 
@@ -20,6 +21,9 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider.value(
             value: TimeBlocks(),
           ),
+          ChangeNotifierProvider.value(
+            value: Tags(),
+          )
         ],
         child: MaterialApp(
           title: 'Timey',
