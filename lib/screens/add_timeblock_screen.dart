@@ -16,11 +16,10 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
   final format = DateFormat("yyyy-MM-dd HH:mm");
   final _form = GlobalKey<FormState>();
 
-  // final _selectedStartDate = TextEditingController();
-  // final _selectedEndDate = TextEditingController();
 
   var _editedEntry = TimeBlock(
-      id: null, tag: '', startDate: DateTime.now(), endDate: DateTime.now());
+      id: null, tag: '', startDate: DateTime.now(), endDate: DateTime.now(), reportHours: 0);
+      
 
   TimeBlock? _initialValues;
   var _isInit = true;
@@ -36,20 +35,13 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
             id: _editedEntry.id,
             tag: _editedEntry.tag,
             startDate: _editedEntry.startDate,
-            endDate: _editedEntry.endDate);
+            endDate: _editedEntry.endDate,
+            reportHours: _editedEntry.reportHours);
       }
     }
     _isInit = false;
     super.didChangeDependencies();
   }
-
-  // @override
-  // void dispose() {
-  //   // Clean up the controller when the widget is disposed.
-  //   _selectedEndDate.dispose();
-  //   _selectedStartDate.dispose();
-  //   super.dispose();
-  // }
 
   void _saveForm() {
     final isValid = _form.currentState!.validate();
@@ -100,6 +92,7 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                           startDate:
                               format.parse(_editedEntry.startDate.toString()),
                           endDate: format.parse(_editedEntry.endDate.toString()),
+                          reportHours: _editedEntry.reportHours,
                         );
                       },
                     ),
@@ -154,6 +147,7 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                         tag: _editedEntry.tag,
                         startDate: format.parse(value.toString()),
                         endDate: format.parse(_editedEntry.endDate.toString()),
+                         reportHours: _editedEntry.reportHours,
                       );
                     },
                   ),
@@ -206,61 +200,14 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                           tag: _editedEntry.tag,
                           startDate: format.parse(value.toString()),
                           endDate: format.parse(_editedEntry.endDate.toString()),
+                           reportHours: _editedEntry.reportHours,
                         );
                       },
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    DateTimeField(
-                      decoration: InputDecoration(
-                        border: UnderlineInputBorder(),
-                        filled: true,
-                        icon: const Icon(Icons.calendar_month_outlined),
-                        labelText: 'End date and time',
-                      ),
-                      format: format,
-                      onShowPicker: (context, currentValue) async {
-                        final date = await showDatePicker(
-                            context: context,
-                            firstDate: DateTime(1900),
-                            initialDate: currentValue ?? DateTime.now(),
-                            lastDate: DateTime(2100));
-                        if (date != null) {
-                          final time = await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay.fromDateTime(
-                                currentValue ?? DateTime.now()),
-                            builder: (BuildContext context, Widget? child) {
-                              return MediaQuery(
-                                data: MediaQuery.of(context)
-                                    .copyWith(alwaysUse24HourFormat: true),
-                                child: child!,
-                              );
-                            },
-                          );
 
-                          return DateTimeField.combine(date, time);
-                        } else {
-                          return currentValue;
-                        }
-                      },
-                      validator: (value) {
-                        return value != null
-                            ? null
-                            : 'Please provide end date and time';
-                      },
-                    
-                      onSaved: (value) {
-                        _editedEntry = TimeBlock(
-                          id: _editedEntry.id,
-                          tag: _editedEntry.tag,
-                          startDate:
-                              format.parse(_editedEntry.startDate.toString()),
-                          endDate: format.parse(value.toString()),
-                        );
-                      },
-                    ),
+                    //implement reportHours here enddate-startdate y/m/d/h:m bla bla 
+                    //format it
+                   
                     SizedBox(
                       height: 20,
                     ),

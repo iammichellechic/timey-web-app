@@ -12,7 +12,8 @@ class TimeBlockDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final data = Provider.of<TimeBlocks>(context);
+  final timeblocksData = Provider.of<TimeBlocks>(context);
+    final timeblocks = timeblocksData.userTimeBlock;
 
     return Scaffold(
         appBar: AppBar(
@@ -38,7 +39,7 @@ class TimeBlockDetailScreen extends StatelessWidget {
         body: Center(
           child: Padding(
             padding: EdgeInsets.all(8),
-            child: data.userTimeBlock.isEmpty
+            child: timeblocks.isEmpty
                 ? Column(
                     children: <Widget>[
                       SizedBox(
@@ -51,14 +52,14 @@ class TimeBlockDetailScreen extends StatelessWidget {
                     ],
                   )
                 : ListView.builder(
-                    itemCount: data.userTimeBlock.length,
+                    itemCount: timeblocks.length,
                     itemBuilder: (_, i) => Column(
                       children: [
                         TimeBlockItem(
-                          data.userTimeBlock[i].id!,
-                          data.userTimeBlock[i].tag,
-                          data.userTimeBlock[i].startDate,
-                          data.userTimeBlock[i].endDate,
+                          timeblocks[i].id!,
+                          timeblocks[i].tag,
+                          timeblocks[i].startDate,
+                          timeblocks[i].endDate,
                         ),
                         Divider(),
                       ],

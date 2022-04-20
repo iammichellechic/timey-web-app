@@ -6,7 +6,6 @@ import './screens/timeblock_detail_screen.dart';
 import './providers/timeblocks.dart';
 import './widgets/overview.dart';
 
-
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
@@ -15,6 +14,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    
     return MultiProvider(
         providers: [
           ChangeNotifierProvider.value(
@@ -24,19 +24,19 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'Timey',
           theme: ThemeData(
-            primarySwatch: Colors.blue,
-            errorColor: Colors.red,
-            fontFamily: 'Quicksand',
-            textTheme: ThemeData.light().textTheme.copyWith(
-                  headline6: TextStyle(
-                  fontFamily: 'OpenSans',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ))
-          ),
+              primarySwatch: Colors.blue,
+              errorColor: Colors.red,
+              fontFamily: 'Quicksand',
+              textTheme: ThemeData.light().textTheme.copyWith(
+                      headline6: TextStyle(
+                    fontFamily: 'OpenSans',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ))),
           debugShowCheckedModeBanner: false,
+          home: OverView(),
           routes: {
-            '/': (context) => const OverView(),
+           
             '/calendar': (context) => TimeBlockDetailScreen(),
             TimeBlockDetailScreen.routeName: (ctx) => TimeBlockDetailScreen(),
             AddTimeBlockScreen.routeName: (ctx) => AddTimeBlockScreen(),
