@@ -68,7 +68,7 @@ class _MyDataTableState extends State<MyDataTable> {
           ],
           rows: timeblocks
               .map((data) => DataRow(cells: [
-                    DataCell(Text(data.tag)),
+                    DataCell(Text(data.tag!.name)),
                     DataCell(
                       Text(DateFormat("EEEE, yyyy/MM/dd HH:mm")
                           .format(data.startDate.toLocal())),
