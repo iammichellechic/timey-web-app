@@ -4,9 +4,9 @@ import './chart_weekly_bar.dart';
 import '../providers/timeblock.dart';
 
 class Chart extends StatelessWidget {
-  final List<TimeBlock> recentEntries;
+  final List<TimeBlock> recentTimeEntries;
 
-  Chart(this.recentEntries);
+  Chart(this.recentTimeEntries);
 
   List<Map<String, Object>> get groupedEntriesValues {
     return List.generate(7, (index) {
@@ -14,13 +14,13 @@ class Chart extends StatelessWidget {
         Duration(days: index),
       );
       
-      var totalHours =0;
+      var totalHours = 0;
 
-      for (var i = 0; i < recentEntries.length; i++) {
-        if (recentEntries[i].startDate.day == weekDay.day &&
-            recentEntries[i].startDate.month == weekDay.month &&
-            recentEntries[i].startDate.year == weekDay.year) {
-          totalHours += recentEntries[i].reportHours;
+      for (var i = 0; i < recentTimeEntries.length; i++) {
+        if (recentTimeEntries[i].startDate.day == weekDay.day &&
+            recentTimeEntries[i].startDate.month == weekDay.month &&
+            recentTimeEntries[i].startDate.year == weekDay.year) {
+          totalHours += recentTimeEntries[i].reportHours;
         }
       }
       return {
@@ -38,6 +38,7 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     print(groupedEntriesValues);
     return Card(
       elevation: 6,
@@ -46,14 +47,14 @@ class Chart extends StatelessWidget {
         padding: EdgeInsets.all(10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: groupedEntriesValues.map((data) {
+          children: this.groupedEntriesValues.map((data) {
             return Flexible(
               fit: FlexFit.tight,
               child: ChartBar(
                 data['day'] as String,
                 data['reportHours'] as int,
-                totalHours == 0.0
-                    ? 0.0
+                totalHours == 0
+                    ? 0
                     : (data['reportHours'] as int) / totalHours,
               ),
             );

@@ -35,9 +35,8 @@ class MyApp extends StatelessWidget {
                   ))),
           debugShowCheckedModeBanner: false,
           home: OverView(),
+          
           routes: {
-           
-            '/calendar': (context) => TimeBlockDetailScreen(),
             TimeBlockDetailScreen.routeName: (ctx) => TimeBlockDetailScreen(),
             AddTimeBlockScreen.routeName: (ctx) => AddTimeBlockScreen(),
             EditablePage.routeName: (ctx) => EditablePage(),

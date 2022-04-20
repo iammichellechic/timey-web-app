@@ -13,37 +13,37 @@ class TimeBlocks with ChangeNotifier {
     TimeBlock(
         id: '2',
         tag: 'Meeting',
-        startDate: DateTime.now().add(new Duration(days: 3)),
+        startDate: DateTime.now().add(new Duration(days: 2)),
         endDate: DateTime.now().add(new Duration(days: 4)),
         reportHours: 3),
     TimeBlock(
         id: '3',
         tag: 'Time Reporting System',
-        startDate: DateTime.now().add(new Duration(days: 2)),
+        startDate: DateTime.now().add(new Duration(days: 3)),
         endDate: DateTime.now().add(new Duration(days: 3)),
          reportHours: 4),
     TimeBlock(
         id: '4',
         tag: 'Microservices',
-        startDate: DateTime.now().add(new Duration(days: 6)),
+        startDate: DateTime.now().add(new Duration(days: 4)),
         endDate: DateTime.now().add(new Duration(days: 7)),
          reportHours: 5),
     TimeBlock(
         id: '5',
         tag: 'Meeting',
-        startDate: DateTime.now().add(new Duration(days: 4)),
+        startDate: DateTime.now().add(new Duration(days: 5)),
         endDate: DateTime.now().add(new Duration(days: 5)),
          reportHours: 6),
     TimeBlock(
         id: '6',
         tag: 'Time Reporting System',
-        startDate: DateTime.now().add(new Duration(days: 7)),
+        startDate: DateTime.now().add(new Duration(days: 6)),
         endDate: DateTime.now().add(new Duration(days: 8)),
          reportHours: 7),
     TimeBlock(
         id: '7',
         tag: 'Microservices',
-        startDate: DateTime.now().add(new Duration(days: 5)),
+        startDate: DateTime.now().add(new Duration(days: 7)),
         endDate: DateTime.now().add(new Duration(days: 6)),
          reportHours: 8),
     TimeBlock(
