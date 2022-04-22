@@ -14,11 +14,8 @@ class OverView extends StatelessWidget {
   Widget build(BuildContext context) {
     final timeblocksData = Provider.of<TimeBlocks>(context);
     final timeblocks = timeblocksData.userTimeBlock;
-    //final chartItems = timeblocksData.recentEntries;
-
     print(timeblocks.first.reportHours);
     print(timeblocks.first.remainingMinutes);
-
     List<charts.Series<TimeBlock, String>> seriesData = [
       charts.Series(
         id: 'Reported Hours',

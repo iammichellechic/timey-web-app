@@ -60,17 +60,18 @@ class TimeBlocks with ChangeNotifier {
     return [..._userTimeBlocks];
   }
 
+
+
   TimeBlock findById(String id) {
     return _userTimeBlocks.firstWhere((tb) => tb.id == id);
   }
 
   void addTimeBlock(TimeBlock timeBlock) {
     final newEntry = TimeBlock(
-      tag: timeBlock.tag,
-      startDate: timeBlock.startDate,
-      endDate: timeBlock.endDate,
-      id: DateTime.now().toString(),
-    );
+        tag: timeBlock.tag,
+        startDate: timeBlock.startDate,
+        endDate: timeBlock.endDate,
+        id: DateTime.now().toString());
     _userTimeBlocks.add(newEntry);
     notifyListeners();
   }
