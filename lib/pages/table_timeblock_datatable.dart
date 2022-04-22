@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:timey_web_scratch/pages/timeblock_editing_page.dart';
 
-import '../screens/add_timeblock_screen.dart';
 import '../providers/timeblocks.dart';
 
 class MyDataTable extends StatefulWidget {
@@ -13,6 +13,7 @@ class MyDataTable extends StatefulWidget {
 }
 
 class _MyDataTableState extends State<MyDataTable> {
+  
   int? sortColumnIndex;
   bool isAscending = false;
 
@@ -22,14 +23,12 @@ class _MyDataTableState extends State<MyDataTable> {
     final timeblocks = timeblocksData.userTimeBlock;
 
     //sorting doesnt work
-    int compareValues(bool ascending, value1, value2) =>
+    //initState list != null sort
+    int compareValues(bool ascending, DateTime value1, DateTime value2) =>
         ascending ? value1.compareTo(value2) : value2.compareTo(value1);
 
     void onSort(int columnIndex, bool ascending) {
-      if (columnIndex == 0) {
-        timeblocks.sort(
-            (user1, user2) => compareValues(ascending, user1.tag, user2.tag));
-      } else if (columnIndex == 1) {
+       if (columnIndex == 1) {
         timeblocks.sort((user1, user2) =>
             compareValues(ascending, user1.startDate, user2.startDate));
       } else if (columnIndex == 2) {
@@ -46,14 +45,15 @@ class _MyDataTableState extends State<MyDataTable> {
     return SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
-        child: DataTable(
+        child: FittedBox(
+            child: DataTable(
           border: TableBorder.symmetric(
               outside: BorderSide(width: 3, color: Colors.amber),
               inside: BorderSide(width: 2, color: Colors.amberAccent)),
           columns: [
             DataColumn(
               label: Text('Project'),
-              onSort: onSort,
+              //onSort: onSort,
             ),
             DataColumn(
               label: Text('Start Date'),
@@ -81,7 +81,7 @@ class _MyDataTableState extends State<MyDataTable> {
                         color: Colors.orange,
                         onPressed: () {
                           Navigator.of(context).pushNamed(
-                              AddTimeBlockScreen.routeName,
+                              TimeblockPage.routeName,
                               arguments: data.id);
                         },
                       ),
@@ -110,6 +110,6 @@ class _MyDataTableState extends State<MyDataTable> {
                     )
                   ]))
               .toList(),
-        ));
+        )));
   }
 }

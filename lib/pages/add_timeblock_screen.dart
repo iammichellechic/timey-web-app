@@ -8,6 +8,9 @@ import '../providers/tags.dart';
 import '../providers/timeblock.dart';
 import '../providers/timeblocks.dart';
 
+
+//THIS PAGE IS NO LONGER NEEDED //
+
 class AddTimeBlockScreen extends StatefulWidget {
   static const routeName = '/edit-timeblock';
   @override
@@ -17,12 +20,14 @@ class AddTimeBlockScreen extends StatefulWidget {
 class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
   final format = DateFormat("yyyy-MM-dd HH:mm");
   final _form = GlobalKey<FormState>();
+ 
 
   var _editedEntry = TimeBlock(
       id: null,
       tag: Tags().tags.first,
       startDate: DateTime.now(),
-      endDate: DateTime.now());
+      endDate: DateTime.now().add(new Duration( hours: 2))
+  );
 
   TimeBlock? _initialValues;
   var _isInit = true;
@@ -111,7 +116,7 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                       onShowPicker: (context, currentValue) async {
                         final date = await showDatePicker(
                             context: context,
-                            firstDate: DateTime(1900),
+                            firstDate: DateTime(2021),
                             initialDate: currentValue ?? DateTime.now(),
                             lastDate: DateTime(2100));
                         if (date != null) {
@@ -142,8 +147,6 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                       },
                     ),
 
-                    //implement reportHours here enddate-startdate y/m/d/h:m bla bla
-                    //format it
 
                     SizedBox(
                       height: 20,
@@ -159,10 +162,10 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                         labelText: 'End date and time',
                       ),
                       format: format,
-                      onShowPicker: (context, currentValue) async {
+                      onShowPicker: (context, currentValue,) async {
                         final date = await showDatePicker(
                             context: context,
-                            firstDate: DateTime(1900),
+                            firstDate: DateTime(2021),
                             initialDate: currentValue ?? DateTime.now(),
                             lastDate: DateTime(2100));
                         if (date != null) {
@@ -186,7 +189,7 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                       validator: (value) {
                         return value != null
                             ? null
-                            : 'Please provide start date and time';
+                            : 'Please provide end date and time';
                       },
                       onSaved: (value) {
                         _editedEntry.endDate = value!;

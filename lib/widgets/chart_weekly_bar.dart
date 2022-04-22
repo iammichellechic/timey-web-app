@@ -13,8 +13,10 @@ class ChartBar extends StatelessWidget {
       children: <Widget>[
         Container(
           height: 20,
-          child: FittedBox(
-            child: Text('${reportedHours.toStringAsFixed(0)} Hrs'),
+          child: Container(
+            child: FittedBox(
+              child: Text('${reportedHours.toStringAsFixed(0)} Hrs'),
+            ),
           ),
         ),
         SizedBox(

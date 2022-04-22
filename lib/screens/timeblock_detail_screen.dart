@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:timey_web_scratch/screens/add_timeblock_screen.dart';
+import 'package:timey_web_scratch/pages/add_timeblock_screen.dart';
 import 'package:timey_web_scratch/widgets/timeblock_item.dart';
 
 import '../providers/timeblocks.dart';
 import '../shared/menu_drawer.dart';
+
+// THIS IS NO LONGER NEEDED //
 
 class TimeBlockDetailScreen extends StatelessWidget {
   static const routeName = '/user-timeblocks';
@@ -55,13 +57,13 @@ class TimeBlockDetailScreen extends StatelessWidget {
                     itemCount: timeblocks.length,
                     itemBuilder: (_, i) => Column(
                       children: [
-                        TimeBlockItem(
-                          timeblocks[i].id!,
-                          timeblocks[i].tag,
-                          timeblocks[i].startDate,
-                          timeblocks[i].endDate,
-                        ),
-                        Divider(),
+                        // TimeBlockItem(
+                        //   timeblocks[i].id!,
+                        //   timeblocks[i].tag,
+                        //   timeblocks[i].startDate,
+                        //   timeblocks[i].endDate,
+                        // ),
+                        // Divider(),
                       ],
                     ),
                   ),

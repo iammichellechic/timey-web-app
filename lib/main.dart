@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:timey_web_scratch/screens/add_timeblock_screen.dart';
+import 'package:timey_web_scratch/pages/timeblock_editing_page.dart';
+import 'package:timey_web_scratch/pages/add_timeblock_screen.dart';
 import 'package:timey_web_scratch/screens/table_timeblock_screen.dart';
+import 'package:timey_web_scratch/screens/calendar_screen.dart';
 import './screens/timeblock_detail_screen.dart';
 import './providers/timeblocks.dart';
-import './widgets/overview.dart';
+import 'screens/overview.dart';
 import 'providers/tags.dart';
 
 void main() => runApp(const MyApp());
@@ -41,9 +43,12 @@ class MyApp extends StatelessWidget {
           home: OverView(),
           
           routes: {
+
             TimeBlockDetailScreen.routeName: (ctx) => TimeBlockDetailScreen(),
             AddTimeBlockScreen.routeName: (ctx) => AddTimeBlockScreen(),
             EditablePage.routeName: (ctx) => EditablePage(),
+            CalendarWidget.routeName: (ctx) => CalendarWidget(),
+            TimeblockPage.routeName: (ctx) => TimeblockPage(),
           },
           initialRoute: '/',
         ));

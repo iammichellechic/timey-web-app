@@ -1,84 +1,123 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
-import '../providers/tag.dart';
-import '../screens/add_timeblock_screen.dart';
+
+import '../pages/timeblock_editing_page.dart';
+import '../providers/timeblock.dart';
 import '../providers/timeblocks.dart';
+import '../utils.dart';
 
 class TimeBlockItem extends StatelessWidget {
-  final String id;
-  final Tag? tag;
-  final DateTime startDate;
-  final DateTime endDate;
+  
+  final TimeBlock? entry;
 
-  TimeBlockItem(this.id, this.tag, this.startDate, this.endDate);
+  const TimeBlockItem({
+    Key? key,
+    required this.entry,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
-        elevation: 5,
-        margin: EdgeInsets.symmetric(
-          vertical: 8,
-          horizontal: 5,
+  Widget build(BuildContext context) =>
+ Scaffold(
+        appBar: AppBar(
+          leading: CloseButton(),
+          actions: buildViewingActions(context, entry),
         ),
-        child: SizedBox(
-          width: 600,
-          child: ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 60),
-            //selectedTileColor: Colors.orange,
-            title: Text(
-              tag!.name,
-              style: Theme.of(context).textTheme.headline6,
-            ),
-            subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Start Date: ${DateFormat("EEEE, yyyy/MM/dd HH:mm").format(startDate.toLocal())}',
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                  Text(
-                    'End Date: ${DateFormat("EEEE, yyyy/MM/dd HH:mm").format(endDate.toLocal())}',
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                ]),
-            trailing: Wrap(
-              spacing: 12,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.edit),
-                  color: Colors.orange,
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed(AddTimeBlockScreen.routeName, arguments: id);
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  color: Theme.of(context).errorColor,
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                          'Remove selected time report?',
-                        ),
-                        duration: Duration(seconds: 5),
-                        action: SnackBarAction(
-                          label: 'CONFIRM',
-                          onPressed: () {
-                            Provider.of<TimeBlocks>(context, listen: false)
-                                .deleteTimeBlock(id);
-                          },
-                        )));
-                  },
-                ),
-              ],
-            ),
-          ),
-        ));
+        body: ListView(
+          padding: EdgeInsets.all(32),
+          children: <Widget>[
+            buildDateTime(entry),
+            SizedBox(height: 32),
+            Text(
+              entry!.tag!.name,
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            )
+          ],
+        ),
+      );
+
+  Widget buildDateTime(TimeBlock? entry) {
+    return Column(children: [
+      buildDate('From', entry!.startDate),
+      buildDate('To', entry.endDate),
+      buildDuration('Duration'),
+      // buildDuration('Remaining(mins)', entry.remainingMinutes)
+    ]);
   }
+
+  Widget buildDuration(String title) {
+    final styleTitle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
+    final styleDate = TextStyle(fontSize: 18);
+
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Expanded(child: Text(title, style: styleTitle)),
+          Text(
+              entry!.reportHours.toString() +
+                  ' ' +
+                  'hrs' + ' '+
+                  entry!.remainingMinutes.toString() +
+                  ' ' +
+                  'mins',
+              style: styleDate),
+          // Text(time, style: styleDate),
+        ],
+      ),
+    );
+  }
+
+  Widget buildDate(String title, DateTime date) {
+    final styleTitle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
+    final styleDate = TextStyle(fontSize: 18);
+
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Expanded(child: Text(title, style: styleTitle)),
+          Text(Utils.toDateTime(date), style: styleDate),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> buildViewingActions(BuildContext context, TimeBlock? entry) => [
+        IconButton(
+          icon: Icon(Icons.edit),
+          color: Colors.orange,
+          onPressed: () {
+            Navigator.of(context).pushReplacementNamed(
+                TimeblockPage.routeName,
+                arguments: entry!.id);
+            // Navigator.of(context).pushReplacement(
+            //   MaterialPageRoute(
+            //     builder: (context) => AddTimeBlockScreen(entry!.id),
+            //   ),
+            // );
+          },
+        ),
+        IconButton(
+          icon: Icon(Icons.delete),
+          color: Theme.of(context).errorColor,
+          onPressed: () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                  'Remove selected time report?',
+                ),
+                duration: Duration(seconds: 5),
+                action: SnackBarAction(
+                  label: 'CONFIRM',
+                  onPressed: () {
+                    final provider =
+                        Provider.of<TimeBlocks>(context, listen: false);
+
+                    provider.deleteTimeBlock(entry!.id);
+                    Navigator.of(context).pop();
+                  },
+                )));
+          },
+        ),
+      ];
 }
