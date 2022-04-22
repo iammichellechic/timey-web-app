@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:timey_web_scratch/pages/timeblock_editing_page.dart';
 import '../providers/timeblocks.dart';
-import '../widgets/table_timeblock_datatable.dart';
+import '../pages/table_timeblock_datatable.dart';
 import '../widgets/chart_weekly.dart';
-import '../screens/add_timeblock_screen.dart';
+import '../pages/add_timeblock_screen.dart';
 import '../shared/menu_drawer.dart';
 
 
@@ -37,7 +38,7 @@ class _EditablePageState extends State<EditablePage> {
               tooltip: 'Add a time report',
               icon: const Icon(Icons.add),
               onPressed: () {
-                Navigator.of(context).pushNamed(AddTimeBlockScreen.routeName);
+                Navigator.of(context).pushNamed(TimeblockPage.routeName);
               },
             ),
           ],

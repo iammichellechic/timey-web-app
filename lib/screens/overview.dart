@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import '../utils.dart';
 import '../providers/timeblock.dart';
 import '../shared/menu_drawer.dart';
 import '../providers/timeblocks.dart';
 
 class OverView extends StatelessWidget {
-  final dateFormat = DateFormat("yyyy-MM-dd");
+  
 
   @override
   Widget build(BuildContext context) {
     final timeblocksData = Provider.of<TimeBlocks>(context);
     final timeblocks = timeblocksData.userTimeBlock;
+    //final chartItems = timeblocksData.recentEntries;
+
+    print(timeblocks.first.reportHours);
+    print(timeblocks.first.remainingMinutes);
 
     List<charts.Series<TimeBlock, String>> seriesData = [
       charts.Series(
         id: 'Reported Hours',
         data: timeblocks,
-        domainFn: (TimeBlock tb, _) => dateFormat.format(tb.startDate),
+        domainFn: (TimeBlock tb, _) => Utils.toDateAbbrLabel(tb.startDate),
         measureFn: (TimeBlock tb, _) => tb.reportHours,
         colorFn: (TimeBlock tb, _) =>
             charts.ColorUtil.fromDartColor(Color(0xff990099)),
@@ -54,7 +59,7 @@ class OverView extends StatelessWidget {
                       seriesData,
                       animate: true,
                       barGroupingType: charts.BarGroupingType.grouped,
-                      animationDuration: Duration(seconds: 5),
+                      animationDuration: Duration(milliseconds: 500),
                     ),
                   ),
                 ],

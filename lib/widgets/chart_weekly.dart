@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:timey_web_scratch/utils.dart';
 import './chart_weekly_bar.dart';
 import '../providers/timeblock.dart';
 
@@ -13,7 +14,7 @@ class Chart extends StatelessWidget {
       final weekDay = DateTime.now().subtract(
         Duration(days: index),
       );
-      
+
       var totalHours = 0;
 
       for (var i = 0; i < recentTimeEntries.length; i++) {
@@ -24,7 +25,7 @@ class Chart extends StatelessWidget {
         }
       }
       return {
-        'day': DateFormat.E().format(weekDay).substring(0, 1),
+        'day': Utils.toDateSingleLetter(weekDay),
         'reportHours': totalHours,
       };
     }).reversed.toList();
@@ -38,7 +39,6 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     print(groupedEntriesValues);
     return Card(
       elevation: 6,
@@ -53,9 +53,7 @@ class Chart extends StatelessWidget {
               child: ChartBar(
                 data['day'] as String,
                 data['reportHours'] as int,
-                totalHours == 0
-                    ? 0
-                    : (data['reportHours'] as int) / totalHours,
+                totalHours == 0 ? 0 : (data['reportHours'] as int) / totalHours,
               ),
             );
           }).toList(),

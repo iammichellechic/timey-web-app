@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:timey_web_scratch/screens/timeblock_detail_screen.dart';
 import 'package:timey_web_scratch/screens/table_timeblock_screen.dart';
-import '../widgets/overview.dart';
+import 'package:timey_web_scratch/screens/calendar_screen.dart';
+import '../screens/overview.dart';
 
 class MenuDrawer extends StatelessWidget {
   const MenuDrawer({Key? key}) : super(key: key);
@@ -34,14 +35,25 @@ class MenuDrawer extends StatelessWidget {
               );
             },
           ),
-          ListTile(
+          // ListTile(
+          //   leading: Icon(Icons.calendar_month),
+          //   title: Text('Calendar view'),
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //           builder: (context) => TimeBlockDetailScreen()),
+          //     );
+          //   },
+          // ),
+           ListTile(
             leading: Icon(Icons.calendar_month),
             title: Text('Calendar view'),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => TimeBlockDetailScreen()),
+                    builder: (context) => CalendarWidget()),
               );
             },
           ),

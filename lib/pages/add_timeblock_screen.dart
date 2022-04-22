@@ -8,6 +8,9 @@ import '../providers/tags.dart';
 import '../providers/timeblock.dart';
 import '../providers/timeblocks.dart';
 
+
+//THIS PAGE IS NO LONGER NEEDED //
+
 class AddTimeBlockScreen extends StatefulWidget {
   static const routeName = '/edit-timeblock';
   @override
@@ -17,16 +20,14 @@ class AddTimeBlockScreen extends StatefulWidget {
 class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
   final format = DateFormat("yyyy-MM-dd HH:mm");
   final _form = GlobalKey<FormState>();
-
+ 
 
   var _editedEntry = TimeBlock(
-     
-      
       id: null,
       tag: Tags().tags.first,
       startDate: DateTime.now(),
-      endDate: DateTime.now(),
-      reportHours: 0);
+      endDate: DateTime.now().add(new Duration( hours: 2))
+  );
 
   TimeBlock? _initialValues;
   var _isInit = true;
@@ -40,12 +41,7 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
       if (tbId != null) {
         _editedEntry = Provider.of<TimeBlocks>(context, listen: false)
             .findById(tbId.toString());
-        _initialValues = TimeBlock(
-            id: _editedEntry.id,
-            tag: _editedEntry.tag,
-            startDate: _editedEntry.startDate,
-            endDate: _editedEntry.endDate,
-            reportHours: _editedEntry.reportHours);
+        _initialValues = _editedEntry;
       }
     }
 
@@ -84,7 +80,6 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                 key: _form,
                 child: ListView(
                   children: <Widget>[
-                   
                     DropdownButtonFormField<Tag>(
                         decoration: InputDecoration(
                           border: UnderlineInputBorder(),
@@ -98,6 +93,7 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                         onChanged: (Tag? newValue) {
                           setState(() {
                             selectedTag = newValue!;
+                            _editedEntry.tag = selectedTag;
                           });
                         },
                         items: availableTags
@@ -107,7 +103,6 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                             .toList()),
                     SizedBox(height: 20),
                     DateTimeField(
-                      
                       initialValue: _initialValues != null
                           ? _initialValues!.startDate
                           : null,
@@ -121,7 +116,7 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                       onShowPicker: (context, currentValue) async {
                         final date = await showDatePicker(
                             context: context,
-                            firstDate: DateTime(1900),
+                            firstDate: DateTime(2021),
                             initialDate: currentValue ?? DateTime.now(),
                             lastDate: DateTime(2100));
                         if (date != null) {
@@ -147,20 +142,11 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                             ? null
                             : 'Please provide start date and time';
                       },
-
                       onSaved: (value) {
-                        _editedEntry = TimeBlock(
-                          id: _editedEntry.id,
-                          tag: _editedEntry.tag,
-                          startDate: format.parse(value.toString()),
-                          endDate: format.parse(_editedEntry.endDate.toString()),
-                           reportHours: _editedEntry.reportHours,
-                        );
+                        _editedEntry.startDate = value!;
                       },
                     ),
 
-                    //implement reportHours here enddate-startdate y/m/d/h:m bla bla 
-                    //format it
 
                     SizedBox(
                       height: 20,
@@ -176,10 +162,10 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                         labelText: 'End date and time',
                       ),
                       format: format,
-                      onShowPicker: (context, currentValue) async {
+                      onShowPicker: (context, currentValue,) async {
                         final date = await showDatePicker(
                             context: context,
-                            firstDate: DateTime(1900),
+                            firstDate: DateTime(2021),
                             initialDate: currentValue ?? DateTime.now(),
                             lastDate: DateTime(2100));
                         if (date != null) {
@@ -203,17 +189,10 @@ class _AddTimeBlockScreenState extends State<AddTimeBlockScreen> {
                       validator: (value) {
                         return value != null
                             ? null
-                            : 'Please provide start date and time';
+                            : 'Please provide end date and time';
                       },
                       onSaved: (value) {
-                        _editedEntry = TimeBlock(
-                          id: _editedEntry.id,
-                          tag: _editedEntry.tag,
-                          startDate: format.parse(value.toString()),
-                          endDate:
-                              format.parse(_editedEntry.endDate.toString()),
-                              reportHours: _editedEntry.reportHours,
-                        );
+                        _editedEntry.endDate = value!;
                       },
                     ),
                     SizedBox(
