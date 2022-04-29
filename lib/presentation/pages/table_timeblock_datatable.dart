@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:timey_web_scratch/pages/timeblock_editing_page.dart';
+import 'package:timey_web_scratch/presentation/resources/color_manager.dart';
 
-import '../providers/timeblocks.dart';
+import '../../data/providers/timeblocks.dart';
+import '../resources/routes_manager.dart';
 
 class MyDataTable extends StatefulWidget {
   const MyDataTable({Key? key}) : super(key: key);
@@ -52,36 +53,43 @@ class _MyDataTableState extends State<MyDataTable> {
               inside: BorderSide(width: 2, color: Colors.amberAccent)),
           columns: [
             DataColumn(
-              label: Text('Project'),
+              label: Text('Project', style: Theme.of(context).textTheme.subtitle1),
+              
               //onSort: onSort,
             ),
             DataColumn(
-              label: Text('Start Date'),
+              label: Text('Start Date',
+                  style: Theme.of(context).textTheme.subtitle1),
               onSort: onSort,
             ),
             DataColumn(
-              label: Text('End Date'),
+              label: Text('End Date',
+                  style: Theme.of(context).textTheme.subtitle1),
               onSort: onSort,
             ),
-            DataColumn(label: Text('Edit'), tooltip: 'edit an entry'),
-            DataColumn(label: Text('Delete'), tooltip: 'remove an entry'),
+            DataColumn(label: Text('Edit', style: Theme.of(context).textTheme.subtitle1), tooltip: 'edit an entry'),
+            DataColumn(label: Text('Delete',
+                    style: Theme.of(context).textTheme.subtitle1), tooltip: 'remove an entry'),
           ],
           rows: timeblocks
               .map((data) => DataRow(cells: [
-                    DataCell(Text(data.tag!.name)),
+                    DataCell(Text(data.tag!.name,
+                        style: Theme.of(context).textTheme.caption)),
                     DataCell(
                       Text(DateFormat("EEEE, yyyy/MM/dd HH:mm")
-                          .format(data.startDate.toLocal())),
+                          .format(data.startDate.toLocal()),
+                        style: Theme.of(context).textTheme.caption),
                     ),
                     DataCell(Text(DateFormat("EEEE, yyyy/MM/dd HH:mm")
-                        .format(data.endDate.toLocal()))),
+                        .format(data.endDate.toLocal()),
+                        style: Theme.of(context).textTheme.caption)),
                     DataCell(
                       IconButton(
                         icon: Icon(Icons.edit),
-                        color: Colors.orange,
+                        color: ColorManager.blue,
                         onPressed: () {
                           Navigator.of(context).pushNamed(
-                              TimeblockPage.routeName,
+                              Routes.formRoute,
                               arguments: data.id);
                         },
                       ),
@@ -89,7 +97,7 @@ class _MyDataTableState extends State<MyDataTable> {
                     DataCell(
                       IconButton(
                         icon: Icon(Icons.delete),
-                        color: Theme.of(context).errorColor,
+                        color: ColorManager.error,
                         onPressed: () {
                           ScaffoldMessenger.of(context).hideCurrentSnackBar();
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -99,6 +107,7 @@ class _MyDataTableState extends State<MyDataTable> {
                               duration: Duration(seconds: 5),
                               action: SnackBarAction(
                                 label: 'CONFIRM',
+                                textColor: ColorManager.blue,
                                 onPressed: () {
                                   Provider.of<TimeBlocks>(context,
                                           listen: false)

@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:timey_web_scratch/providers/timeblock.dart';
+import 'package:timey_web_scratch/presentation/resources/color_manager.dart';
+import 'package:timey_web_scratch/presentation/resources/values_manager.dart';
 
-import '../providers/tag.dart';
-import '../providers/tags.dart';
-import '../providers/timeblocks.dart';
-import '../utils.dart';
+import '../../data/providers/tag.dart';
+import '../../data/providers/tags.dart';
+import '../../data/providers/timeblocks.dart';
+import '../../data/providers/timeblock.dart';
+import '../resources/timeFormat_manager.dart';
 
 class TimeblockPage extends StatefulWidget {
-  static const routeName = '/edit-entry';
-
   @override
   State<TimeblockPage> createState() => _TimeblockPageState();
 }
 
 class _TimeblockPageState extends State<TimeblockPage> {
   final _form = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   TimeBlock? _initialValues;
   List<Tag> availableTags = Tags().tags;
@@ -63,62 +64,115 @@ class _TimeblockPageState extends State<TimeblockPage> {
     Navigator.of(context).pop();
   }
 
+  bool isDesktop(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 600;
+
+  bool isMobile(BuildContext context) =>
+      MediaQuery.of(context).size.width < 600;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: Form(
-            key: _form,
-            child: ListView(
-              children: <Widget>[
-                buildTag(),
-                SizedBox(height: 12),
-                buildDateTimePickers(),
-                SizedBox(height: 12),
-                //buildLanguages(),
-                SizedBox(
-                  height: 20,
-                ),
-                Center(
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                    ),
-                    child: Text('Report'),
-                    onPressed: _saveForm,
+    final safeArea =
+        EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
+
+//padding issues : mobile: padding top
+    return Container(
+        padding: safeArea,
+        width: isDesktop(context)
+            ? MediaQuery.of(context).size.width * 0.30
+            : MediaQuery.of(context).size.width,
+        child: Drawer(
+            child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(AppPadding.p30),
+            child: Form(
+              key: _form,
+              child: ListView(
+                children: <Widget>[
+                  buildTag(),
+                  SizedBox(
+                    height: AppSize.s12,
                   ),
-                ),
-              ],
+                  buildDateTimePickers(),
+                  SizedBox(height: AppSize.s12),
+                  //buildLanguages(),
+                  SizedBox(
+                    height: AppSize.s20,
+                  ),
+                  Column(children: [
+                    Align(
+                      alignment: FractionalOffset.bottomRight,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [
+                                Color.fromRGBO(187, 222, 251, 1),
+                                Color.fromRGBO(13, 71, 161, 1),
+                              ]),
+                        ),
+                        child: ElevatedButton(
+                          child: Padding(
+                            padding: const EdgeInsets.all(AppPadding.p8),
+                            child: Text('Report'),
+                          ),
+                          onPressed: _saveForm,
+                        ),
+                      ),
+                    ),
+                  ]),
+
+                  //this can be removed once the form has more stuff in it so icon below goes to the bottomest part
+                  SizedBox(
+                    height: AppSize.s280,
+                  ),
+                  //Spacer(), - richtext isnt flexible
+                  RichText(
+                      text: TextSpan(children: [
+                    TextSpan(
+                        text: "Close",
+                        style: Theme.of(context).textTheme.caption),
+                    WidgetSpan(
+                        child: Align(
+                            alignment: FractionalOffset.bottomLeft,
+                            child: IconButton(
+                                icon: Icon(
+                                  Icons.close,
+                                  color: ColorManager.grey,
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                })))
+                  ]))
+                ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        )));
   }
 
-  Widget buildTag() => DropdownButtonFormField<Tag>(
-      decoration: InputDecoration(
-        border: UnderlineInputBorder(),
-        icon: const Icon(Icons.assignment, color:Colors.grey),
-        labelText: 'Project',
-        labelStyle: TextStyle(fontWeight: FontWeight.bold)
-      ),
-      value: selectedTag,
-      icon: const Icon(Icons.arrow_downward),
-      elevation: 16,
-      onChanged: (Tag? newValue) {
-        setState(() {
-          selectedTag = newValue!;
-          _editedEntry.tag = selectedTag;
-        });
-      },
-      items: availableTags
-          .map<DropdownMenuItem<Tag>>(
-              (tag) => DropdownMenuItem<Tag>(value: tag, child: Text(tag.name)))
-          .toList());
+  Widget buildTag() => Container(
+      padding: EdgeInsets.only(top: AppPadding.p16),
+      child: DropdownButtonFormField<Tag>(
+          decoration: InputDecoration(
+              border: UnderlineInputBorder(),
+              icon: Icon(Icons.assignment, color: ColorManager.grey),
+              labelText: 'Project',
+              labelStyle: Theme.of(context).textTheme.subtitle2),
+          value: selectedTag,
+          icon: const Icon(Icons.arrow_downward),
+          elevation: AppSize.s16.toInt(),
+          onChanged: (Tag? newValue) {
+            setState(() {
+              selectedTag = newValue!;
+              _editedEntry.tag = selectedTag;
+            });
+          },
+          items: availableTags
+              .map<DropdownMenuItem<Tag>>((tag) =>
+                  DropdownMenuItem<Tag>(value: tag, child: Text(tag.name)))
+              .toList()));
 
   Widget buildDateTimePickers() => Column(
         children: [buildStartDate(), buildEndDate()],
@@ -146,7 +200,6 @@ class _TimeblockPageState extends State<TimeblockPage> {
       );
 
   Widget buildEndDate() => buildHeader(
-    
         header: 'End date and time',
         child: Row(
           children: [
@@ -218,13 +271,12 @@ class _TimeblockPageState extends State<TimeblockPage> {
         context: context,
         initialTime: TimeOfDay.fromDateTime(initialDate),
         builder: (BuildContext context, Widget? child) {
-                              return MediaQuery(
-                                data: MediaQuery.of(context)
-                                    .copyWith(alwaysUse24HourFormat: true),
-                                child: child!,
-                              );
-                            },
-                          );
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+            child: child!,
+          );
+        },
+      );
 
       if (timeOfDay == null) return null;
 
@@ -244,9 +296,12 @@ class _TimeblockPageState extends State<TimeblockPage> {
         padding: EdgeInsets.symmetric(vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [    
-            Icon(Icons.calendar_month_outlined, color:Colors.grey),
-            Text(header, style: TextStyle(fontWeight: FontWeight.bold)),
+          children: [
+            Icon(Icons.calendar_month_outlined, color: ColorManager.grey),
+            Text(
+              header,
+              style: Theme.of(context).textTheme.subtitle2,
+            ),
             child,
           ],
         ),
@@ -257,7 +312,10 @@ class _TimeblockPageState extends State<TimeblockPage> {
     required VoidCallback onClicked,
   }) =>
       ListTile(
-        title: Text(text),
+        title: Text(
+          text,
+          style: Theme.of(context).textTheme.subtitle1,
+        ),
         trailing: Icon(Icons.arrow_drop_down),
         onTap: onClicked,
       );

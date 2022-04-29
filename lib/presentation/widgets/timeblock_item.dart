@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:timey_web_scratch/presentation/resources/color_manager.dart';
+import 'package:timey_web_scratch/presentation/resources/theme_manager.dart';
+import 'package:timey_web_scratch/presentation/resources/values_manager.dart';
 
-import '../pages/timeblock_editing_page.dart';
-import '../providers/timeblock.dart';
-import '../providers/timeblocks.dart';
-import '../utils.dart';
+import '../../data/providers/timeblock.dart';
+import '../../data/providers/timeblocks.dart';
+
+import '../resources/routes_manager.dart';
+import '../resources/timeFormat_manager.dart';
 
 class TimeBlockItem extends StatelessWidget {
-  
   final TimeBlock? entry;
 
   const TimeBlockItem({
@@ -16,20 +19,22 @@ class TimeBlockItem extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) =>
- Scaffold(
+  Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          leading: CloseButton(),
+          leading: CloseButton(color: ColorManager.error),
           actions: buildViewingActions(context, entry),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
         body: ListView(
-          padding: EdgeInsets.all(32),
+          padding: EdgeInsets.all(AppPadding.p30),
           children: <Widget>[
             buildDateTime(entry),
-            SizedBox(height: 32),
+            SizedBox(height: AppPadding.p30),
             Text(
               entry!.tag!.name,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style:  getAppTheme().textTheme.headline1,
+    
             )
           ],
         ),
@@ -45,18 +50,19 @@ class TimeBlockItem extends StatelessWidget {
   }
 
   Widget buildDuration(String title) {
-    final styleTitle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
-    final styleDate = TextStyle(fontSize: 18);
+   final styleTitle = getAppTheme().textTheme.headline2;
+    final styleDate = getAppTheme().textTheme.headline3;
 
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(vertical: AppPadding.p8),
       child: Row(
         children: [
           Expanded(child: Text(title, style: styleTitle)),
           Text(
               entry!.reportHours.toString() +
                   ' ' +
-                  'hrs' + ' '+
+                  'hrs' +
+                  ' ' +
                   entry!.remainingMinutes.toString() +
                   ' ' +
                   'mins',
@@ -68,8 +74,8 @@ class TimeBlockItem extends StatelessWidget {
   }
 
   Widget buildDate(String title, DateTime date) {
-    final styleTitle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
-    final styleDate = TextStyle(fontSize: 18);
+    final styleTitle = getAppTheme().textTheme.headline2;
+    final styleDate = getAppTheme().textTheme.headline3;
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8),
@@ -85,11 +91,10 @@ class TimeBlockItem extends StatelessWidget {
   List<Widget> buildViewingActions(BuildContext context, TimeBlock? entry) => [
         IconButton(
           icon: Icon(Icons.edit),
-          color: Colors.orange,
+          color: ColorManager.blue,
           onPressed: () {
-            Navigator.of(context).pushReplacementNamed(
-                TimeblockPage.routeName,
-                arguments: entry!.id);
+            Navigator.of(context)
+                .pushReplacementNamed(Routes.formRoute, arguments: entry!.id);
             // Navigator.of(context).pushReplacement(
             //   MaterialPageRoute(
             //     builder: (context) => AddTimeBlockScreen(entry!.id),
@@ -99,7 +104,7 @@ class TimeBlockItem extends StatelessWidget {
         ),
         IconButton(
           icon: Icon(Icons.delete),
-          color: Theme.of(context).errorColor,
+          color: ColorManager.error,
           onPressed: () {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -109,6 +114,7 @@ class TimeBlockItem extends StatelessWidget {
                 duration: Duration(seconds: 5),
                 action: SnackBarAction(
                   label: 'CONFIRM',
+                  textColor: ColorManager.blue,
                   onPressed: () {
                     final provider =
                         Provider.of<TimeBlocks>(context, listen: false);

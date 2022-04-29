@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:timey_web_scratch/utils.dart';
+
+import '../../data/providers/timeblock.dart';
+import '../resources/timeFormat_manager.dart';
 import './chart_weekly_bar.dart';
-import '../providers/timeblock.dart';
+
 
 class Chart extends StatelessWidget {
   final List<TimeBlock> recentTimeEntries;

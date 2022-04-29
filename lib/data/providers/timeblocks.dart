@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:timey_web_scratch/providers/tags.dart';
-import '../utils.dart';
+import 'package:timey_web_scratch/data/providers/tags.dart';
+import '../../presentation/resources/timeFormat_manager.dart';
 import './timeblock.dart';
 
 

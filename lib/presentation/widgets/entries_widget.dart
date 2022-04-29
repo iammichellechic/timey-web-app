@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
-import 'package:timey_web_scratch/widgets/timeblock_item.dart';
+import 'package:timey_web_scratch/presentation/resources/color_manager.dart';
+import 'package:timey_web_scratch/presentation/widgets/timeblock_item.dart';
 
-import '../model/timeblock_data_source.dart';
-import '../providers/timeblocks.dart';
+
+import '../../data/providers/timeblocks.dart';
+import '../../model/timeblock_data_source.dart';
+
 
 
 class EntriesWidget extends StatefulWidget {
@@ -25,14 +28,14 @@ class _EntriesWidgetState extends State<EntriesWidget> {
       return Center(
         child: Text(
           'No Entries found!',
-          style: TextStyle(color: Colors.black, fontSize: 24),
+          style: Theme.of(context).textTheme.headline1,
         ),
       );
     }
 
     return SfCalendarTheme(
       data: SfCalendarThemeData(
-        timeTextStyle: TextStyle(fontSize: 16, color: Colors.black),
+        timeTextStyle: Theme.of(context).textTheme.subtitle1
       ),
       child: SfCalendar(
         view: CalendarView.timelineDay,
@@ -40,7 +43,7 @@ class _EntriesWidgetState extends State<EntriesWidget> {
         initialDisplayDate: provider.selectedDate,
         appointmentBuilder: appointmentBuilder,
         headerHeight: 0,
-        todayHighlightColor: Colors.black,
+        todayHighlightColor:ColorManager.black,
         selectionDecoration: BoxDecoration(
           color: Colors.transparent,
         ),
@@ -69,7 +72,7 @@ class _EntriesWidgetState extends State<EntriesWidget> {
       height: details.bounds.height,
       decoration: BoxDecoration(
         //color:event.tag!.color
-        color: Colors.blue.withOpacity
+        color: ColorManager.blue.withOpacity
         (0.5),
         borderRadius: BorderRadius.circular(12),
       ),
@@ -78,11 +81,7 @@ class _EntriesWidgetState extends State<EntriesWidget> {
           event.tag!.name,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+          style:Theme.of(context).textTheme.subtitle1
         ),
       ),
     );
