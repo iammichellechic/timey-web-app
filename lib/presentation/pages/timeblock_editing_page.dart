@@ -23,49 +23,43 @@ class TimeblockPage extends StatefulWidget {
 
 class _TimeblockPageState extends State<TimeblockPage> {
   final _form = GlobalKey<FormState>();
-  
-  List<Tag> availableTags = Tags().tags;
-  Tag? selectedTag;
-  late DateTime startDate;
-  late DateTime endDate;
 
- 
+  List<Tag> availableTags = Tags().tags;
+  late Tag? _selectedTag;
+  late DateTime _startDate;
+  late DateTime _endDate;
+
   @override
   void initState() {
     super.initState();
 
     if (widget.timeBlock == null) {
-      startDate = DateTime.now();
-      endDate = DateTime.now().add(Duration(hours: 2));
-      selectedTag = Tags().tags.first;
-
-     
+      _startDate = DateTime.now();
+      _endDate = DateTime.now().add(Duration(hours: 2));
+      _selectedTag = Tags().tags.first;
     } else {
-      
-        final timeBlock = widget.timeBlock!;
+      final timeBlock = widget.timeBlock!;
 
-        startDate = timeBlock.startDate;
-        endDate = timeBlock.endDate;
-        selectedTag = timeBlock.tag; //doesnt auto populate durinh edit
-
-      }
-      
-       if (availableTags.isNotEmpty) selectedTag = availableTags.first;
+      _startDate = timeBlock.startDate;
+      _endDate = timeBlock.endDate;
+      _selectedTag = timeBlock.tag!; //doesnt auto populate durinh edit
     }
-  
+
+    if (availableTags.isNotEmpty) _selectedTag = availableTags.first;
+  }
+
   void _saveForm() {
     final isValid = _form.currentState!.validate();
 
     if (isValid) {
-      final timeBlock =
-          TimeBlock(tag: selectedTag, startDate: startDate, endDate: endDate);
+      final timeBlock = TimeBlock(
+          tag: _selectedTag, startDate: _startDate, endDate: _endDate);
 
       if (widget.timeBlock != null) {
         Provider.of<TimeBlocks>(context, listen: false)
             .updateTimeBlock(timeBlock, widget.timeBlock!);
       } else {
-        Provider.of<TimeBlocks>(context, listen: false)
-            .addTimeBlock(timeBlock);
+        Provider.of<TimeBlocks>(context, listen: false).addTimeBlock(timeBlock);
       }
       Navigator.of(context).pop();
     }
@@ -87,8 +81,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
         width: isDesktop(context)
             ? MediaQuery.of(context).size.width * 0.30
             : MediaQuery.of(context).size.width,
-        child: Drawer(
-            child: Center(
+        child: Center(
           child: Padding(
             padding: const EdgeInsets.all(AppPadding.p30),
             child: Form(
@@ -100,84 +93,76 @@ class _TimeblockPageState extends State<TimeblockPage> {
                     height: AppSize.s12,
                   ),
                   buildDateTimePickers(),
-                  SizedBox(height: AppSize.s12),
                   //buildLanguages(),
                   SizedBox(
                     height: AppSize.s20,
                   ),
-                  Column(children: [
-                    Align(
-                      alignment: FractionalOffset.bottomRight,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [
-                                Color.fromRGBO(187, 222, 251, 1),
-                                Color.fromRGBO(13, 71, 161, 1),
-                              ]),
-                        ),
-                        child: ElevatedButton(
-                          child: Padding(
-                            padding: const EdgeInsets.all(AppPadding.p8),
-                            child: Text('Report'),
-                          ),
-                          onPressed: _saveForm,
-                        ),
-                      ),
-                    ),
-                  ]),
-
-                  //chnage this
-                  SizedBox(
-                    height: AppSize.s280,
-                  ),
-                  //Spacer(), - richtext isnt flexible
-                  RichText(
-                      text: TextSpan(children: [
-                    TextSpan(
-                        text: "Close",
-                        style: Theme.of(context).textTheme.caption),
-                    WidgetSpan(
-                        child: Align(
-                            alignment: FractionalOffset.bottomLeft,
-                            child: IconButton(
-                                icon: Icon(
-                                  Icons.close,
-                                  color: ColorManager.grey,
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                })))
-                  ]))
+                  buildActionRow(context),
                 ],
               ),
             ),
           ),
-        )));
+        ));
   }
+
+  Row buildActionRow(BuildContext context) => Row(children: [
+        RichText(
+            text: TextSpan(children: [
+          TextSpan(text: "Close", style: Theme.of(context).textTheme.caption),
+          WidgetSpan(
+              child: Align(
+                  alignment: FractionalOffset.bottomLeft,
+                  child: IconButton(
+                      icon: Icon(
+                        Icons.close,
+                        color: ColorManager.grey,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      })))
+        ])),
+        Spacer(),
+        DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: const [
+                  Color.fromRGBO(187, 222, 251, 1),
+                  Color.fromRGBO(13, 71, 161, 1),
+                ]),
+          ),
+          child: ElevatedButton(
+            child: Padding(
+              padding: const EdgeInsets.all(AppPadding.p8),
+              child: Text('Report'),
+            ),
+            onPressed: _saveForm,
+          ),
+        ),
+      ]);
 
   Widget buildTag() => Container(
       padding: EdgeInsets.only(top: AppPadding.p16),
       child: DropdownButtonFormField<Tag>(
-          decoration: InputDecoration(
-              border: UnderlineInputBorder(),
-              icon: Icon(Icons.assignment, color: ColorManager.grey),
-              labelText: 'Project',
-              labelStyle: Theme.of(context).textTheme.subtitle2),
-          value: selectedTag,
-          icon: const Icon(Icons.arrow_downward),
-          elevation: AppSize.s16.toInt(),
-          onChanged: (Tag? newValue) {
-            setState(() {
-              selectedTag = newValue!;
-            });
-          },
-          items: availableTags
-              .map<DropdownMenuItem<Tag>>((tag) =>
-                  DropdownMenuItem<Tag>(value: tag, child: Text(tag.name)))
-              .toList()));
+        value: _selectedTag,
+        decoration: InputDecoration(
+            border: UnderlineInputBorder(),
+            icon: Icon(Icons.assignment, color: ColorManager.grey),
+            labelText: 'Project',
+            labelStyle: Theme.of(context).textTheme.subtitle2),
+        icon: const Icon(Icons.arrow_downward),
+        elevation: AppSize.s16.toInt(),
+        onChanged: (Tag? newValue) {
+          setState(() {
+            _selectedTag = newValue!;
+          });
+        },
+        items: availableTags
+            .map<DropdownMenuItem<Tag>>((tag) =>
+                DropdownMenuItem<Tag>(value: tag, child: Text(tag.name)))
+            .toList(),
+      ));
 
   Widget buildDateTimePickers() => Column(
         children: [buildStartDate(), buildEndDate()],
@@ -190,13 +175,13 @@ class _TimeblockPageState extends State<TimeblockPage> {
             Expanded(
               flex: 2,
               child: buildDropdownField(
-                text: Utils.toDate(startDate),
+                text: Utils.toDate(_startDate),
                 onClicked: () => pickFromDateTime(pickDate: true),
               ),
             ),
             Expanded(
               child: buildDropdownField(
-                text: Utils.toTime(startDate),
+                text: Utils.toTime(_startDate),
                 onClicked: () => pickFromDateTime(pickDate: false),
               ),
             ),
@@ -211,13 +196,13 @@ class _TimeblockPageState extends State<TimeblockPage> {
             Expanded(
               flex: 2,
               child: buildDropdownField(
-                text: Utils.toDate(endDate),
+                text: Utils.toDate(_endDate),
                 onClicked: () => pickToDateTime(pickDate: true),
               ),
             ),
             Expanded(
               child: buildDropdownField(
-                text: Utils.toTime(endDate),
+                text: Utils.toTime(_endDate),
                 onClicked: () => pickToDateTime(pickDate: false),
               ),
             ),
@@ -227,31 +212,31 @@ class _TimeblockPageState extends State<TimeblockPage> {
 
   Future pickFromDateTime({required bool pickDate}) async {
     final date = await pickDateTime(
-      startDate,
+      _startDate,
       pickDate: pickDate,
     );
     if (date == null) return;
 
-    if (date.isAfter(endDate)) {
-      endDate = DateTime(
-          date.year, date.month, date.day, endDate.hour, endDate.minute);
+    if (date.isAfter(_endDate)) {
+      _endDate = DateTime(
+          date.year, date.month, date.day, _endDate.hour, _endDate.minute);
     }
 
     setState(() {
-      startDate = date;
+      _startDate = date;
     });
   }
 
   Future pickToDateTime({required bool pickDate}) async {
     final date = await pickDateTime(
-      endDate,
+      _endDate,
       pickDate: pickDate,
-      firstDate: pickDate ? startDate : null,
+      firstDate: pickDate ? _startDate : null,
     );
     if (date == null) return;
 
     setState(() {
-      endDate = date;
+      _endDate = date;
     });
   }
 
