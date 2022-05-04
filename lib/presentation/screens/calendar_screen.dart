@@ -10,7 +10,7 @@ import '../shared/menu_drawer.dart';
 import '../widgets/entries_widget.dart';
 
 class CalendarWidget extends StatelessWidget {
-  static const routeName = '/calendar-timeblock';
+ 
 
   @override
   Widget build(BuildContext context) {

@@ -3,13 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:timey_web_scratch/presentation/resources/color_manager.dart';
-import 'package:timey_web_scratch/presentation/widgets/timeblock_item.dart';
-
 
 import '../../data/providers/timeblocks.dart';
 import '../../model/timeblock_data_source.dart';
-
-
+import '../resources/font_manager.dart';
+import 'dialogs.dart';
 
 class EntriesWidget extends StatefulWidget {
   @override
@@ -22,7 +20,6 @@ class _EntriesWidgetState extends State<EntriesWidget> {
     final provider = Provider.of<TimeBlocks>(context);
     final selectedEvents = provider.entriesOfSelectedDate;
     final entries = provider.userTimeBlock;
-    
 
     if (selectedEvents.isEmpty) {
       return Center(
@@ -35,15 +32,14 @@ class _EntriesWidgetState extends State<EntriesWidget> {
 
     return SfCalendarTheme(
       data: SfCalendarThemeData(
-        timeTextStyle: Theme.of(context).textTheme.subtitle1
-      ),
+          timeTextStyle: Theme.of(context).textTheme.subtitle1),
       child: SfCalendar(
         view: CalendarView.timelineDay,
         dataSource: EventDataSource(entries),
         initialDisplayDate: provider.selectedDate,
         appointmentBuilder: appointmentBuilder,
         headerHeight: 0,
-        todayHighlightColor:ColorManager.black,
+        todayHighlightColor: ColorManager.black,
         selectionDecoration: BoxDecoration(
           color: Colors.transparent,
         ),
@@ -52,11 +48,31 @@ class _EntriesWidgetState extends State<EntriesWidget> {
 
           final event = details.appointments!.first;
 
-          Navigator.of(context).push(MaterialPageRoute(
-          
-            builder: (context) => TimeBlockItem(entry: event),
-          ));
+          showDialog<EntryItemDialog>(
+            context: context,
+            builder: (context) {
+              return EntryItemDialog(
+                entry: event,
+              );
+            },
+          );
+
+          // Navigator.of(context).push(MaterialPageRoute(
+          //   builder: (context) => TimeBlockItem(entry: event),
+          //));
         },
+        timeSlotViewSettings: TimeSlotViewSettings(
+          startHour: 7,
+          endHour: 24,
+          timeIntervalWidth: 100,
+          dayFormat: 'EEE',
+          timeFormat: 'HH:mm',
+          timeTextStyle: TextStyle(
+              fontWeight: FontWeightManager.bold,
+              fontStyle: FontStyle.italic,
+              fontSize: FontSize.s16,
+              color: ColorManager.blue),
+        ),
       ),
     );
   }
@@ -72,17 +88,14 @@ class _EntriesWidgetState extends State<EntriesWidget> {
       height: details.bounds.height,
       decoration: BoxDecoration(
         //color:event.tag!.color
-        color: ColorManager.blue.withOpacity
-        (0.5),
+        color: ColorManager.blue.withOpacity(0.5),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Center(
-        child: Text(
-          event.tag!.name,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style:Theme.of(context).textTheme.subtitle1
-        ),
+        child: Text(event.tag!.name,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.subtitle1),
       ),
     );
   }

@@ -59,7 +59,7 @@ class MenuDrawer extends StatelessWidget {
             Navigator.push(
                 context,
                 PageTransition(
-                  type: PageTransitionType.rightToLeftWithFade,
+                  type: PageTransitionType.fade,
                   duration: Duration(seconds: 1),
                   child: OverView(),
                 ));
@@ -73,7 +73,7 @@ class MenuDrawer extends StatelessWidget {
             Navigator.push(
                 context,
                 PageTransition(
-                  type: PageTransitionType.rightToLeftWithFade,
+                  type: PageTransitionType.fade,
                   duration: Duration(seconds: 1),
                   child: CalendarWidget(),
                   // MaterialPageRoute(builder: (context) =>
@@ -89,7 +89,7 @@ class MenuDrawer extends StatelessWidget {
             Navigator.push(
                 context,
                 PageTransition(
-                  type: PageTransitionType.rightToLeftWithFade,
+                  type: PageTransitionType.fade,
                   duration: Duration(seconds: 1),
                   child:EditablePage(),
                 ));
@@ -127,7 +127,8 @@ class MenuDrawer extends StatelessWidget {
                 ),
                 SizedBox(width: AppSize.s12),
                 Flexible(
-                    child: Column(
+                  child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
                       'Dev. Waleed H.',

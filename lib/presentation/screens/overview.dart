@@ -7,12 +7,13 @@ import '../../data/providers/timeblock.dart';
 import '../../data/providers/timeblocks.dart';
 import '../resources/timeFormat_manager.dart';
 
+import '../resources/values_manager.dart';
 import '../shared/menu_drawer.dart';
+
 
 class OverView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     final screenWidth = MediaQuery.of(context).size.width;
     const breakpoint = 600.0;
 
@@ -58,43 +59,26 @@ class OverView extends StatelessWidget {
     ];
 
     return Scaffold(
-      // extendBodyBehindAppBar: true,
-      // appBar: AppBar(
-      //   title: Text('Timey'),
-      //   actions: [
-      //     IconButton(
-      //         tooltip: 'Search',
-      //         onPressed: () {},
-      //         icon: const Icon(Icons.search))
-      //   ],
-      //    backgroundColor: Colors.transparent,
-      //   elevation: 0,
-      // ),
       body: Container(
-        height: 600,
-        padding: EdgeInsets.all(20),
+        // height: 600,
+        padding: EdgeInsets.all(AppPadding.p12),
         child: Center(
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    'Reported Hours',
-                    style:
-                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                  ),
-                  Expanded(
-                    child: charts.BarChart(
-                      seriesData,
-                      animate: true,
-                      barGroupingType: charts.BarGroupingType.grouped,
-                      animationDuration: Duration(milliseconds: 500),
-                    ),
-                  ),
-                ],
+          child: Column(
+            children: <Widget>[
+              Text(
+                'Reported Hours',
+                style: Theme.of(context).textTheme.headline1,
               ),
-            ),
+              SizedBox(height: AppSize.s5),
+              Expanded(
+                child: charts.BarChart(
+                  seriesData,
+                  animate: true,
+                  barGroupingType: charts.BarGroupingType.grouped,
+                  animationDuration: Duration(milliseconds: 500),
+                ),
+              ),
+            ],
           ),
         ),
       ),

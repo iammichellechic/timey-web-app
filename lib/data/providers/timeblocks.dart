@@ -3,10 +3,9 @@ import 'package:timey_web_scratch/data/providers/tags.dart';
 import '../../presentation/resources/timeFormat_manager.dart';
 import './timeblock.dart';
 
-
 class TimeBlocks with ChangeNotifier {
   final List<TimeBlock> _userTimeBlocks = [
-   TimeBlock(
+    TimeBlock(
         id: '1',
         tag: Tags().tags[0],
         startDate: DateTime.now().add(new Duration(days: 1, hours: 0)),
@@ -60,8 +59,6 @@ class TimeBlocks with ChangeNotifier {
     return [..._userTimeBlocks];
   }
 
-
-
   TimeBlock findById(String id) {
     return _userTimeBlocks.firstWhere((tb) => tb.id == id);
   }
@@ -76,16 +73,24 @@ class TimeBlocks with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateTimeBlock(id, TimeBlock newEntry) {
-    final entryIndex = _userTimeBlocks.indexWhere((tb) => tb.id == id);
-    if (entryIndex >= 0) {
-      _userTimeBlocks[entryIndex] = newEntry;
-      notifyListeners();
-    } else {
-      print('....');
-    }
+  // void updateTimeBlock(id, TimeBlock? newEntry) {
+  //   final entryIndex = _userTimeBlocks.indexWhere((tb) => tb.id == id);
+  //   if (entryIndex >= 0) {
+  //     _userTimeBlocks[entryIndex] = newEntry!;
+  //     notifyListeners();
+  //   } else {
+  //     print('....');
+  //   }
+  // }
+
+  void updateTimeBlock(TimeBlock newEntry, TimeBlock oldEntry) {
+    final index = _userTimeBlocks.indexOf(oldEntry);
+    _userTimeBlocks[index] = newEntry;
+
+    notifyListeners();
   }
 
+  
   void deleteTimeBlock(id) {
     _userTimeBlocks.removeWhere((tb) => tb.id == id);
     notifyListeners();
@@ -122,7 +127,4 @@ class TimeBlocks with ChangeNotifier {
               (selected.isAfter(from) && selected.isBefore(to));
         },
       ).toList();
-
-
-
 }

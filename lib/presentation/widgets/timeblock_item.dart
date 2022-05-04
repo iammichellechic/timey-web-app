@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:timey_web_scratch/presentation/resources/color_manager.dart';
 import 'package:timey_web_scratch/presentation/resources/theme_manager.dart';
 import 'package:timey_web_scratch/presentation/resources/values_manager.dart';
@@ -7,8 +8,8 @@ import 'package:timey_web_scratch/presentation/resources/values_manager.dart';
 import '../../data/providers/timeblock.dart';
 import '../../data/providers/timeblocks.dart';
 
-import '../resources/routes_manager.dart';
 import '../resources/timeFormat_manager.dart';
+import 'dialogs.dart';
 
 class TimeBlockItem extends StatelessWidget {
   final TimeBlock? entry;
@@ -33,8 +34,7 @@ class TimeBlockItem extends StatelessWidget {
             SizedBox(height: AppPadding.p30),
             Text(
               entry!.tag!.name,
-              style:  getAppTheme().textTheme.headline1,
-    
+              style: getAppTheme().textTheme.headline1,
             )
           ],
         ),
@@ -50,7 +50,7 @@ class TimeBlockItem extends StatelessWidget {
   }
 
   Widget buildDuration(String title) {
-   final styleTitle = getAppTheme().textTheme.headline2;
+    final styleTitle = getAppTheme().textTheme.headline2;
     final styleDate = getAppTheme().textTheme.headline3;
 
     return Container(
@@ -67,7 +67,6 @@ class TimeBlockItem extends StatelessWidget {
                   ' ' +
                   'mins',
               style: styleDate),
-          // Text(time, style: styleDate),
         ],
       ),
     );
@@ -93,36 +92,26 @@ class TimeBlockItem extends StatelessWidget {
           icon: Icon(Icons.edit),
           color: ColorManager.blue,
           onPressed: () {
-            Navigator.of(context)
-                .pushReplacementNamed(Routes.formRoute, arguments: entry!.id);
-            // Navigator.of(context).pushReplacement(
-            //   MaterialPageRoute(
-            //     builder: (context) => AddTimeBlockScreen(entry!.id),
-            //   ),
-            // );
+            showDialog<EntryEditDialog>(
+              context: context,
+              builder: (context) {
+                return EntryEditDialog(
+                  entry: entry,
+                );
+              },
+            );
+            // Navigator.of(context)
+            //    .pushReplacementNamed(Routes.formRoute, arguments: entry!.id);
           },
         ),
         IconButton(
           icon: Icon(Icons.delete),
           color: ColorManager.error,
           onPressed: () {
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(
-                  'Remove selected time report?',
-                ),
-                duration: Duration(seconds: 5),
-                action: SnackBarAction(
-                  label: 'CONFIRM',
-                  textColor: ColorManager.blue,
-                  onPressed: () {
-                    final provider =
-                        Provider.of<TimeBlocks>(context, listen: false);
+            final provider = Provider.of<TimeBlocks>(context, listen: false);
 
-                    provider.deleteTimeBlock(entry!.id);
-                    Navigator.of(context).pop();
-                  },
-                )));
+            provider.deleteTimeBlock(entry!.id);
+            Navigator.of(context).pop();
           },
         ),
       ];

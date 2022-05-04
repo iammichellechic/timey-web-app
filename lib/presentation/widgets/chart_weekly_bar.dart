@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:timey_web_scratch/presentation/resources/color_manager.dart';
+import 'package:timey_web_scratch/presentation/resources/values_manager.dart';
 
 class ChartBar extends StatelessWidget {
   final String label;
@@ -12,34 +14,37 @@ class ChartBar extends StatelessWidget {
     return Column(
       children: <Widget>[
         Container(
-          height: 20,
+          //height: AppSize.s20,
+          padding: EdgeInsets.only(top: AppPadding.p20),
           child: Container(
             child: FittedBox(
-              child: Text('${reportedHours.toStringAsFixed(0)} Hrs'),
+              child: Text('${reportedHours.toStringAsFixed(0)} Hrs',
+               style: Theme.of(context).textTheme.subtitle1),
             ),
           ),
         ),
         SizedBox(
-          height: 4,
+          height: AppSize.s10,
         ),
         Container(
-          height: 60,
-          width: 10,
+          height: AppSize.s250,
+          width: AppSize.s80,
           child: Stack(
             children: <Widget>[
               Container(
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey, width: 1.0),
-                  color: Color.fromRGBO(220, 220, 220, 1),
-                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: ColorManager.blue, width:AppSize.s1_5),
+                  // color: Color.fromRGBO(220, 220, 220, 1),
+                  color:ColorManager.blue.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(AppSize.s14),
                 ),
               ),
               FractionallySizedBox(
                 heightFactor: reportedPctOfTotal,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10),
+                    color: ColorManager.blue.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(AppSize.s14),
                   ),
                 ),
               ),
@@ -47,9 +52,12 @@ class ChartBar extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 4,
+          height: AppSize.s10,
         ),
-        Text(label),
+        Text(label, style: Theme.of(context).textTheme.subtitle1),
+        SizedBox(
+          height: AppSize.s20,
+        ),
       ],
     );
   }

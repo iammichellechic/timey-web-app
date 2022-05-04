@@ -12,6 +12,7 @@ ThemeData getAppTheme() {
       primaryColorDark: ColorManager.black,
       colorScheme:
           ColorScheme.fromSwatch().copyWith(secondary: ColorManager.grey),
+      visualDensity: VisualDensity.adaptivePlatformDensity,
 
       //app bar theme
       appBarTheme: AppBarTheme(
@@ -38,6 +39,7 @@ ThemeData getAppTheme() {
         //menu drawer
         headline1:
             getBoldStyle(color: ColorManager.black, fontSize: FontSize.s24),
+            
         headline2: getBoldStyle(color: ColorManager.black,fontSize: FontSize.s20),
         headline3: getBoldStyle(color: ColorManager.grey,fontSize: FontSize.s20),
         subtitle1:
@@ -45,7 +47,8 @@ ThemeData getAppTheme() {
         subtitle2: getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s16),
         caption: getRegularStyle(color: ColorManager.grey),
         bodyText1:  getBoldStyle(color: ColorManager.black),
-        bodyText2:  getBoldStyle(color: ColorManager.grey)
+        bodyText2:  getBoldStyle(color: ColorManager.grey),
+        
       ),
       
       inputDecorationTheme: InputDecorationTheme(

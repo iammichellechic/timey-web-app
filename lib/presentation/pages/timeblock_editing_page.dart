@@ -10,58 +10,65 @@ import '../../data/providers/timeblock.dart';
 import '../resources/timeFormat_manager.dart';
 
 class TimeblockPage extends StatefulWidget {
+  final TimeBlock? timeBlock;
+
+  const TimeblockPage({
+    Key? key,
+    this.timeBlock,
+  }) : super(key: key);
+
   @override
   State<TimeblockPage> createState() => _TimeblockPageState();
 }
 
 class _TimeblockPageState extends State<TimeblockPage> {
   final _form = GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  TimeBlock? _initialValues;
+  
   List<Tag> availableTags = Tags().tags;
   Tag? selectedTag;
+  late DateTime startDate;
+  late DateTime endDate;
 
-  var _editedEntry = TimeBlock(
-    id: null,
-    tag: Tags().tags.first,
-    startDate: DateTime.now(),
-    endDate: DateTime.now(),
-  );
-
-  var _isInit = true;
-
+ 
   @override
-  void didChangeDependencies() {
-    if (_isInit) {
-      final tbId = ModalRoute.of(context)!.settings.arguments;
-      if (tbId != null) {
-        _editedEntry = Provider.of<TimeBlocks>(context, listen: false)
-            .findById(tbId.toString());
-        _initialValues = _editedEntry;
+  void initState() {
+    super.initState();
+
+    if (widget.timeBlock == null) {
+      startDate = DateTime.now();
+      endDate = DateTime.now().add(Duration(hours: 2));
+      selectedTag = Tags().tags.first;
+
+     
+    } else {
+      
+        final timeBlock = widget.timeBlock!;
+
+        startDate = timeBlock.startDate;
+        endDate = timeBlock.endDate;
+        selectedTag = timeBlock.tag; //doesnt auto populate durinh edit
+
       }
+      
+       if (availableTags.isNotEmpty) selectedTag = availableTags.first;
     }
-
-    if (availableTags.isNotEmpty) selectedTag = availableTags.first;
-
-    _isInit = false;
-    super.didChangeDependencies();
-  }
-
+  
   void _saveForm() {
     final isValid = _form.currentState!.validate();
-    if (!isValid) {
-      return;
+
+    if (isValid) {
+      final timeBlock =
+          TimeBlock(tag: selectedTag, startDate: startDate, endDate: endDate);
+
+      if (widget.timeBlock != null) {
+        Provider.of<TimeBlocks>(context, listen: false)
+            .updateTimeBlock(timeBlock, widget.timeBlock!);
+      } else {
+        Provider.of<TimeBlocks>(context, listen: false)
+            .addTimeBlock(timeBlock);
+      }
+      Navigator.of(context).pop();
     }
-    _form.currentState!.save();
-    if (_editedEntry.id != null) {
-      Provider.of<TimeBlocks>(context, listen: false)
-          .updateTimeBlock(_editedEntry.id!, _editedEntry);
-    } else {
-      Provider.of<TimeBlocks>(context, listen: false)
-          .addTimeBlock(_editedEntry);
-    }
-    Navigator.of(context).pop();
   }
 
   bool isDesktop(BuildContext context) =>
@@ -75,7 +82,6 @@ class _TimeblockPageState extends State<TimeblockPage> {
     final safeArea =
         EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
 
-//padding issues : mobile: padding top
     return Container(
         padding: safeArea,
         width: isDesktop(context)
@@ -123,7 +129,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
                     ),
                   ]),
 
-                  //this can be removed once the form has more stuff in it so icon below goes to the bottomest part
+                  //chnage this
                   SizedBox(
                     height: AppSize.s280,
                   ),
@@ -166,7 +172,6 @@ class _TimeblockPageState extends State<TimeblockPage> {
           onChanged: (Tag? newValue) {
             setState(() {
               selectedTag = newValue!;
-              _editedEntry.tag = selectedTag;
             });
           },
           items: availableTags
@@ -185,13 +190,13 @@ class _TimeblockPageState extends State<TimeblockPage> {
             Expanded(
               flex: 2,
               child: buildDropdownField(
-                text: Utils.toDate(_editedEntry.startDate),
+                text: Utils.toDate(startDate),
                 onClicked: () => pickFromDateTime(pickDate: true),
               ),
             ),
             Expanded(
               child: buildDropdownField(
-                text: Utils.toTime(_editedEntry.startDate),
+                text: Utils.toTime(startDate),
                 onClicked: () => pickFromDateTime(pickDate: false),
               ),
             ),
@@ -206,13 +211,13 @@ class _TimeblockPageState extends State<TimeblockPage> {
             Expanded(
               flex: 2,
               child: buildDropdownField(
-                text: Utils.toDate(_editedEntry.endDate),
+                text: Utils.toDate(endDate),
                 onClicked: () => pickToDateTime(pickDate: true),
               ),
             ),
             Expanded(
               child: buildDropdownField(
-                text: Utils.toTime(_editedEntry.endDate),
+                text: Utils.toTime(endDate),
                 onClicked: () => pickToDateTime(pickDate: false),
               ),
             ),
@@ -221,29 +226,32 @@ class _TimeblockPageState extends State<TimeblockPage> {
       );
 
   Future pickFromDateTime({required bool pickDate}) async {
-    final date = await pickDateTime(_editedEntry.startDate, pickDate: pickDate);
+    final date = await pickDateTime(
+      startDate,
+      pickDate: pickDate,
+    );
     if (date == null) return;
 
-    if (date.isAfter(_editedEntry.endDate)) {
-      _editedEntry.endDate = DateTime(date.year, date.month, date.day,
-          _editedEntry.endDate.hour, _editedEntry.endDate.minute);
+    if (date.isAfter(endDate)) {
+      endDate = DateTime(
+          date.year, date.month, date.day, endDate.hour, endDate.minute);
     }
 
     setState(() {
-      _editedEntry.startDate = date;
+      startDate = date;
     });
   }
 
   Future pickToDateTime({required bool pickDate}) async {
     final date = await pickDateTime(
-      _editedEntry.endDate,
+      endDate,
       pickDate: pickDate,
-      firstDate: pickDate ? _editedEntry.startDate : null,
+      firstDate: pickDate ? startDate : null,
     );
     if (date == null) return;
 
     setState(() {
-      _editedEntry.endDate = date;
+      endDate = date;
     });
   }
 

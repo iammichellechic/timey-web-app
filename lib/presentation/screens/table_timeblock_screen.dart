@@ -10,7 +10,7 @@ import '../widgets/chart_weekly.dart';
 import '../shared/menu_drawer.dart';
 
 class EditablePage extends StatefulWidget {
-  static const routeName = '/list-timeblock';
+  
   @override
   State<EditablePage> createState() => _EditablePageState();
 }
