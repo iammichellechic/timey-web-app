@@ -15,32 +15,33 @@ class Routes {
 
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings routeSettings) {
+    const int animationDurationMs = 100;
     switch (routeSettings.name) {
       case Routes.overviewRoute:
         return PageTransition(
-          type: PageTransitionType.fade,
-          duration: Duration(seconds: 1),
+          type: PageTransitionType.rightToLeft,
+          duration: Duration(milliseconds: animationDurationMs),
           child: OverView(),
           settings: routeSettings,
         );
       case Routes.calendarRoute:
         return PageTransition(
-          type: PageTransitionType.fade,
-          duration: Duration(seconds: 1),
+          type: PageTransitionType.rightToLeft,
+          duration: Duration(milliseconds: animationDurationMs),
           child: CalendarWidget(),
           settings: routeSettings,
         );
       case Routes.tableRoute:
         return PageTransition(
-          type: PageTransitionType.fade,
-          duration: Duration(seconds: 1),
+          type: PageTransitionType.rightToLeft,
+          duration: Duration(milliseconds: animationDurationMs),
           child: EditablePage(),
           settings: routeSettings,
         );
       case Routes.formRoute:
         return PageTransition(
-          type: PageTransitionType.fade,
-          duration: Duration(seconds: 1),
+          type: PageTransitionType.rightToLeft,
+          duration: Duration(milliseconds: animationDurationMs),
           child: TimeblockPage(),
           settings: routeSettings,
         );
