@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:timey_web/locator.dart';
+import 'package:timey_web/navigation-service.dart';
 import 'package:timey_web/presentation/resources/routes_manager.dart';
 import '/presentation/resources/color_manager.dart';
 
@@ -57,12 +59,7 @@ class MenuDrawer extends StatelessWidget {
           leading: Icon(Icons.home),
           title: Text('Overview', style: Theme.of(context).textTheme.subtitle1),
           onTap: () {
-            var currentRoute = ModalRoute.of(context);
-            var routeToOpen = Routes.overviewRoute;
-            if (currentRoute != null &&
-                currentRoute.settings.name != routeToOpen) {
-              Navigator.of(context).pushReplacementNamed(routeToOpen);
-            }
+            locator<NavigationService>().navigateTo(Routes.overviewRoute);
           },
         ),
         ListTile(
@@ -70,12 +67,7 @@ class MenuDrawer extends StatelessWidget {
           title: Text('Calendar view',
               style: Theme.of(context).textTheme.subtitle1),
           onTap: () {
-            var currentRoute = ModalRoute.of(context);
-            var routeToOpen = Routes.calendarRoute;
-            if (currentRoute != null &&
-                currentRoute.settings.name != routeToOpen) {
-              Navigator.of(context).pushReplacementNamed(routeToOpen);
-            }
+            locator<NavigationService>().navigateTo(Routes.calendarRoute);
           },
         ),
         ListTile(
@@ -83,12 +75,7 @@ class MenuDrawer extends StatelessWidget {
           title:
               Text('Table view', style: Theme.of(context).textTheme.subtitle1),
           onTap: () {
-            var currentRoute = ModalRoute.of(context);
-            var routeToOpen = Routes.tableRoute;
-            if (currentRoute != null &&
-                currentRoute.settings.name != routeToOpen) {
-              Navigator.of(context).pushReplacementNamed(routeToOpen);
-            }
+            locator<NavigationService>().navigateTo(Routes.tableRoute);
           },
         ),
         ListTile(

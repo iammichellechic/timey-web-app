@@ -35,7 +35,10 @@ dependencies:
 
   #handle dates
   intl: ^0.17.0
+
+  get_it:  
   
+  responsive_builder:
 
   #charts
   charts_flutter: ^0.12.0

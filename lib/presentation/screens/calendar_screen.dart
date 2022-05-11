@@ -22,52 +22,15 @@ class CalendarWidget extends StatelessWidget {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     final bool displayMobileLayout = MediaQuery.of(context).size.width < 600;
 
-    return Row(
-      children: [
-        if (!displayMobileLayout)
-          const MenuDrawer(
-            permanentlyDisplay: true,
-          ),
-        Expanded(
-          child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              iconTheme: IconThemeData(color: ColorManager.grey),
-              elevation: 0,
-              automaticallyImplyLeading: displayMobileLayout,
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.add, color: ColorManager.grey),
-                  hoverColor: ColorManager.blue.withOpacity(0.6),
-                  onPressed: () {
-                    _scaffoldKey.currentState!.openEndDrawer();
-                  },
-                ),
-              ],
-            ),
-            key: _scaffoldKey,
-            //endDrawerEnableOpenDragGesture: false,
-            //extendBodyBehindAppBar: true,
-            endDrawer: TimeblockPage(),
-            drawer: displayMobileLayout
-                ? const MenuDrawer(
-                    permanentlyDisplay: false,
-                  )
-                : null,
-            body: buildCalendarWidget(context),
-          ),
-        )
-      ],
-    );
+    return Container(child: buildCalendarWidget(context));
   }
 
   Widget buildCalendarWidget(BuildContext context) {
     final entries = Provider.of<TimeBlocks>(context).userTimeBlock;
 
-    return Scaffold(
-        body: SfCalendar(
+    return SfCalendar(
       view: CalendarView.week,
-      allowedViews: <CalendarView>[
+      allowedViews: const <CalendarView>[
         //CalendarView.day,
         CalendarView.week,
         CalendarView.month,
@@ -113,7 +76,7 @@ class CalendarWidget extends StatelessWidget {
 
       //   provider.setDate(details.date!);
       // },
-    ));
+    );
   }
 
   Widget appointmentBuilder(
@@ -133,60 +96,57 @@ class CalendarWidget extends StatelessWidget {
             //spacing issues//
             child: ListTile(
               selected: true,
-                title: Text(
-                  event.tag!.name,
-                  style: getAppTheme().textTheme.subtitle1,
+              title: Text(
+                event.tag!.name,
+                style: getAppTheme().textTheme.subtitle1,
+              ),
+              subtitle: Column(children: <Widget>[
+                buildDuration(
+                  event!.reportHours.toString() +
+                      ' ' +
+                      'hrs' +
+                      ' ' +
+                      event!.remainingMinutes.toString() +
+                      ' ' +
+                      'mins',
                 ),
-                
-                subtitle: Column(
-                    children: <Widget>[
-                      buildDuration(
-                        event!.reportHours.toString() +
-                            ' ' +
-                            'hrs' +
-                            ' ' +
-                            event!.remainingMinutes.toString() +
-                            ' ' +
-                            'mins',
-                      ),
-                      buildDate('From', event.startDate),
-                      buildDate('To', event.endDate),
-                    ]),
-                  trailing: SizedBox(
-                    width: 20,
-                    child: PopupMenuButton(
-                      iconSize: AppSize.s12,
-                      color: ColorManager.lightBlue,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                      itemBuilder: (context) => [
-                        PopupMenuItem<int>(
-                            value: 0,
-                            child: ListTile(
-                              leading: const Icon(Icons.edit),
-                              title: Text(
-                                "Edit",
-                                // style: TextStyle(color: Colors.white),
-                              ),
-                            )),
-                        PopupMenuItem<int>(
-                            value: 1,
-                            child: ListTile(
-                              leading: Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                              ),
-                              title: Text(
-                                "Delete",
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            )),
-                      ],
-                      onSelected: (item) => selectedItem(context, item, event),
-                    ),
-                  ),
-                )
-               ));
+                buildDate('From', event.startDate),
+                buildDate('To', event.endDate),
+              ]),
+              trailing: SizedBox(
+                width: 20,
+                child: PopupMenuButton(
+                  iconSize: AppSize.s12,
+                  color: ColorManager.lightBlue,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  itemBuilder: (context) => [
+                    PopupMenuItem<int>(
+                        value: 0,
+                        child: ListTile(
+                          leading: const Icon(Icons.edit),
+                          title: Text(
+                            "Edit",
+                            // style: TextStyle(color: Colors.white),
+                          ),
+                        )),
+                    PopupMenuItem<int>(
+                        value: 1,
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                          title: Text(
+                            "Delete",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        )),
+                  ],
+                  onSelected: (item) => selectedItem(context, item, event),
+                ),
+              ),
+            )));
   }
 
   Widget buildDate(String title, DateTime date) {
