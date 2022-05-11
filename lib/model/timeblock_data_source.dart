@@ -1,7 +1,5 @@
-
-import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import '../providers/timeblock.dart';
+import '../data/providers/timeblock.dart';
 
 
 class EventDataSource extends CalendarDataSource {
@@ -19,6 +17,5 @@ class EventDataSource extends CalendarDataSource {
 
   @override
   String getSubject(int index) => getEvent(index).tag!.name;
-
 
 }

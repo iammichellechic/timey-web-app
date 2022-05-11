@@ -26,6 +26,12 @@ class Utils {
     return '$date';
   }
 
+  static String toChartDate(DateTime dateTime) {
+    final date = DateFormat.Md().format(dateTime);
+
+    return '$date';
+  }
+
   static String toTime(DateTime dateTime) {
     final time = DateFormat.Hm().format(dateTime);
 

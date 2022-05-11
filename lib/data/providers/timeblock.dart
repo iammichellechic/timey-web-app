@@ -15,7 +15,7 @@ class TimeBlock with ChangeNotifier {
       endDate.difference(startDate).inMinutes - (reportHours * 60);
 
   TimeBlock({
-    required this.id,
+    this.id, // lets ignore id for now
     required this.tag,
     required this.startDate,
     required this.endDate,

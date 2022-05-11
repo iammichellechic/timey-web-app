@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:timey_web_scratch/providers/tag.dart';
+import '/data/providers/tag.dart';
 
 class Tags with ChangeNotifier {
   final List<Tag> _tags = [

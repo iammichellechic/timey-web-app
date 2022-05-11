@@ -1,4 +1,4 @@
-name: timey_web_scratch
+name: timey_web
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -35,7 +35,7 @@ dependencies:
 
   #handle dates
   intl: ^0.17.0
-  datetime_picker_formfield: ^2.0.0
+  
 
   #charts
   charts_flutter: ^0.12.0
@@ -43,6 +43,12 @@ dependencies:
   #calendar
   syncfusion_flutter_calendar: ^20.1.50
 
+  #page-transition
+  page_transition: ^2.0.5
+
+  #aligning-dialogs
+  aligned_dialog: ^0.0.6
+  
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -101,6 +107,18 @@ flutter:
         - asset: assets/fonts/OpenSans-Regular.ttf
         - asset: assets/fonts/Opensans-Bold.ttf
           weight: 700
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/Lato-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Lato-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Lato-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Lato-Italic.ttf
+          weight: 400
+        - asset: assets/fonts/Lato-Light.ttf
+          weight: 300
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
