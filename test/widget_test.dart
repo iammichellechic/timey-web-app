@@ -7,9 +7,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:timey_web_scratch/app/app.dart';
+import 'package:timey_web/app/app.dart';
 
-import 'package:timey_web_scratch/main.dart';
+import 'package:timey_web/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

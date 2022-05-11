@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:timey_web_scratch/presentation/resources/values_manager.dart';
+import '../pages/timeblock_adding_page.dart';
+import '../shared/menu_drawer.dart';
 import '../../data/providers/timeblocks.dart';
-import '../pages/timeblock_editing_page.dart';
 
-import '../pages/table_timeblock_datatable.dart';
+
+import '../pages/table_timeblock_page.dart';
 import '../resources/color_manager.dart';
 import '../widgets/chart_weekly.dart';
-import '../shared/menu_drawer.dart';
+
+//right now this screen has no purpose
 
 class EditablePage extends StatefulWidget {
   
@@ -20,65 +22,67 @@ class _EditablePageState extends State<EditablePage> {
 
   @override
   Widget build(BuildContext context) {
-     
-      final screenWidth = MediaQuery.of(context).size.width;
-    const breakpoint = 600.0;
+    
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final bool displayMobileLayout = MediaQuery.of(context).size.width < 600;
 
-    if (screenWidth >= breakpoint) {
-   
     return Row(
       children: [
-        MenuDrawer(),
-        VerticalDivider(
-           width: 1,
-           color: ColorManager.grey,
-        ),
+        if (!displayMobileLayout)
+          const MenuDrawer(
+            permanentlyDisplay: true,
+          ),
         Expanded(
-        child:buildTableItems(context))
+          child: Scaffold(
+            appBar: AppBar(
+             backgroundColor: Colors.transparent,
+             iconTheme: IconThemeData(color: ColorManager.grey),
+              elevation: 0,
+              automaticallyImplyLeading: displayMobileLayout,
+               actions: [
+                IconButton(
+                  icon: Icon(Icons.add, color: ColorManager.grey),
+                  hoverColor: ColorManager.blue.withOpacity(0.6),
+                  onPressed: () {
+                    _scaffoldKey.currentState!.openEndDrawer();
+                  },
+                ),
+              ],
+            ),
+             key: _scaffoldKey,
+            //endDrawerEnableOpenDragGesture: false,
+            extendBodyBehindAppBar: true,
+            endDrawer: TimeblockPage(),
+            drawer: displayMobileLayout
+                ? const MenuDrawer(
+                    permanentlyDisplay: false,
+                  )
+                : null,
+            body: buildTableItems(context),
+          ),
+        )
       ],
     );
-  } else {
-      return Scaffold(
-          body: buildTableItems(context),
-          drawer: SizedBox(
-            width: 240,
-            child: Drawer(child: MenuDrawer()),
-          ));
-    }
   }
 
   Widget buildTableItems(BuildContext context){
     final timeblocksData = Provider.of<TimeBlocks>(context);
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  
     return Scaffold(
-          key: _scaffoldKey,
-          //endDrawerEnableOpenDragGesture: false,
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-           actions: [
-              IconButton(
-                icon: Icon(Icons.add, color: ColorManager.grey),
-                onPressed: () {
-                  _scaffoldKey.currentState!.openEndDrawer();
-                },
-              ),
-            ],
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
-        endDrawer: TimeblockPage(),
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.only(top: AppPadding.p20),
+            padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
             child: Column(
-              children: <Widget>[
-              Chart(timeblocksData.recentEntries), //no purpose
-              MyDataTable(),
-            ],
-             
-              ),
-          ),
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const <Widget>[
+               // Chart(timeblocksData.recentEntries), //no prupose
+                MyDataTable(),
+              ],
+               
+                ),
+            ),
           ),
         );
 

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:timey_web_scratch/presentation/pages/timeblock_editing_page.dart';
-import 'package:timey_web_scratch/presentation/screens/calendar_screen.dart';
-import 'package:timey_web_scratch/presentation/screens/overview.dart';
-import 'package:timey_web_scratch/presentation/screens/table_timeblock_screen.dart';
-
-import 'strings_manager.dart';
+import 'package:page_transition/page_transition.dart';
+import '/presentation/pages/timeblock_adding_page.dart';
+import '/presentation/screens/calendar_screen.dart';
+import '/presentation/screens/chart_overview_screen.dart';
+import '/presentation/screens/table_timeblock_screen.dart';
 
 class Routes {
   //temporary names
-  static const String overviewRoute = "/";
+  static const String overviewRoute = "/dashboard";
   static const String calendarRoute = "/timereports";
   static const String tableRoute = "/timereports-list";
   static const String formRoute = "/edit-timereport";
@@ -18,13 +17,33 @@ class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case Routes.overviewRoute:
-        return MaterialPageRoute(builder: (_) => OverView());
+        return PageTransition(
+          type: PageTransitionType.fade,
+          duration: Duration(seconds: 1),
+          child: OverView(),
+          settings: routeSettings,
+        );
       case Routes.calendarRoute:
-        return MaterialPageRoute(builder: (_) => CalendarWidget());
+        return PageTransition(
+          type: PageTransitionType.fade,
+          duration: Duration(seconds: 1),
+          child: CalendarWidget(),
+          settings: routeSettings,
+        );
       case Routes.tableRoute:
-        return MaterialPageRoute(builder: (_) => EditablePage());
+        return PageTransition(
+          type: PageTransitionType.fade,
+          duration: Duration(seconds: 1),
+          child: EditablePage(),
+          settings: routeSettings,
+        );
       case Routes.formRoute:
-        return MaterialPageRoute(builder: (_) => TimeblockPage());
+        return PageTransition(
+          type: PageTransitionType.fade,
+          duration: Duration(seconds: 1),
+          child: TimeblockPage(),
+          settings: routeSettings,
+        );
       default:
         return unDefinedRoute();
     }
@@ -34,9 +53,9 @@ class RouteGenerator {
     return MaterialPageRoute(
         builder: (_) => Scaffold(
               appBar: AppBar(
-                title: Text(AppStrings.noRouteFound),
+                title: Text("No Route Found"),
               ),
-              body: Center(child: Text(AppStrings.noRouteFound)),
+              body: Center(child: Text("No Route Found")),
             ));
   }
 }

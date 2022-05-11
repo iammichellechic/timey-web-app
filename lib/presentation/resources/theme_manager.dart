@@ -13,6 +13,11 @@ ThemeData getAppTheme() {
       colorScheme:
           ColorScheme.fromSwatch().copyWith(secondary: ColorManager.grey),
       visualDensity: VisualDensity.adaptivePlatformDensity,
+      scaffoldBackgroundColor: ColorManager.lightBlue,
+
+      //icon theme 
+       iconTheme: IconThemeData(
+         color: ColorManager.grey),
 
       //app bar theme
       appBarTheme: AppBarTheme(
@@ -20,7 +25,7 @@ ThemeData getAppTheme() {
           color: ColorManager.primaryWhite,
           titleTextStyle:
               getBoldStyle(color: ColorManager.black, fontSize: FontSize.s20)),
-      //sign up
+      //
       buttonTheme: ButtonThemeData(
         shape: StadiumBorder(),
         disabledColor: ColorManager.grey,
@@ -46,8 +51,10 @@ ThemeData getAppTheme() {
             getBoldStyle(color: ColorManager.black, fontSize: FontSize.s16),
         subtitle2: getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s16),
         caption: getRegularStyle(color: ColorManager.grey),
-        bodyText1:  getBoldStyle(color: ColorManager.black),
-        bodyText2:  getBoldStyle(color: ColorManager.grey),
+        bodyText1:  getBoldStyle(color: ColorManager.black,fontSize: FontSize.s12),
+        bodyText2:  getBoldStyle(color: ColorManager.grey,fontSize:FontSize.s12),
+        headline4: getRegularStyle(color: ColorManager.blue),
+        headline5: getRegularStyle(color: ColorManager.error),
         
       ),
       

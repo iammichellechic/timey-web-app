@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:timey_web_scratch/presentation/resources/values_manager.dart';
+import '../resources/values_manager.dart';
 
 import '../../data/providers/timeblock.dart';
 import '../resources/timeFormat_manager.dart';
 import './chart_weekly_bar.dart';
 
+//THIS IS NO LONGER NEEDED//
 class Chart extends StatelessWidget {
   final List<TimeBlock> recentTimeEntries;
 
@@ -42,16 +42,11 @@ class Chart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(groupedEntriesValues);
-    // return Card(
-    //   elevation: 6,
-    //   margin: EdgeInsets.all(20),
-    //   child: Padding(
-    //     padding: EdgeInsets.all(10),
     return Padding(
         padding: EdgeInsets.all(AppPadding.p12),
         child: Column(children: <Widget>[
           Text(
-            'Weekly Reported Hours',
+            'Weekly Time Report',
             style: Theme.of(context).textTheme.headline1,
           ),
           SizedBox(height: AppSize.s5),

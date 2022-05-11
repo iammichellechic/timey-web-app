@@ -1,34 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:timey_web_scratch/presentation/resources/color_manager.dart';
-import 'package:timey_web_scratch/presentation/screens/calendar_screen.dart';
-import 'package:timey_web_scratch/presentation/screens/overview.dart';
-import 'package:timey_web_scratch/presentation/screens/table_timeblock_screen.dart';
+import 'package:timey_web/presentation/resources/routes_manager.dart';
+import '/presentation/resources/color_manager.dart';
+
 import '../resources/values_manager.dart';
 
 class MenuDrawer extends StatelessWidget {
-  const MenuDrawer({Key? key}) : super(key: key);
+  const MenuDrawer({required this.permanentlyDisplay, Key? key}) : super(key: key);
+
+final bool permanentlyDisplay;
 
   @override
   Widget build(BuildContext context) {
-    //drawer icon doesnt show up on mobile
-    //swiping from left works
-
+ 
     return Drawer(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          buildHeader(context),
-          buildNavItems(context),
-          Spacer(),
-          Divider(
-            color: ColorManager.grey,
-          ),
-          buildUserProfile(context),
-          const SizedBox(height: 12),
-        ],
-      ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            buildHeader(context),
+            buildNavItems(context),
+            Spacer(),
+            Divider(
+              color: ColorManager.grey,
+            ),
+            buildUserProfile(context),
+            const SizedBox(height: 12),
+            if (permanentlyDisplay)
+              const VerticalDivider(
+                width: 1,
+              )
+          ],
+        ),
+      
     );
   }
 
@@ -48,51 +51,39 @@ class MenuDrawer extends StatelessWidget {
   }
 
   Widget buildNavItems(BuildContext context) {
-    return Container(
-        //padding: const EdgeInsets.all(24),
-        child: Wrap(
+    return Container( 
+      child: Wrap(
       children: [
         ListTile(
           leading: Icon(Icons.home),
           title: Text('Overview', style: Theme.of(context).textTheme.subtitle1),
           onTap: () {
-            Navigator.push(
+            Navigator.pushNamed(
                 context,
-                PageTransition(
-                  type: PageTransitionType.fade,
-                  duration: Duration(seconds: 1),
-                  child: OverView(),
-                ));
+                Routes.overviewRoute);
           },
         ),
         ListTile(
           leading: Icon(Icons.calendar_month),
           title: Text('Calendar view',
               style: Theme.of(context).textTheme.subtitle1),
-          onTap: () {
-            Navigator.push(
+          onTap: () 
+            {
+            Navigator.pushNamed(
                 context,
-                PageTransition(
-                  type: PageTransitionType.fade,
-                  duration: Duration(seconds: 1),
-                  child: CalendarWidget(),
-                  // MaterialPageRoute(builder: (context) =>
-                  //CalendarWidget()),
-                ));
+                Routes.calendarRoute);
           },
         ),
         ListTile(
           leading: Icon(Icons.table_chart),
           title:
               Text('Table view', style: Theme.of(context).textTheme.subtitle1),
-          onTap: () {
-            Navigator.push(
+          onTap: () 
+           {
+            Navigator.pushNamed(
                 context,
-                PageTransition(
-                  type: PageTransitionType.fade,
-                  duration: Duration(seconds: 1),
-                  child:EditablePage(),
-                ));
+                Routes.tableRoute);
+          
           },
         ),
         ListTile(
@@ -127,7 +118,7 @@ class MenuDrawer extends StatelessWidget {
                 ),
                 SizedBox(width: AppSize.s12),
                 Flexible(
-                  child: Column(
+                    child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(

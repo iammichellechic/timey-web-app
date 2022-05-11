@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:timey_web_scratch/presentation/resources/color_manager.dart';
-import 'package:timey_web_scratch/presentation/resources/values_manager.dart';
+import '/presentation/resources/color_manager.dart';
+import '/presentation/resources/values_manager.dart';
 
+//THIS IS NO LONGER NEEDED//
 class ChartBar extends StatelessWidget {
   final String label;
   final int reportedHours;

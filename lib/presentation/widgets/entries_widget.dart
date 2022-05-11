@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
-import 'package:timey_web_scratch/presentation/resources/color_manager.dart';
+import '../pages/entries_item_page.dart';
+import '/presentation/resources/color_manager.dart';
 
 import '../../data/providers/timeblocks.dart';
 import '../../model/timeblock_data_source.dart';
 import '../resources/font_manager.dart';
-import 'dialogs.dart';
+import 'dialogs_widget.dart';
+
+//THIS IS NO LONGER NEEDED//
 
 class EntriesWidget extends StatefulWidget {
   @override
@@ -42,26 +45,28 @@ class _EntriesWidgetState extends State<EntriesWidget> {
         todayHighlightColor: ColorManager.black,
         selectionDecoration: BoxDecoration(
           color: Colors.transparent,
+          
         ),
-        onTap: (details) {
-          if (details.appointments == null) return;
+        // onTap: (details) {
+        //   if (details.appointments == null) return;
 
-          final event = details.appointments!.first;
+        //   final event = details.appointments!.first;
 
-          showDialog<EntryItemDialog>(
-            context: context,
-            builder: (context) {
-              return EntryItemDialog(
-                entry: event,
-              );
-            },
-          );
+        //   showDialog<EntryItemDialog>(
+        //     context: context,
+        //     builder: (context) {
+        //       return EntryItemDialog(
+        //         entry: event,
+        //       );
+        //     },
+        //   );
 
-          // Navigator.of(context).push(MaterialPageRoute(
-          //   builder: (context) => TimeBlockItem(entry: event),
-          //));
-        },
+        // Navigator.of(context).push(MaterialPageRoute(
+        //   builder: (context) => TimeBlockItem(entry: event),
+        //));
+
         timeSlotViewSettings: TimeSlotViewSettings(
+          timelineAppointmentHeight: 300,
           startHour: 7,
           endHour: 24,
           timeIntervalWidth: 100,
@@ -86,17 +91,13 @@ class _EntriesWidgetState extends State<EntriesWidget> {
     return Container(
       width: details.bounds.width,
       height: details.bounds.height,
-      decoration: BoxDecoration(
-        //color:event.tag!.color
-        color: ColorManager.blue.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Center(
-        child: Text(event.tag!.name,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.subtitle1),
-      ),
-    );
+      color: ColorManager.blue.withOpacity(0.5),
+      // decoration: BoxDecoration(
+      //   //color:event.tag!.color
+      //   color: ColorManager.blue.withOpacity(0.5),
+      //   borderRadius: BorderRadius.circular(12),
+      // ),
+     child:TimeBlockItem(entry: event));
+
   }
 }

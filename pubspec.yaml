@@ -1,4 +1,4 @@
-name: timey_web_scratch
+name: timey_web
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -46,6 +46,9 @@ dependencies:
   #page-transition
   page_transition: ^2.0.5
 
+  #aligning-dialogs
+  aligned_dialog: ^0.0.6
+  
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2

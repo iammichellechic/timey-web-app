@@ -1,60 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:provider/provider.dart';
-import 'package:timey_web_scratch/presentation/resources/color_manager.dart';
 
-import '../../data/providers/timeblock.dart';
+import '/presentation/utils/chart_utils.dart' as utils;
+
 import '../../data/providers/timeblocks.dart';
 import '../resources/timeFormat_manager.dart';
 
 import '../resources/values_manager.dart';
-import '../shared/menu_drawer.dart';
 
+//detwrmines how many days before will render in the vhart
+const _daysBefore = 6;
 
-class OverView extends StatelessWidget {
+class WeeklyChart extends StatelessWidget {
+  const WeeklyChart({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    const breakpoint = 600.0;
-
-    if (screenWidth >= breakpoint) {
-      return Row(
-        children: [
-          SizedBox(child: MenuDrawer()),
-          VerticalDivider(
-            width: 1,
-            color: ColorManager.grey,
-          ),
-          Expanded(
-            child: buildChartWidget(context),
-          )
-        ],
-      );
-    } else {
-      return Scaffold(
-          body: buildChartWidget(context),
-          drawer: SizedBox(
-            width: 240,
-            child: Drawer(child: MenuDrawer()),
-          ));
-    }
+    return Scaffold(body: buildChartWeeklyWidget(context));
   }
 
-  Widget buildChartWidget(BuildContext context) {
+  Widget buildChartWeeklyWidget(BuildContext context) {
     final timeblocksData = Provider.of<TimeBlocks>(context);
     final timeblocks = timeblocksData.userTimeBlock;
 
     print(timeblocks.first.reportHours);
     print(timeblocks.first.remainingMinutes);
 
-    List<charts.Series<TimeBlock, String>> seriesData = [
+    List<charts.Series<utils.EntryTotal, String>> seriesData = [
       charts.Series(
         id: 'Reported Hours',
-        data: timeblocks,
-        domainFn: (TimeBlock tb, _) => Utils.toDateAbbrLabel(tb.startDate),
-        measureFn: (TimeBlock tb, _) => tb.reportHours,
-        colorFn: (TimeBlock tb, _) =>
-            charts.ColorUtil.fromDartColor(Color(0xff990099)),
+        data: utils.entryTotalsByDay(timeblocks, _daysBefore),
+        domainFn: (entryTotal, _) {
+          return Utils.toChartDate(entryTotal.day);
+        },
+        measureFn: (total, _) {
+          return total.value;
+        },
+        colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
       )
     ];
 
@@ -66,7 +49,7 @@ class OverView extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Text(
-                'Reported Hours',
+                'Weekly Time Report',
                 style: Theme.of(context).textTheme.headline1,
               ),
               SizedBox(height: AppSize.s5),

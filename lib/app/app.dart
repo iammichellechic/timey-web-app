@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:timey_web_scratch/presentation/resources/theme_manager.dart';
+import '/presentation/resources/theme_manager.dart';
 
 import '../data/providers/tags.dart';
 import '../data/providers/timeblocks.dart';
@@ -41,7 +41,6 @@ class _MyAppState extends State<MyApp> {
           theme: getAppTheme(),
       
           debugShowCheckedModeBanner: false,
-    
           onGenerateRoute: RouteGenerator.getRoute,
           initialRoute:Routes.overviewRoute,
         ));

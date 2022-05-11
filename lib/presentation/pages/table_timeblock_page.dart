@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:timey_web_scratch/presentation/resources/color_manager.dart';
-import 'package:timey_web_scratch/presentation/resources/timeFormat_manager.dart';
+import '/presentation/resources/color_manager.dart';
+import '/presentation/resources/timeFormat_manager.dart';
 
 import '../../data/providers/timeblocks.dart';
-import '../widgets/dialogs.dart';
+import '../widgets/dialogs_widget.dart';
 
 class MyDataTable extends StatefulWidget {
   const MyDataTable({Key? key}) : super(key: key);
@@ -47,7 +47,7 @@ class _MyDataTableState extends State<MyDataTable> {
         physics: BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
         child: FittedBox(
-            fit: BoxFit.cover,
+            fit: BoxFit.fitWidth,
             child: DataTable(
               border: TableBorder.symmetric(
                   outside: BorderSide(width: 3, color: Colors.amber),

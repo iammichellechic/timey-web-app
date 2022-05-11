@@ -5,10 +5,8 @@ class ColorManager {
   static Color black = HexColor.fromHex("#000000");
   static Color grey = HexColor.fromHex("#8B8989");
   static Color blue = HexColor.fromHex("#1A72F8");
-
-  // new colors
- 
   static Color error = HexColor.fromHex("#e61f34"); // red color
+  static Color lightBlue = HexColor.fromHex("#F0FFFF"); //swcaffold background
 }
 
 extension HexColor on Color {
