@@ -57,7 +57,12 @@ class MenuDrawer extends StatelessWidget {
           leading: Icon(Icons.home),
           title: Text('Overview', style: Theme.of(context).textTheme.subtitle1),
           onTap: () {
-            Navigator.of(context).pushReplacementNamed(Routes.overviewRoute);
+            var currentRoute = ModalRoute.of(context);
+            var routeToOpen = Routes.overviewRoute;
+            if (currentRoute != null &&
+                currentRoute.settings.name != routeToOpen) {
+              Navigator.of(context).pushReplacementNamed(routeToOpen);
+            }
           },
         ),
         ListTile(
@@ -65,7 +70,12 @@ class MenuDrawer extends StatelessWidget {
           title: Text('Calendar view',
               style: Theme.of(context).textTheme.subtitle1),
           onTap: () {
-            Navigator.of(context).pushReplacementNamed(Routes.calendarRoute);
+            var currentRoute = ModalRoute.of(context);
+            var routeToOpen = Routes.calendarRoute;
+            if (currentRoute != null &&
+                currentRoute.settings.name != routeToOpen) {
+              Navigator.of(context).pushReplacementNamed(routeToOpen);
+            }
           },
         ),
         ListTile(
@@ -73,7 +83,12 @@ class MenuDrawer extends StatelessWidget {
           title:
               Text('Table view', style: Theme.of(context).textTheme.subtitle1),
           onTap: () {
-            Navigator.of(context).pushReplacementNamed(Routes.tableRoute);
+            var currentRoute = ModalRoute.of(context);
+            var routeToOpen = Routes.tableRoute;
+            if (currentRoute != null &&
+                currentRoute.settings.name != routeToOpen) {
+              Navigator.of(context).pushReplacementNamed(routeToOpen);
+            }
           },
         ),
         ListTile(
