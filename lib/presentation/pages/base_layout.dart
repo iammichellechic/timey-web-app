@@ -16,13 +16,9 @@ class BaseLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
         builder: (context, sizingInformation) => Scaffold(
-            drawer: sizingInformation.isMobile
-                ? MenuDrawer(
-                    permanentlyDisplay: false,
-                  )
-                : MenuDrawer(
-                    permanentlyDisplay: true,
-                  ),
+            drawer: MenuDrawer(
+              permanentlyDisplay: !sizingInformation.isMobile,
+            ),
             endDrawer: TimeblockPage(),
             body: CenteredView(
               child: Column(
@@ -48,7 +44,7 @@ class CenteredView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 25),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       alignment: Alignment.topCenter,
       child: ConstrainedBox(
         constraints: BoxConstraints(),

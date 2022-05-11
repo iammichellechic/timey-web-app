@@ -16,9 +16,7 @@ class MenuDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
+        children: [
           buildHeader(context),
           buildNavItems(context),
           Spacer(),
@@ -30,30 +28,14 @@ class MenuDrawer extends StatelessWidget {
           if (permanentlyDisplay)
             const VerticalDivider(
               width: 1,
-            )
+            ),
         ],
       ),
     );
   }
 
-  Widget buildHeader(BuildContext context) {
-    final safeArea =
-        EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
-
-    return Container(
-        padding: safeArea,
-        height: 100,
-        child: DrawerHeader(
-            child: Center(
-          child: SelectableText('Timey',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headline1),
-        )));
-  }
-
-  Widget buildNavItems(BuildContext context) {
-    return Container(
-        child: Wrap(
+  Column buildNavItems(BuildContext context) {
+    return Column(
       children: [
         ListTile(
           leading: Icon(Icons.home),
@@ -93,7 +75,22 @@ class MenuDrawer extends StatelessWidget {
           onTap: () => {},
         ),
       ],
-    ));
+    );
+  }
+
+  Widget buildHeader(BuildContext context) {
+    final safeArea =
+        EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
+
+    return Container(
+        padding: safeArea,
+        height: 100,
+        child: DrawerHeader(
+            child: Center(
+          child: SelectableText('Timey',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headline1),
+        )));
   }
 
   Widget buildUserProfile(BuildContext context) => Material(
