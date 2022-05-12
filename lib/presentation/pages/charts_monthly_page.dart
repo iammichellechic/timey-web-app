@@ -13,22 +13,16 @@ import '../resources/values_manager.dart';
 const _daysBefore = 30;
 
 class MonthlyChart extends StatelessWidget {
-  const MonthlyChart({ Key? key }) : super(key: key);
-
+  const MonthlyChart({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body:buildChartWidget(context)
-      
-    );
+    return Scaffold(body: buildChartWidget(context));
   }
 
-   Widget buildChartWidget(BuildContext context) {
+  Widget buildChartWidget(BuildContext context) {
     final timeblocksData = Provider.of<TimeBlocks>(context);
     final timeblocks = timeblocksData.userTimeBlock;
-
-    print(timeblocks.first.reportHours);
-    print(timeblocks.first.remainingMinutes);
 
     List<charts.Series<utils.EntryTotal, String>> seriesData = [
       charts.Series(
