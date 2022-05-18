@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:timey_web/presentation/pages/timeblocks_items.dart';
 import '/presentation/resources/color_manager.dart';
 import '/presentation/resources/values_manager.dart';
 
@@ -25,14 +26,13 @@ class _TimeblockPageState extends State<TimeblockPage> {
   final _form = GlobalKey<FormState>();
 
   List<Tag> availableTags = Tags().tags;
-  Tag? selectedTag;
+  Tag? selectedTag; //saving empty tag value
+
   late DateTime startDate;
   late DateTime endDate;
 
   @override
   void initState() {
-    super.initState();
-
     if (widget.timeBlock == null) {
       startDate = DateTime.now();
       endDate = DateTime.now().add(Duration(hours: 2));
@@ -42,19 +42,23 @@ class _TimeblockPageState extends State<TimeblockPage> {
 
       startDate = timeBlock.startDate;
       endDate = timeBlock.endDate;
-      selectedTag = timeBlock.tag; //doesnt auto populate durinh edit
+      selectedTag = timeBlock.tag; //doesnt auto populate during edit
 
     }
 
-    if (availableTags.isNotEmpty) selectedTag = availableTags.first;
+    if (availableTags.isNotEmpty) {
+      selectedTag = availableTags.first;
+    }
+
+    super.initState();
   }
 
   void _saveForm() {
     final isValid = _form.currentState!.validate();
 
     if (isValid) {
-      final timeBlock =
-          TimeBlock(tag: selectedTag, startDate: startDate, endDate: endDate);
+      final timeBlock = TimeBlock(
+          tag: selectedTag, startDate: startDate, endDate: endDate);
 
       if (widget.timeBlock != null) {
         Provider.of<TimeBlocks>(context, listen: false)
@@ -62,7 +66,8 @@ class _TimeblockPageState extends State<TimeblockPage> {
       } else {
         Provider.of<TimeBlocks>(context, listen: false).addTimeBlock(timeBlock);
       }
-      Navigator.of(context).pop();
+      //Navigator.of(context, rootNavigator: true).pop();
+      Navigator.pop(context);
     }
   }
 
@@ -83,7 +88,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
             ? MediaQuery.of(context).size.width * 0.30
             : MediaQuery.of(context).size.width,
         child: Drawer(
-          child: Center(
+            child: Center(
           child: Padding(
             padding: const EdgeInsets.all(AppPadding.p30),
             child: Form(
@@ -99,7 +104,29 @@ class _TimeblockPageState extends State<TimeblockPage> {
                     height: AppSize.s20,
                   ),
                   buildActionRow(context),
-               
+                  TimeBlocksItems(),
+                  // SizedBox(
+                  //   height: AppSize.s10,
+                  // ),
+                  RichText(
+                      text: TextSpan(children: [
+                    TextSpan(
+                        text: "Close",
+                        style: Theme.of(context).textTheme.caption),
+                    WidgetSpan(
+                        child: Align(
+                            alignment: FractionalOffset.bottomLeft,
+                            child: IconButton(
+                                icon: Icon(
+                                  Icons.close,
+                                  color: ColorManager.grey,
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  //  locator<NavigationService>()
+                                  //     .navigateTo(Routes.calendarRoute);
+                                })))
+                  ])),
                 ],
               ),
             ),
@@ -107,22 +134,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
         )));
   }
 
-Row buildActionRow(BuildContext context) => Row(children: [
-        RichText(
-            text: TextSpan(children: [
-          TextSpan(text: "Close", style: Theme.of(context).textTheme.caption),
-          WidgetSpan(
-              child: Align(
-                  alignment: FractionalOffset.bottomLeft,
-                  child: IconButton(
-                      icon: Icon(
-                        Icons.close,
-                        color: ColorManager.grey,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      })))
-        ])),
+  Row buildActionRow(BuildContext context) => Row(children: [
         Spacer(),
         DecoratedBox(
           decoration: BoxDecoration(
@@ -143,28 +155,29 @@ Row buildActionRow(BuildContext context) => Row(children: [
           ),
         ),
       ]);
-    
 
-  Widget buildTag() => Container(
-      padding: EdgeInsets.only(top: AppPadding.p16),
-      child: DropdownButtonFormField<Tag>(
-          decoration: InputDecoration(
-              border: UnderlineInputBorder(),
-              icon: Icon(Icons.assignment, color: ColorManager.grey),
-              labelText: 'Project',
-              labelStyle: Theme.of(context).textTheme.subtitle2),
-          value: selectedTag,
-          icon: const Icon(Icons.arrow_downward),
-          elevation: AppSize.s16.toInt(),
-          onChanged: (Tag? newValue) {
-            setState(() {
-              selectedTag = newValue!;
-            });
-          },
-          items: availableTags
-              .map<DropdownMenuItem<Tag>>((tag) =>
-                  DropdownMenuItem<Tag>(value: tag, child: Text(tag.name)))
-              .toList()));
+  Widget  buildTag() => Container(
+        padding: EdgeInsets.only(top: AppPadding.p16),
+        child: DropdownButtonFormField<Tag>(
+            decoration: InputDecoration(
+                border: UnderlineInputBorder(),
+                icon: Icon(Icons.assignment, color: ColorManager.grey),
+                labelText: 'Project',
+                labelStyle: Theme.of(context).textTheme.subtitle2),
+            value: selectedTag ,
+            icon: const Icon(Icons.arrow_downward),
+            elevation: AppSize.s16.toInt(),
+            onChanged: (Tag? newValue) {
+              setState(() {
+                selectedTag = newValue!;
+               
+              });
+            },
+            items: availableTags
+                .map<DropdownMenuItem<Tag>>((tag) =>
+                    DropdownMenuItem<Tag>(value: tag, child: Text(tag.name)))
+                .toList()),
+      );
 
   Widget buildDateTimePickers() => Column(
         children: [buildStartDate(), buildEndDate()],

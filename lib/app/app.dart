@@ -38,6 +38,7 @@ class _MyAppState extends State<MyApp> {
           theme: getAppTheme(),
           debugShowCheckedModeBanner: false,
           home: BaseLayout(),
+         
         ));
   }
 }

@@ -26,7 +26,7 @@ class MenuDrawer extends StatelessWidget {
           buildUserProfile(context),
           const SizedBox(height: 12),
           if (permanentlyDisplay)
-            const VerticalDivider(
+            VerticalDivider(
               width: 1,
             ),
         ],
@@ -57,7 +57,7 @@ class MenuDrawer extends StatelessWidget {
           title:
               Text('Table view', style: Theme.of(context).textTheme.subtitle1),
           onTap: () {
-            locator<NavigationService>().navigateTo(Routes.tableRoute);
+            // locator<NavigationService>().navigateTo(Routes.tableRoute);
           },
         ),
         ListTile(

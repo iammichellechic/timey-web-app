@@ -18,7 +18,9 @@ class RouteGenerator {
     switch (routeSettings.name) {
       case Routes.overviewRoute:
         return _GeneratePageRoute(
-            widget: OverView(), routeName: routeSettings.name!);
+          widget: OverView(),
+          routeName: routeSettings.name!,
+        );
       case Routes.calendarRoute:
         return _GeneratePageRoute(
           widget: CalendarWidget(),

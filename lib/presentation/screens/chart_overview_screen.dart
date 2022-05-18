@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:timey_web/presentation/pages/charts_monthly_page.dart';
 import 'package:timey_web/presentation/pages/charts_weekly_page.dart';
 
-import '../pages/timeblock_adding_page.dart';
 import '../widgets/tabbar_widget.dart';
-import '/presentation/resources/color_manager.dart';
-
-import '../shared/menu_drawer.dart';
 
 class OverView extends StatelessWidget {
   @override

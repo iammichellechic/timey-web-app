@@ -2,8 +2,11 @@ import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:timey_web/presentation/pages/table_timeblock_page.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 import '../../data/providers/timeblock.dart';
+import '../../locator.dart';
+import '../../navigation-service.dart';
 import '../pages/timeblock_adding_page.dart';
 import '../resources/font_manager.dart';
 import '../resources/routes_manager.dart';
@@ -19,9 +22,6 @@ import '../shared/menu_drawer.dart';
 class CalendarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-    final bool displayMobileLayout = MediaQuery.of(context).size.width < 600;
-
     return Container(child: buildCalendarWidget(context));
   }
 
@@ -31,13 +31,13 @@ class CalendarWidget extends StatelessWidget {
     return SfCalendar(
       view: CalendarView.week,
       allowedViews: const <CalendarView>[
-        //CalendarView.day,
         CalendarView.week,
         CalendarView.month,
+        CalendarView.schedule,
       ],
       allowViewNavigation: true,
       showNavigationArrow: true,
-      showWeekNumber: true,
+      //showWeekNumber: true,
       initialDisplayDate: DateTime.now(),
       appointmentBuilder: appointmentBuilder,
       monthViewSettings: MonthViewSettings(
@@ -59,6 +59,10 @@ class CalendarWidget extends StatelessWidget {
         startHour: 7,
         endHour: 24,
         numberOfDaysInView: 3,
+        // nonWorkingDays: <int>[
+        //   DateTime.saturday,
+        //   DateTime.sunday,
+        // ],
         dayFormat: 'EEE',
         timeFormat: 'HH:mm',
         timeTextStyle: TextStyle(
@@ -67,15 +71,12 @@ class CalendarWidget extends StatelessWidget {
             fontSize: FontSize.s14,
             color: ColorManager.grey),
       ),
+      scheduleViewSettings: ScheduleViewSettings(
+          appointmentItemHeight: 100, hideEmptyScheduleWeek: true),
       firstDayOfWeek: 1,
       dataSource: EventDataSource(entries),
       initialSelectedDate: DateTime.now(),
       cellBorderColor: Colors.transparent,
-      // onSelectionChanged: (details) {
-      //   final provider = Provider.of<TimeBlocks>(context, listen: false);
-
-      //   provider.setDate(details.date!);
-      // },
     );
   }
 
@@ -84,67 +85,43 @@ class CalendarWidget extends StatelessWidget {
     CalendarAppointmentDetails details,
   ) {
     final event = details.appointments.first;
+
     return SingleChildScrollView(
         child: Container(
-            padding: EdgeInsets.only(top: AppPadding.p12),
+            padding: EdgeInsets.all(AppPadding.p8),
             width: details.bounds.width,
             height: details.bounds.height,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppSize.s10),
               color: ColorManager.blue.withOpacity(0.5),
             ),
-            //spacing issues//
-            child: ListTile(
-              selected: true,
-              title: Text(
-                event.tag!.name,
-                style: getAppTheme().textTheme.subtitle1,
-              ),
-              subtitle: Column(children: <Widget>[
-                buildDuration(
-                  event!.reportHours.toString() +
-                      ' ' +
-                      'hrs' +
-                      ' ' +
-                      event!.remainingMinutes.toString() +
-                      ' ' +
-                      'mins',
-                ),
-                buildDate('From', event.startDate),
-                buildDate('To', event.endDate),
-              ]),
-              trailing: SizedBox(
-                width: 20,
-                child: PopupMenuButton(
-                  iconSize: AppSize.s12,
-                  color: ColorManager.lightBlue,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  itemBuilder: (context) => [
-                    PopupMenuItem<int>(
-                        value: 0,
-                        child: ListTile(
-                          leading: const Icon(Icons.edit),
-                          title: Text(
-                            "Edit",
-                            // style: TextStyle(color: Colors.white),
-                          ),
-                        )),
-                    PopupMenuItem<int>(
-                        value: 1,
-                        child: ListTile(
-                          leading: Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          ),
-                          title: Text(
-                            "Delete",
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        )),
-                  ],
-                  onSelected: (item) => selectedItem(context, item, event),
-                ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ListTile(
+                    selected: true,
+                    title: Text(
+                      event.tag!.name,
+                      style: getAppTheme().textTheme.subtitle1,
+                    ),
+                    
+                    subtitle:  Column(children: <Widget>[
+                        buildDuration(
+                          event!.reportHours.toString() +
+                              ' ' +
+                              'hrs' +
+                              ' ' +
+                              event!.remainingMinutes.toString() +
+                              ' ' +
+                              'mins',
+                        ),
+                        buildDate('From', event.startDate),
+                        buildDate('To', event.endDate),
+                      ]),
+                    
+                    trailing: buildActionMethods(context, event),
+                  ),
+                ],
               ),
             )));
   }
@@ -154,6 +131,7 @@ class CalendarWidget extends StatelessWidget {
     final styleDate = getAppTheme().textTheme.bodyText2;
 
     return Container(
+       padding: EdgeInsets.only(top: AppPadding.p8),
       child: Row(
         children: [
           Expanded(child: Text(title, style: styleTitle)),
@@ -167,7 +145,7 @@ class CalendarWidget extends StatelessWidget {
     final styleDate = getAppTheme().textTheme.bodyText2;
 
     return Container(
-      //padding: EdgeInsets.symmetric(vertical: AppPadding.p8),
+      padding: EdgeInsets.only(top: AppPadding.p8),
       child: Text(text, style: styleDate),
     );
   }
@@ -210,7 +188,10 @@ class CalendarWidget extends StatelessWidget {
                       Provider.of<TimeBlocks>(context, listen: false);
                   provider.deleteTimeBlock(entry!.id);
                   //punshNamed vs popUntil??
-                  Navigator.of(context).pushNamed(Routes.calendarRoute);
+                  Navigator.of(context)
+                      .pop(); //it should pop before redirecting
+
+                  locator<NavigationService>().navigateTo(Routes.calendarRoute);
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -229,5 +210,46 @@ class CalendarWidget extends StatelessWidget {
         );
         break;
     }
+  }
+
+  Widget buildActionMethods(BuildContext context, TimeBlock? entry) {
+    return SizedBox(
+      width: 20,
+      child: PopupMenuButton(
+        iconSize: AppSize.s12,
+        color: ColorManager.lightBlue,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(15.0))),
+        itemBuilder: (context) => [
+          PopupMenuItem<int>(
+            value: 0,
+            child: ListTile(
+              leading: const Icon(Icons.edit),
+              title: Text(
+                "Edit",
+                // style: TextStyle(color: Colors.white),
+              ),
+            ),
+            // onTap: () async {
+            //  // Provider.of<TimeBlocks>(context, listen: true);
+            //   Scaffold.of(context).openEndDrawer();
+            // }
+          ),
+          PopupMenuItem<int>(
+              value: 1,
+              child: ListTile(
+                leading: Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                ),
+                title: Text(
+                  "Delete",
+                  style: TextStyle(color: Colors.red),
+                ),
+              )),
+        ],
+        onSelected: (item) => selectedItem(context, item, entry),
+      ),
+    );
   }
 }
