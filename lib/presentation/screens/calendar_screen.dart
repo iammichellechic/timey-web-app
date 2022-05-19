@@ -2,12 +2,13 @@ import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:timey_web/presentation/pages/table_timeblock_page.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
+import 'package:timey_web/presentation/utils/snackbar_utils.dart';
+
 import '../../data/providers/timeblock.dart';
 import '../../locator.dart';
 import '../../navigation-service.dart';
-import '../pages/timeblock_adding_page.dart';
+
 import '../resources/font_manager.dart';
 import '../resources/routes_manager.dart';
 import '../resources/theme_manager.dart';
@@ -17,7 +18,6 @@ import '/presentation/resources/color_manager.dart';
 import '../../data/providers/timeblocks.dart';
 
 import '../../model/timeblock_data_source.dart';
-import '../shared/menu_drawer.dart';
 
 class CalendarWidget extends StatelessWidget {
   @override
@@ -86,44 +86,41 @@ class CalendarWidget extends StatelessWidget {
   ) {
     final event = details.appointments.first;
 
-    return SingleChildScrollView(
-        child: Container(
-            padding: EdgeInsets.all(AppPadding.p8),
-            width: details.bounds.width,
-            height: details.bounds.height,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppSize.s10),
-              color: ColorManager.blue.withOpacity(0.5),
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  ListTile(
-                    selected: true,
-                    title: Text(
-                      event.tag!.name,
-                      style: getAppTheme().textTheme.subtitle1,
-                    ),
-                    
-                    subtitle:  Column(children: <Widget>[
-                        buildDuration(
-                          event!.reportHours.toString() +
-                              ' ' +
-                              'hrs' +
-                              ' ' +
-                              event!.remainingMinutes.toString() +
-                              ' ' +
-                              'mins',
-                        ),
-                        buildDate('From', event.startDate),
-                        buildDate('To', event.endDate),
-                      ]),
-                    
-                    trailing: buildActionMethods(context, event),
+    return Container(
+        padding: EdgeInsets.all(AppPadding.p8),
+        width: details.bounds.width,
+        height: details.bounds.height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(AppSize.s10),
+          color: ColorManager.blue.withOpacity(0.5),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ListTile(
+                selected: true,
+                title: Text(
+                  event.tag!.name,
+                  style: getAppTheme().textTheme.subtitle1,
+                ),
+                subtitle: Column(children: <Widget>[
+                  buildDuration(
+                    event!.reportHours.toString() +
+                        ' ' +
+                        'hrs' +
+                        ' ' +
+                        event!.remainingMinutes.toString() +
+                        ' ' +
+                        'mins',
                   ),
-                ],
+                  buildDate('From', event.startDate),
+                  buildDate('To', event.endDate),
+                ]),
+                trailing: buildActionMethods(context, event),
               ),
-            )));
+            ],
+          ),
+        ));
   }
 
   Widget buildDate(String title, DateTime date) {
@@ -131,7 +128,7 @@ class CalendarWidget extends StatelessWidget {
     final styleDate = getAppTheme().textTheme.bodyText2;
 
     return Container(
-       padding: EdgeInsets.only(top: AppPadding.p8),
+      padding: EdgeInsets.only(top: AppPadding.p8),
       child: Row(
         children: [
           Expanded(child: Text(title, style: styleTitle)),
@@ -193,15 +190,12 @@ class CalendarWidget extends StatelessWidget {
 
                   locator<NavigationService>().navigateTo(Routes.calendarRoute);
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        backgroundColor: ColorManager.primaryWhite,
-                        behavior: SnackBarBehavior.floating,
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0))),
-                        content: Text('Entry Removed',
-                            style: Theme.of(context).textTheme.headline4)),
+                  SnackBarUtils.showSnackBar(
+                    context: context,
+                    text: 'Entry removed',
+                    color: ColorManager.primaryWhite.withOpacity(0.7),
+                    icons: Icons.delete,
+                    iconColor: ColorManager.error
                   );
                 },
               )

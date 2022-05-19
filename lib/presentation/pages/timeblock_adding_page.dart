@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timey_web/presentation/pages/timeblocks_items.dart';
+import 'package:timey_web/presentation/widgets/button_widget.dart';
 import '/presentation/resources/color_manager.dart';
 import '/presentation/resources/values_manager.dart';
 
@@ -57,8 +58,8 @@ class _TimeblockPageState extends State<TimeblockPage> {
     final isValid = _form.currentState!.validate();
 
     if (isValid) {
-      final timeBlock = TimeBlock(
-          tag: selectedTag, startDate: startDate, endDate: endDate);
+      final timeBlock =
+          TimeBlock(tag: selectedTag, startDate: startDate, endDate: endDate);
 
       if (widget.timeBlock != null) {
         Provider.of<TimeBlocks>(context, listen: false)
@@ -82,81 +83,62 @@ class _TimeblockPageState extends State<TimeblockPage> {
     final safeArea =
         EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
 
-    return Container(
-        padding: safeArea,
-        width: isDesktop(context)
-            ? MediaQuery.of(context).size.width * 0.30
-            : MediaQuery.of(context).size.width,
-        child: Drawer(
-            child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(AppPadding.p30),
-            child: Form(
-              key: _form,
-              child: ListView(
-                children: <Widget>[
-                  buildTag(),
-                  SizedBox(
-                    height: AppSize.s12,
-                  ),
-                  buildDateTimePickers(),
-                  SizedBox(
-                    height: AppSize.s20,
-                  ),
-                  buildActionRow(context),
-                  TimeBlocksItems(),
-                  // SizedBox(
-                  //   height: AppSize.s10,
-                  // ),
-                  RichText(
-                      text: TextSpan(children: [
-                    TextSpan(
-                        text: "Close",
-                        style: Theme.of(context).textTheme.caption),
-                    WidgetSpan(
-                        child: Align(
-                            alignment: FractionalOffset.bottomLeft,
-                            child: IconButton(
-                                icon: Icon(
-                                  Icons.close,
-                                  color: ColorManager.grey,
-                                ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  //  locator<NavigationService>()
-                                  //     .navigateTo(Routes.calendarRoute);
-                                })))
-                  ])),
-                ],
+    return  Container(
+          padding: safeArea,
+          width: isDesktop(context)
+              ? MediaQuery.of(context).size.width * 0.30
+              : MediaQuery.of(context).size.width,
+          child: Drawer(
+              child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(AppPadding.p30),
+              child: Form(
+                key: _form,
+                child: ListView(
+                  children: <Widget>[
+                    buildTag(),
+                    SizedBox(
+                      height: AppSize.s12,
+                    ),
+                    buildDateTimePickers(),
+                    SizedBox(
+                      height: AppSize.s20,
+                    ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          ButtonWidget(text: 'Report', onClicked: _saveForm)
+                        ]),
+                    Spacer(),
+                    TimeBlocksItems(),
+                    buildCloseButton(context),
+                  ],
+                ),
               ),
             ),
-          ),
-        )));
+          )),
+    );
   }
 
-  Row buildActionRow(BuildContext context) => Row(children: [
-        Spacer(),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: const [
-                  Color.fromRGBO(187, 222, 251, 1),
-                  Color.fromRGBO(13, 71, 161, 1),
-                ]),
-          ),
-          child: ElevatedButton(
-            child: Padding(
-              padding: const EdgeInsets.all(AppPadding.p8),
-              child: Text('Report'),
-            ),
-            onPressed: _saveForm,
-          ),
-        ),
-      ]);
+  Widget buildCloseButton(BuildContext context) => RichText(
+          text: TextSpan(children: [
+        TextSpan(text: "Close", style: Theme.of(context).textTheme.caption),
+        WidgetSpan(
+            child: Align(
+                alignment: FractionalOffset.bottomLeft,
+                child: IconButton(
+                    icon: Icon(
+                      Icons.close,
+                      color: ColorManager.grey,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      //  locator<NavigationService>()
+                      //     .navigateTo(Routes.calendarRoute);
+                    })))
+      ]));
 
-  Widget  buildTag() => Container(
+  Widget buildTag() => Container(
         padding: EdgeInsets.only(top: AppPadding.p16),
         child: DropdownButtonFormField<Tag>(
             decoration: InputDecoration(
@@ -164,13 +146,12 @@ class _TimeblockPageState extends State<TimeblockPage> {
                 icon: Icon(Icons.assignment, color: ColorManager.grey),
                 labelText: 'Project',
                 labelStyle: Theme.of(context).textTheme.subtitle2),
-            value: selectedTag ,
+            value: selectedTag,
             icon: const Icon(Icons.arrow_downward),
             elevation: AppSize.s16.toInt(),
             onChanged: (Tag? newValue) {
               setState(() {
                 selectedTag = newValue!;
-               
               });
             },
             items: availableTags

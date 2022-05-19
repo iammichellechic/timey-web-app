@@ -46,9 +46,6 @@ dependencies:
   #calendar
   syncfusion_flutter_calendar: ^20.1.50
 
-  #page-transition
-  page_transition: ^2.0.5
-
   #aligning-dialogs
   aligned_dialog: ^0.0.6
   
