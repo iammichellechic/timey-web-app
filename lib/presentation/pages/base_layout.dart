@@ -12,53 +12,60 @@ class BaseLayout extends StatelessWidget {
   const BaseLayout({Key? key, this.child}) : super(key: key);
 
 //temporary solution
+//use adaptive scaffold.dart in the future
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     final bool displayMobileLayout = MediaQuery.of(context).size.width < 600;
 
-    return  Row(
-      children: [
-        if (!displayMobileLayout)
-          const MenuDrawer(
-            permanentlyDisplay: true,
-          ),
-        Expanded(
-          child:  Builder(
-      builder:(context) =>Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              iconTheme: IconThemeData(color: ColorManager.grey),
-              elevation: 0,
-              automaticallyImplyLeading: displayMobileLayout,
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.add, color: ColorManager.grey),
-                  hoverColor: ColorManager.blue.withOpacity(0.6),
-                  onPressed: () {
-                    _scaffoldKey.currentState!.openEndDrawer();
-                  },
-                ),
-              ],
-            ),
-            key: _scaffoldKey,
-            extendBodyBehindAppBar: true,
-            endDrawer: TimeblockPage(),
-            drawer: displayMobileLayout
-                ? const MenuDrawer(
-                    permanentlyDisplay: false,
-                  )
-                : null,
-            body:Container(child: child)
-          //  body: Navigator(
-          //             key: locator<NavigationService>().navigatorKey,
-          //             onGenerateRoute: RouteGenerator.getRoute,
-          //             initialRoute: Routes.overviewRoute,
-                      
-          //           ),
-          )))]
-        );
-    
+    //ERROR: incorrect use of parentdatawidget
+    //expanded is already a direct descendant of row, column or flex
+
+    //ERROR:Navigator operation requested with a context that does not include a Navigator.
+    //fixed when a: main.dart //runApp(MaterialApp(home: MyApp()));
+    //fixed when b: app.dart //home:Baselayout() then Navigator is passed here in body 
+    //however both solutions results to routename not rendering in thr URL
+    //already tried wrapping in builder
+
+   return Builder(builder: (context) => Row(children: <Widget>[
+      if (!displayMobileLayout)
+        const MenuDrawer(
+          permanentlyDisplay: true,
+        ),
+      Expanded(
+          child: Scaffold(
+                  appBar: AppBar(
+                    backgroundColor: Colors.transparent,
+                    iconTheme: IconThemeData(color: ColorManager.grey),
+                    elevation: 0,
+                    automaticallyImplyLeading: displayMobileLayout,
+                    actions: [
+                      IconButton(
+                        icon: Icon(Icons.add, color: ColorManager.grey),
+                        hoverColor: ColorManager.blue.withOpacity(0.6),
+                        onPressed: () {
+                          _scaffoldKey.currentState!.openEndDrawer();
+                        },
+                      ),
+                    ],
+                  ),
+                  key: _scaffoldKey,
+                  extendBodyBehindAppBar: true,
+                  endDrawer: TimeblockPage(),
+                  drawer: displayMobileLayout
+                      ? const MenuDrawer(
+                          permanentlyDisplay: false,
+                        )
+                      : null,
+                  body: Container(child: child))
+              //  body: Navigator(
+              //             key: locator<NavigationService>().navigatorKey,
+              //             onGenerateRoute: RouteGenerator.getRoute,
+              //             initialRoute: Routes.overviewRoute,
+
+              //           ),
+              )
+    ]));
   }
 }
 
@@ -79,22 +86,22 @@ class CenteredView extends StatelessWidget {
   }
 }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return ResponsiveBuilder(
-  //       builder: (context, sizingInformation) => Scaffold(
-  //           drawer: MenuDrawer(permanentlyDisplay: !sizingInformation.isMobile),
-  //           endDrawer: TimeblockPage(),
-  //           body: CenteredView(
-  //             child: Column(
-  //               children: [
-  //                 NavigationBar(),
-  //                 Expanded(child: Container(child: child)),
-  //               ],
-  //             ),
-  //           ));
-    
-  // }
+// @override
+// Widget build(BuildContext context) {
+//   return ResponsiveBuilder(
+//       builder: (context, sizingInformation) => Scaffold(
+//           drawer: MenuDrawer(permanentlyDisplay: !sizingInformation.isMobile),
+//           endDrawer: TimeblockPage(),
+//           body: CenteredView(
+//             child: Column(
+//               children: [
+//                 NavigationBar(),
+//                 Expanded(child: Container(child: child)),
+//               ],
+//             ),
+//           ));
+
+// }
 
 //   class NavigationBar extends StatelessWidget {
 //   const NavigationBar({Key? key}) : super(key: key);
@@ -154,5 +161,3 @@ class CenteredView extends StatelessWidget {
 //     );
 //   }
 // }
-
-

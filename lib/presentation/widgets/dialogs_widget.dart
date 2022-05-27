@@ -3,10 +3,6 @@ import '/presentation/pages/timeblock_adding_page.dart';
 
 import '../../data/providers/timeblock.dart';
 
-bool isDesktop(BuildContext context) =>
-    MediaQuery.of(context).size.width >= 600;
-
-bool isMobile(BuildContext context) => MediaQuery.of(context).size.width < 600;
 
 //becomes a showdialog when desktop
 //full width when mobile

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:timey_web/presentation/pages/timeblocks_items.dart';
-import 'package:timey_web/presentation/screens/calendar_screen.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
 import '../../locator.dart';
 import '../../navigation-service.dart';
@@ -71,6 +69,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
       } else {
         Provider.of<TimeBlocks>(context, listen: false).addTimeBlock(timeBlock);
       }
+      //Navigator.maybeOf(context)!.pop; --unexpected null value which means navigator is not in this page
 
       locator<NavigationService>().navigateTo(Routes.calendarRoute);
     }
@@ -84,45 +83,44 @@ class _TimeblockPageState extends State<TimeblockPage> {
 
   @override
   Widget build(BuildContext context) {
-  
     final safeArea =
         EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
-
-    return Container(
-      padding: safeArea,
-      width: isDesktop(context)
-          ? MediaQuery.of(context).size.width * 0.30
-          : MediaQuery.of(context).size.width,
-      child: Drawer(
-          child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(AppPadding.p30),
-          child: Form(
-            key: _form,
-            child: ListView(
-              children: <Widget>[
-                buildTag(),
-                SizedBox(
-                  height: AppSize.s12,
+    return Builder(
+        builder: (context) => Container(
+              padding: safeArea,
+              width: isDesktop(context)
+                  ? MediaQuery.of(context).size.width * 0.30
+                  : MediaQuery.of(context).size.width,
+              child: Drawer(
+                  child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppPadding.p30),
+                  child: Form(
+                    key: _form,
+                    child: ListView(
+                      children: <Widget>[
+                        buildTag(),
+                        SizedBox(
+                          height: AppSize.s12,
+                        ),
+                        buildDateTimePickers(),
+                        SizedBox(
+                          height: AppSize.s20,
+                        ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              ButtonWidget(text: 'Report', onClicked: _saveForm)
+                            ]),
+                        Spacer(),
+                        // TimeBlocksItems(),
+                        buildCloseButton(context),
+                      ],
+                    ),
+                  ),
                 ),
-                buildDateTimePickers(),
-                SizedBox(
-                  height: AppSize.s20,
-                ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      ButtonWidget(text: 'Report', onClicked: _saveForm)
-                    ]),
-                Spacer(),
-                TimeBlocksItems(),
-                buildCloseButton(context),
-              ],
-            ),
-          ),
-        ),
-      )),
-    );
+              )),
+            ));
   }
 
   Widget buildCloseButton(BuildContext context) {
@@ -138,6 +136,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
                     color: ColorManager.grey,
                   ),
                   onPressed: () {
+                    Navigator.of(context).pop();
                     locator<NavigationService>()
                         .navigateTo(Routes.calendarRoute);
                   })))

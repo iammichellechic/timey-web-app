@@ -218,10 +218,12 @@ class CalendarWidget extends StatelessWidget {
   void selectedItem(BuildContext context, item, TimeBlock? entry) {
     switch (item) {
       case 0:
-        showGlobalDrawer<EntryEditDialog>(
-          useRootNavigator: false,
+        showAlignedDialog<EntryEditDialog>(
+          avoidOverflow:true,
           context: context,
-          direction: AxisDirection.right,
+          followerAnchor: Alignment.topRight,
+          targetAnchor: Alignment.bottomRight,
+          barrierColor: Colors.transparent,
           duration: Duration(seconds: 1),
           builder: (context) {
             return EntryEditDialog(
