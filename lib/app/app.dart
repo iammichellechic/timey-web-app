@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timey_web/presentation/pages/base_layout.dart';
 
+import '../locator.dart';
+import '../navigation-service.dart';
+import '../presentation/resources/routes_manager.dart';
 import '/presentation/resources/theme_manager.dart';
 
 import '../data/providers/tags.dart';
 import '../data/providers/timeblocks.dart';
-import '../presentation/resources/routes_manager.dart';
 
 class MyApp extends StatefulWidget {
   MyApp._internal(); // private named constructor
@@ -34,11 +36,21 @@ class _MyAppState extends State<MyApp> {
           )
         ],
         child: MaterialApp(
+          //home: BaseLayout(),
+          builder: (context, child) =>
+          Overlay(
+          initialEntries: [
+            OverlayEntry(
+              builder: (context) => BaseLayout(child: child),
+            ),
+          ],
+        ),
           title: 'Timey',
           theme: getAppTheme(),
           debugShowCheckedModeBanner: false,
-          home: BaseLayout(),
-         
+          navigatorKey: locator<NavigationService>().navigatorKey,
+          onGenerateRoute: RouteGenerator.getRoute,
+          initialRoute: Routes.overviewRoute,
         ));
   }
 }

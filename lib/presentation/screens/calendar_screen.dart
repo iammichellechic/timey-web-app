@@ -20,63 +20,68 @@ import '../../data/providers/timeblocks.dart';
 import '../../model/timeblock_data_source.dart';
 
 class CalendarWidget extends StatelessWidget {
+  const CalendarWidget({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Container(child: buildCalendarWidget(context));
+    return buildCalendarWidget(context);
   }
 
   Widget buildCalendarWidget(BuildContext context) {
     final entries = Provider.of<TimeBlocks>(context).userTimeBlock;
 
-    return SfCalendar(
-      view: CalendarView.week,
-      allowedViews: const <CalendarView>[
-        CalendarView.week,
-        CalendarView.month,
-        CalendarView.schedule,
-      ],
-      allowViewNavigation: true,
-      showNavigationArrow: true,
-      //showWeekNumber: true,
-      initialDisplayDate: DateTime.now(),
-      appointmentBuilder: appointmentBuilder,
-      monthViewSettings: MonthViewSettings(
-          showAgenda: true,
-          agendaItemHeight: 150,
-          agendaStyle: AgendaStyle(
-            dateTextStyle: TextStyle(
-                fontStyle: FontStyle.italic,
-                fontSize: 12,
-                fontWeight: FontWeight.w300,
-                color: Colors.black),
-            dayTextStyle: TextStyle(
-                fontStyle: FontStyle.normal,
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                color: Colors.black),
-          )),
-      timeSlotViewSettings: TimeSlotViewSettings(
-        startHour: 7,
-        endHour: 24,
-        numberOfDaysInView: 3,
-        // nonWorkingDays: <int>[
-        //   DateTime.saturday,
-        //   DateTime.sunday,
-        // ],
-        dayFormat: 'EEE',
-        timeFormat: 'HH:mm',
-        timeTextStyle: TextStyle(
-            fontWeight: FontWeightManager.bold,
-            fontStyle: FontStyle.italic,
-            fontSize: FontSize.s14,
-            color: ColorManager.grey),
+    return Container(
+      padding: EdgeInsets.only(top: AppPadding.p40),
+      child: SfCalendar(
+        view: CalendarView.week,
+        allowedViews: const <CalendarView>[
+          CalendarView.week,
+          CalendarView.month,
+          CalendarView.schedule,
+        ],
+        allowViewNavigation: true,
+        showNavigationArrow: true,
+        //showWeekNumber: true,
+        initialDisplayDate: DateTime.now(),
+        appointmentBuilder: appointmentBuilder,
+        monthViewSettings: MonthViewSettings(
+            showAgenda: true,
+            agendaItemHeight: 150,
+            agendaStyle: AgendaStyle(
+              dateTextStyle: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.black),
+              dayTextStyle: TextStyle(
+                  fontStyle: FontStyle.normal,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black),
+            )),
+        timeSlotViewSettings: TimeSlotViewSettings(
+          startHour: 7,
+          endHour: 24,
+          numberOfDaysInView: 5,
+          // nonWorkingDays: <int>[
+          //   DateTime.saturday,
+          //   DateTime.sunday,
+          // ],
+          dayFormat: 'EEE',
+          timeFormat: 'HH:mm',
+          timeTextStyle: TextStyle(
+              fontWeight: FontWeightManager.bold,
+              fontFamily: FontConstants.fontFamily,
+              fontSize: FontSize.s14,
+              color: ColorManager.grey),
+        ),
+        scheduleViewSettings: ScheduleViewSettings(
+            appointmentItemHeight: 120, hideEmptyScheduleWeek: true),
+        firstDayOfWeek: 1,
+        dataSource: EventDataSource(entries),
+        initialSelectedDate: DateTime.now(),
+        cellBorderColor: Colors.transparent,
       ),
-      scheduleViewSettings: ScheduleViewSettings(
-          appointmentItemHeight: 100, hideEmptyScheduleWeek: true),
-      firstDayOfWeek: 1,
-      dataSource: EventDataSource(entries),
-      initialSelectedDate: DateTime.now(),
-      cellBorderColor: Colors.transparent,
     );
   }
 
@@ -91,18 +96,23 @@ class CalendarWidget extends StatelessWidget {
         width: details.bounds.width,
         height: details.bounds.height,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppSize.s10),
-          color: ColorManager.blue.withOpacity(0.5),
-        ),
+            color: ColorManager.blue.withOpacity(0.4),
+            border:
+                Border(left: BorderSide(color: ColorManager.blue, width: 4))),
         child: SingleChildScrollView(
           child: Column(
             children: [
               ListTile(
+                contentPadding: EdgeInsets.symmetric(horizontal: AppPadding.p4),
                 selected: true,
-                title: Text(
-                  event.tag!.name,
-                  style: getAppTheme().textTheme.subtitle1,
-                ),
+                title: Row(children: <Widget>[
+                  Icon(Icons.av_timer_outlined,
+                      color: ColorManager.grey, size: AppSize.s14),
+                  Text(
+                    event.tag!.name,
+                    style: getAppTheme().textTheme.subtitle1,
+                  )
+                ]),
                 subtitle: Column(children: <Widget>[
                   buildDuration(
                     event!.reportHours.toString() +
@@ -147,10 +157,69 @@ class CalendarWidget extends StatelessWidget {
     );
   }
 
+  Widget buildActionMethods(BuildContext context, TimeBlock? entry) {
+    return SizedBox(
+      width: 20,
+      child: PopupMenuButton(
+        offset: Offset(50, 50),
+        iconSize: AppSize.s12,
+        color: ColorManager.lightBlue,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0))),
+        itemBuilder: (context) => [
+          PopupMenuItem<int>(
+            padding: EdgeInsets.all(0),
+            value: 0,
+            child: Row(children: [
+              ElevatedButton(
+                onPressed: () {},
+                child: Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                  size: AppSize.s10,
+                ),
+                style: ElevatedButton.styleFrom(
+                  shape: CircleBorder(),
+                  padding: EdgeInsets.all(AppPadding.p6),
+                  primary: Colors.blue, // <-- Button color
+                ),
+              ),
+              Text(
+                "Edit",
+                style: Theme.of(context).textTheme.headline4,
+              )
+            ]),
+          ),
+          PopupMenuItem<int>(
+              padding: EdgeInsets.all(0),
+              value: 1,
+              child: Row(children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Icon(Icons.delete,
+                      color: Colors.white, size: AppSize.s10),
+                  style: ElevatedButton.styleFrom(
+                    shape: CircleBorder(),
+                    padding: EdgeInsets.all(AppPadding.p6),
+                    primary: Colors.red, // <-- Button color
+                  ),
+                ),
+                Text(
+                  "Delete",
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+              ])),
+        ],
+        onSelected: (item) => selectedItem(context, item, entry),
+      ),
+    );
+  }
+
   void selectedItem(BuildContext context, item, TimeBlock? entry) {
     switch (item) {
       case 0:
         showGlobalDrawer<EntryEditDialog>(
+          useRootNavigator: false,
           context: context,
           direction: AxisDirection.right,
           duration: Duration(seconds: 1),
@@ -193,9 +262,8 @@ class CalendarWidget extends StatelessWidget {
                   SnackBarUtils.showSnackBar(
                     context: context,
                     text: 'Entry removed',
-                    color: ColorManager.primaryWhite.withOpacity(0.7),
+                    color: ColorManager.error.withOpacity(0.7),
                     icons: Icons.delete,
-                    iconColor: ColorManager.error
                   );
                 },
               )
@@ -204,46 +272,5 @@ class CalendarWidget extends StatelessWidget {
         );
         break;
     }
-  }
-
-  Widget buildActionMethods(BuildContext context, TimeBlock? entry) {
-    return SizedBox(
-      width: 20,
-      child: PopupMenuButton(
-        iconSize: AppSize.s12,
-        color: ColorManager.lightBlue,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(15.0))),
-        itemBuilder: (context) => [
-          PopupMenuItem<int>(
-            value: 0,
-            child: ListTile(
-              leading: const Icon(Icons.edit),
-              title: Text(
-                "Edit",
-                // style: TextStyle(color: Colors.white),
-              ),
-            ),
-            // onTap: () async {
-            //  // Provider.of<TimeBlocks>(context, listen: true);
-            //   Scaffold.of(context).openEndDrawer();
-            // }
-          ),
-          PopupMenuItem<int>(
-              value: 1,
-              child: ListTile(
-                leading: Icon(
-                  Icons.delete,
-                  color: Colors.red,
-                ),
-                title: Text(
-                  "Delete",
-                  style: TextStyle(color: Colors.red),
-                ),
-              )),
-        ],
-        onSelected: (item) => selectedItem(context, item, entry),
-      ),
-    );
   }
 }

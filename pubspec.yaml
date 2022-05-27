@@ -40,6 +40,9 @@ dependencies:
   
   responsive_builder:
 
+  #graphQl
+  graphql_flutter: ^5.1.0
+
   #charts
   charts_flutter: ^0.12.0
 

@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:timey_web/presentation/pages/timeblock_adding_page.dart';
-import 'package:timey_web/presentation/resources/values_manager.dart';
-import 'package:timey_web/presentation/widgets/dialogs_widget.dart';
-
 import '../../locator.dart';
 import '../../navigation-service.dart';
+import '../resources/color_manager.dart';
 import '../resources/routes_manager.dart';
 import '../shared/menu_drawer.dart';
 
@@ -14,87 +11,56 @@ class BaseLayout extends StatelessWidget {
   final Widget? child;
   const BaseLayout({Key? key, this.child}) : super(key: key);
 
+//temporary solution
   @override
   Widget build(BuildContext context) {
-    return ResponsiveBuilder(
-        builder: (context, sizingInformation) => Scaffold(
-            drawer: MenuDrawer(permanentlyDisplay: !sizingInformation.isMobile),
-            endDrawer: TimeblockPage(),
-            body: CenteredView(
-              child: Column(
-                children: [
-                  NavigationBar(),
-                  Expanded(
-                    child: Navigator(
-                      key: locator<NavigationService>().navigatorKey,
-                      onGenerateRoute: RouteGenerator.getRoute,
-                      initialRoute: Routes.overviewRoute,
-                    ),
-                  )
-                ],
-              ),
-            ))
-        // if (sizingInformation.isMobile) {
-        //   return HomeMobile(child: child);
-        // }
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final bool displayMobileLayout = MediaQuery.of(context).size.width < 600;
 
-        // return HomeTablet(
-        //   child: child,
+    return  Row(
+      children: [
+        if (!displayMobileLayout)
+          const MenuDrawer(
+            permanentlyDisplay: true,
+          ),
+        Expanded(
+          child:  Builder(
+      builder:(context) =>Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              iconTheme: IconThemeData(color: ColorManager.grey),
+              elevation: 0,
+              automaticallyImplyLeading: displayMobileLayout,
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.add, color: ColorManager.grey),
+                  hoverColor: ColorManager.blue.withOpacity(0.6),
+                  onPressed: () {
+                    _scaffoldKey.currentState!.openEndDrawer();
+                  },
+                ),
+              ],
+            ),
+            key: _scaffoldKey,
+            extendBodyBehindAppBar: true,
+            endDrawer: TimeblockPage(),
+            drawer: displayMobileLayout
+                ? const MenuDrawer(
+                    permanentlyDisplay: false,
+                  )
+                : null,
+            body:Container(child: child)
+          //  body: Navigator(
+          //             key: locator<NavigationService>().navigatorKey,
+          //             onGenerateRoute: RouteGenerator.getRoute,
+          //             initialRoute: Routes.overviewRoute,
+                      
+          //           ),
+          )))]
         );
+    
   }
 }
-
-// class HomeTablet extends StatelessWidget {
-//   final Widget? child;
-
-//   const HomeTablet({Key? key, this.child}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         appBar: AppBar(
-//           actions: [
-//             IconButton(
-//               icon: Icon(Icons.add),
-//               onPressed: () async => Scaffold.of(context).openEndDrawer(),
-//             )
-//           ],
-//         ),
-//         endDrawer: TimeblockPage(),
-//         body: CenteredView(
-//           child: Row(children: [
-//             MenuDrawer(permanentlyDisplay: true),
-//             Expanded(
-//               child: Container(child: child),
-//             ),
-//           ]),
-//         ));
-//   }
-// }
-
-// class HomeMobile extends StatelessWidget {
-//   final Widget? child;
-
-//   const HomeMobile({Key? key, this.child}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       drawer: MenuDrawer(permanentlyDisplay: false),
-//       endDrawer: TimeblockPage(),
-//       body: CenteredView(
-//         child: Column(
-//           children: [
-//             NavigationBar(),
-//             Expanded(
-//               child: Container(child: child),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 class CenteredView extends StatelessWidget {
   final Widget child;
@@ -113,61 +79,80 @@ class CenteredView extends StatelessWidget {
   }
 }
 
-class NavigationBar extends StatelessWidget {
-  const NavigationBar({Key? key}) : super(key: key);
+  // @override
+  // Widget build(BuildContext context) {
+  //   return ResponsiveBuilder(
+  //       builder: (context, sizingInformation) => Scaffold(
+  //           drawer: MenuDrawer(permanentlyDisplay: !sizingInformation.isMobile),
+  //           endDrawer: TimeblockPage(),
+  //           body: CenteredView(
+  //             child: Column(
+  //               children: [
+  //                 NavigationBar(),
+  //                 Expanded(child: Container(child: child)),
+  //               ],
+  //             ),
+  //           ));
+    
+  // }
 
-  @override
-  Widget build(BuildContext context) {
-    return ScreenTypeLayout(
-      mobile: NavigationBarMobile(),
-      tablet: NavigationBarTabletDesktop(),
-      desktop: NavigationBarTabletDesktop(),
-    );
-  }
-}
+//   class NavigationBar extends StatelessWidget {
+//   const NavigationBar({Key? key}) : super(key: key);
 
-class NavigationBarMobile extends StatelessWidget {
-  const NavigationBarMobile({Key? key}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return ScreenTypeLayout(
+//       mobile: NavigationBarMobile(),
+//       tablet: NavigationBarTabletDesktop(),
+//       desktop: NavigationBarTabletDesktop(),
+//     );
+//   }
+// }
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 80,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () async => Scaffold.of(context).openDrawer(),
-          ),
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () async => Scaffold.of(context).openEndDrawer(),
-          )
-          //NavBarLogo()
-        ],
-      ),
-    );
-  }
-}
+// class NavigationBarMobile extends StatelessWidget {
+//   const NavigationBarMobile({Key? key}) : super(key: key);
 
-class NavigationBarTabletDesktop extends StatelessWidget {
-  const NavigationBarTabletDesktop({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 80,
-      child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            //const MenuDrawer(permanentlyDisplay: true),
-            SizedBox(),
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () async => Scaffold.of(context).openEndDrawer(),
-            )
-          ]),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//       height: 80,
+//       child: Row(
+//         mainAxisSize: MainAxisSize.max,
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: <Widget>[
+//           IconButton(
+//             icon: Icon(Icons.menu),
+//             onPressed: () async => Scaffold.of(context).openDrawer(),
+//           ),
+//           IconButton(
+//             icon: Icon(Icons.add),
+//             onPressed: () async => Scaffold.of(context).openEndDrawer(),
+//           )
+//           //NavBarLogo()
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+// class NavigationBarTabletDesktop extends StatelessWidget {
+//   const NavigationBarTabletDesktop({Key? key}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//       height: 80,
+//       child: Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: <Widget>[
+//             //const MenuDrawer(permanentlyDisplay: true),
+//             SizedBox(),
+//             IconButton(
+//               icon: Icon(Icons.add),
+//               onPressed: () async => Scaffold.of(context).openEndDrawer(),
+//             )
+//           ]),
+//     );
+//   }
+// }
+
+

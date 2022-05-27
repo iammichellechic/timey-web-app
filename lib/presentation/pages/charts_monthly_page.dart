@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:provider/provider.dart';
-
+import 'package:timey_web/presentation/resources/font_manager.dart';
 import '/presentation/utils/chart_utils.dart' as utils;
-
 import '../../data/providers/timeblocks.dart';
 import '../resources/timeFormat_manager.dart';
-
 import '../resources/values_manager.dart';
-
-//detwrmines how many days before will render in the vhart
-const _daysBefore = 30;
 
 class MonthlyChart extends StatelessWidget {
   const MonthlyChart({Key? key}) : super(key: key);
@@ -22,20 +17,23 @@ class MonthlyChart extends StatelessWidget {
 
   Widget buildChartWidget(BuildContext context) {
     final timeblocksData = Provider.of<TimeBlocks>(context);
-    final timeblocks = timeblocksData.userTimeBlock;
+    final timeblocks = timeblocksData.userTimeBlock; //list of timeblocks
 
+    //DO: id:tags.name 
+ 
     List<charts.Series<utils.EntryTotal, String>> seriesData = [
       charts.Series(
-        id: 'Reported Hours',
-        data: utils.entryTotalsByDay(timeblocks, _daysBefore),
-        domainFn: (entryTotal, _) {
-          return Utils.toChartDate(entryTotal.day);
-        },
-        measureFn: (total, _) {
-          return total.value;
-        },
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-      )
+          id: 'Reported Hours',
+          data: utils.entryTotalsByMonth(timeblocks),
+          domainFn: (entryTotal, _) {
+            return Utils.toChartDate(entryTotal.day);
+          },
+          measureFn: (total, _) {
+            return total.value;
+          },
+          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+          // Set a label accessor to control the text of the bar label.
+          labelAccessorFn: (total, _) => '${total.value}hrs'),
     ];
 
     return Scaffold(
@@ -56,6 +54,16 @@ class MonthlyChart extends StatelessWidget {
                   animate: true,
                   barGroupingType: charts.BarGroupingType.grouped,
                   animationDuration: Duration(milliseconds: 500),
+                  barRendererDecorator: charts.BarLabelDecorator<String>(
+                      insideLabelStyleSpec: charts.TextStyleSpec(
+                          fontFamily: FontConstants.fontFamily,
+                          fontSize: 10,
+                          color: charts.MaterialPalette.white),
+                      outsideLabelStyleSpec: charts.TextStyleSpec(
+                          fontFamily: FontConstants.fontFamily,
+                          fontSize: 10,
+                          color: charts.MaterialPalette.blue.shadeDefault)),
+                  domainAxis: charts.OrdinalAxisSpec(),
                 ),
               ),
             ],

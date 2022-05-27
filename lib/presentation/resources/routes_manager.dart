@@ -6,10 +6,10 @@ import '/presentation/screens/table_timeblock_screen.dart';
 
 class Routes {
   //temporary names
-  static const String overviewRoute = "/dashboard";
-  static const String calendarRoute = "/timereports";
-  static const String tableRoute = "/timereports-list";
-  static const String formRoute = "/edit-timereport";
+  static const String overviewRoute = "dashboard";
+  static const String calendarRoute = "timereports";
+  static const String tableRoute = "timereports-list";
+  static const String formRoute = "edit-timereport";
 }
 
 class RouteGenerator {

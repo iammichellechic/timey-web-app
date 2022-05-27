@@ -4,10 +4,11 @@ import 'package:timey_web/presentation/pages/timeblocks_items.dart';
 
 import '../../data/providers/timeblocks.dart';
 
-
 //right now this screen has no purpose
 
 class EditablePage extends StatefulWidget {
+  const EditablePage({Key? key}) : super(key: key);
+
   @override
   State<EditablePage> createState() => _EditablePageState();
 }
@@ -15,8 +16,6 @@ class EditablePage extends StatefulWidget {
 class _EditablePageState extends State<EditablePage> {
   @override
   Widget build(BuildContext context) {
-   
-
     return Container(child: buildTableItems(context));
   }
 

@@ -9,9 +9,6 @@ import '../resources/timeFormat_manager.dart';
 
 import '../resources/values_manager.dart';
 
-//detwrmines how many days before will render in the vhart
-const _daysBefore = 6;
-
 class WeeklyChart extends StatelessWidget {
   const WeeklyChart({Key? key}) : super(key: key);
 
@@ -24,13 +21,11 @@ class WeeklyChart extends StatelessWidget {
     final timeblocksData = Provider.of<TimeBlocks>(context);
     final timeblocks = timeblocksData.userTimeBlock;
 
-    print(timeblocks.first.reportHours);
-    print(timeblocks.first.remainingMinutes);
 
     List<charts.Series<utils.EntryTotal, String>> seriesData = [
       charts.Series(
         id: 'Reported Hours',
-        data: utils.entryTotalsByDay(timeblocks, _daysBefore),
+        data: utils.entryTotalsByWeek(timeblocks),
         domainFn: (entryTotal, _) {
           return Utils.toChartDate(entryTotal.day);
         },
@@ -38,7 +33,9 @@ class WeeklyChart extends StatelessWidget {
           return total.value;
         },
         colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
-      )
+        labelAccessorFn: (total, _) =>
+              '${total.value.toString()}hrs')
+      
     ];
 
     return Scaffold(
@@ -57,7 +54,9 @@ class WeeklyChart extends StatelessWidget {
                 child: charts.BarChart(
                   seriesData,
                   animate: true,
-                  barGroupingType: charts.BarGroupingType.grouped,
+                  barRendererDecorator: charts.BarLabelDecorator<String>(),
+                  domainAxis: charts.OrdinalAxisSpec(),
+                  barGroupingType: charts.BarGroupingType.groupedStacked,
                   animationDuration: Duration(milliseconds: 500),
                 ),
               ),

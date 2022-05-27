@@ -15,9 +15,8 @@ ThemeData getAppTheme() {
       visualDensity: VisualDensity.adaptivePlatformDensity,
       scaffoldBackgroundColor: ColorManager.lightBlue,
 
-      //icon theme 
-       iconTheme: IconThemeData(
-         color: ColorManager.grey),
+      //icon theme
+      iconTheme: IconThemeData(color: ColorManager.grey),
 
       //app bar theme
       appBarTheme: AppBarTheme(
@@ -35,38 +34,45 @@ ThemeData getAppTheme() {
       //form button
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-      //         primary: ColorManager.blue,
-          textStyle: getBoldStyle(color: ColorManager.primaryWhite),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero))),
+              //         primary: ColorManager.blue,
+              textStyle: getBoldStyle(color: ColorManager.primaryWhite),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero))),
 
       //text theme
       textTheme: TextTheme(
         //menu drawer
         headline1:
             getBoldStyle(color: ColorManager.black, fontSize: FontSize.s24),
-            
-        headline2: getBoldStyle(color: ColorManager.black,fontSize: FontSize.s20),
-        headline3: getBoldStyle(color: ColorManager.grey,fontSize: FontSize.s20),
+
+        headline2:
+            getBoldStyle(color: ColorManager.black, fontSize: FontSize.s20),
+        headline3:
+            getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s20),
         subtitle1:
             getBoldStyle(color: ColorManager.black, fontSize: FontSize.s16),
-        subtitle2: getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s16),
+        subtitle2:
+            getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s16),
         caption: getRegularStyle(color: ColorManager.grey),
-        bodyText1:  getBoldStyle(color: ColorManager.black,fontSize: FontSize.s12),
-        bodyText2:  getBoldStyle(color: ColorManager.grey,fontSize:FontSize.s12),
+        bodyText1:
+            getBoldStyle(color: ColorManager.black, fontSize: FontSize.s12),
+        bodyText2:
+            getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s12),
         headline4: getRegularStyle(color: ColorManager.blue),
         headline5: getRegularStyle(color: ColorManager.error),
-        
+        headline6: getRegularStyle(color: ColorManager.primaryWhite),
       ),
-      
       inputDecorationTheme: InputDecorationTheme(
         contentPadding: EdgeInsets.all(AppPadding.p8),
         // hint style
-        hintStyle: getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s16),
+        hintStyle:
+            getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s16),
 
         // label style
-        labelStyle: getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s16),
+        labelStyle:
+            getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s16),
         // error style
-        errorStyle: getBoldStyle(color: ColorManager.error, fontSize: FontSize.s16),
+        errorStyle:
+            getBoldStyle(color: ColorManager.error, fontSize: FontSize.s16),
 
         // enabled border
         enabledBorder: OutlineInputBorder(

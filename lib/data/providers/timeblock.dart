@@ -7,7 +7,7 @@ class TimeBlock with ChangeNotifier {
   Tag? tag;
   DateTime startDate;
   DateTime endDate;
-   // Temporary calculation - will be replaced with data from db.
+  // Temporary calculation - will be replaced with data from db.
   int get reportHours => endDate.difference(startDate).inHours;
 
   // Temporary calculation - will be replaced with data from db.
@@ -19,6 +19,5 @@ class TimeBlock with ChangeNotifier {
     required this.tag,
     required this.startDate,
     required this.endDate,
-  
   });
 }

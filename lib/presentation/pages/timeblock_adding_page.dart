@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timey_web/presentation/pages/timeblocks_items.dart';
+import 'package:timey_web/presentation/screens/calendar_screen.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
+import '../../locator.dart';
+import '../../navigation-service.dart';
+import '../resources/routes_manager.dart';
 import '/presentation/resources/color_manager.dart';
 import '/presentation/resources/values_manager.dart';
 
@@ -67,8 +71,8 @@ class _TimeblockPageState extends State<TimeblockPage> {
       } else {
         Provider.of<TimeBlocks>(context, listen: false).addTimeBlock(timeBlock);
       }
-      //Navigator.of(context, rootNavigator: true).pop();
-      Navigator.pop(context);
+
+      locator<NavigationService>().navigateTo(Routes.calendarRoute);
     }
   }
 
@@ -80,63 +84,65 @@ class _TimeblockPageState extends State<TimeblockPage> {
 
   @override
   Widget build(BuildContext context) {
+  
     final safeArea =
         EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
 
-    return  Container(
-          padding: safeArea,
-          width: isDesktop(context)
-              ? MediaQuery.of(context).size.width * 0.30
-              : MediaQuery.of(context).size.width,
-          child: Drawer(
-              child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(AppPadding.p30),
-              child: Form(
-                key: _form,
-                child: ListView(
-                  children: <Widget>[
-                    buildTag(),
-                    SizedBox(
-                      height: AppSize.s12,
-                    ),
-                    buildDateTimePickers(),
-                    SizedBox(
-                      height: AppSize.s20,
-                    ),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          ButtonWidget(text: 'Report', onClicked: _saveForm)
-                        ]),
-                    Spacer(),
-                    TimeBlocksItems(),
-                    buildCloseButton(context),
-                  ],
+    return Container(
+      padding: safeArea,
+      width: isDesktop(context)
+          ? MediaQuery.of(context).size.width * 0.30
+          : MediaQuery.of(context).size.width,
+      child: Drawer(
+          child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(AppPadding.p30),
+          child: Form(
+            key: _form,
+            child: ListView(
+              children: <Widget>[
+                buildTag(),
+                SizedBox(
+                  height: AppSize.s12,
                 ),
-              ),
+                buildDateTimePickers(),
+                SizedBox(
+                  height: AppSize.s20,
+                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      ButtonWidget(text: 'Report', onClicked: _saveForm)
+                    ]),
+                Spacer(),
+                TimeBlocksItems(),
+                buildCloseButton(context),
+              ],
             ),
-          )),
+          ),
+        ),
+      )),
     );
   }
 
-  Widget buildCloseButton(BuildContext context) => RichText(
-          text: TextSpan(children: [
-        TextSpan(text: "Close", style: Theme.of(context).textTheme.caption),
-        WidgetSpan(
-            child: Align(
-                alignment: FractionalOffset.bottomLeft,
-                child: IconButton(
-                    icon: Icon(
-                      Icons.close,
-                      color: ColorManager.grey,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      //  locator<NavigationService>()
-                      //     .navigateTo(Routes.calendarRoute);
-                    })))
-      ]));
+  Widget buildCloseButton(BuildContext context) {
+    return RichText(
+        text: TextSpan(children: [
+      TextSpan(text: "Close", style: Theme.of(context).textTheme.caption),
+      WidgetSpan(
+          child: Align(
+              alignment: FractionalOffset.bottomLeft,
+              child: IconButton(
+                  icon: Icon(
+                    Icons.close,
+                    color: ColorManager.grey,
+                  ),
+                  onPressed: () {
+                    locator<NavigationService>()
+                        .navigateTo(Routes.calendarRoute);
+                  })))
+    ]));
+  }
 
   Widget buildTag() => Container(
         padding: EdgeInsets.only(top: AppPadding.p16),
