@@ -6,7 +6,7 @@
 jobs:
   - job: Web
     pool:
-      vmImage: 'macOS-latest'
+      vmImage: 'ubuntu-latest'
     steps:
       - task: FlutterInstall@0
         inputs:
@@ -16,9 +16,9 @@ jobs:
 
       - task: FlutterBuild@0
         inputs:
-          target: 'apk'
+          target: 'web'
           projectDirectory: '.'
-          entryPoint: "lib/main.dart"
+          entryPoint: 'lib/main.dart'
 
       - task: FlutterTest@0
         inputs:
