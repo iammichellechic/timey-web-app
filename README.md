@@ -1,16 +1,21 @@
-# timey_web_scratch
+# timey-app
 
 A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Docker
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+First of all you need to install Docker on your system.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Building the Container
+
+Build the Container by running 
+`docker build . -t timey-app`
+
+### Running the Container
+Run the Container by running
+`docker run -i -p 8080:4040 -td timey-app`
+
+Navigate to: https://localhost:8080/
