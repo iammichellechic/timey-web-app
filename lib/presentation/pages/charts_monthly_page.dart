@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:provider/provider.dart';
+import 'package:timey_web/presentation/resources/color_manager.dart';
 import 'package:timey_web/presentation/resources/font_manager.dart';
 import '/presentation/utils/chart_utils.dart' as utils;
 import '../../data/providers/timeblocks.dart';
@@ -19,8 +20,8 @@ class MonthlyChart extends StatelessWidget {
     final timeblocksData = Provider.of<TimeBlocks>(context);
     final timeblocks = timeblocksData.userTimeBlock; //list of timeblocks
 
-    //DO: id:tags.name 
- 
+    //DO: id:tags.name
+
     List<charts.Series<utils.EntryTotal, String>> seriesData = [
       charts.Series(
           id: 'Reported Hours',
@@ -31,7 +32,7 @@ class MonthlyChart extends StatelessWidget {
           measureFn: (total, _) {
             return total.value;
           },
-          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+          colorFn: (_, __) => charts.ColorUtil.fromDartColor(ColorManager.blue),
           // Set a label accessor to control the text of the bar label.
           labelAccessorFn: (total, _) => '${total.value}hrs'),
     ];
@@ -58,11 +59,12 @@ class MonthlyChart extends StatelessWidget {
                       insideLabelStyleSpec: charts.TextStyleSpec(
                           fontFamily: FontConstants.fontFamily,
                           fontSize: 10,
-                          color: charts.MaterialPalette.white),
+                          color: charts.ColorUtil.fromDartColor(
+                              ColorManager.primaryWhite)),
                       outsideLabelStyleSpec: charts.TextStyleSpec(
                           fontFamily: FontConstants.fontFamily,
                           fontSize: 10,
-                          color: charts.MaterialPalette.blue.shadeDefault)),
+                          color: charts.ColorUtil.fromDartColor(ColorManager.blue))),
                   domainAxis: charts.OrdinalAxisSpec(),
                 ),
               ),

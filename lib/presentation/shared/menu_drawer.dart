@@ -69,7 +69,7 @@ class MenuDrawer extends StatelessWidget {
             title: Text('Table view',
                 style: Theme.of(context).textTheme.subtitle1),
             onTap: () {
-              // locator<NavigationService>().navigateTo(Routes.tableRoute);
+              locator<NavigationService>().navigateTo(Routes.tableRoute);
             },
           ),
           ListTile(

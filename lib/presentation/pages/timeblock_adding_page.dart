@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:timey_web/presentation/screens/calendar_screen.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
 import '../../locator.dart';
 import '../../navigation-service.dart';
@@ -110,7 +111,11 @@ class _TimeblockPageState extends State<TimeblockPage> {
                         Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
-                              ButtonWidget(text: 'Report', onClicked: _saveForm)
+                              ButtonWidget(
+                                color:ColorManager.blue,
+                                text: 'Report', 
+                                style: Theme.of(context).textTheme.headline6,
+                                onClicked: _saveForm)
                             ]),
                         Spacer(),
                         // TimeBlocksItems(),
@@ -135,13 +140,18 @@ class _TimeblockPageState extends State<TimeblockPage> {
                     Icons.close,
                     color: ColorManager.grey,
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    locator<NavigationService>()
-                        .navigateTo(Routes.calendarRoute);
-                  })))
-    ]));
-  }
+                  onPressed: () async{
+                       final route = MaterialPageRoute(
+                                builder: (context) {
+                                  return CalendarWidget();
+                                },
+                              );
+                              await Navigator.push(context, route);
+                    })))]));
+                  }
+
+  
+  
 
   Widget buildTag() => Container(
         padding: EdgeInsets.only(top: AppPadding.p16),

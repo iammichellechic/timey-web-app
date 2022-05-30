@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:timey_web/presentation/pages/timeblocks_items.dart';
+import 'package:timey_web/presentation/pages/table_timeblock_page.dart';
 
-import '../../data/providers/timeblocks.dart';
 
 //right now this screen has no purpose
 
@@ -20,7 +18,6 @@ class _EditablePageState extends State<EditablePage> {
   }
 
   Widget buildTableItems(BuildContext context) {
-    final timeblocksData = Provider.of<TimeBlocks>(context);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -32,7 +29,7 @@ class _EditablePageState extends State<EditablePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: const <Widget>[
               // Chart(timeblocksData.recentEntries), //no prupose
-              TimeBlocksItems(),
+              MyDataTable()
             ],
           ),
         ),

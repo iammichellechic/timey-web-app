@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:timey_web/app/app.dart';
 
 import 'package:timey_web/main.dart';
@@ -14,7 +15,12 @@ import 'package:timey_web/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+     final HttpLink link =
+        HttpLink('https://graphql-flutter-course.herokuapp.com/graphql');
+    ValueNotifier<GraphQLClient> client = ValueNotifier(
+        GraphQLClient(link: link, cache: GraphQLCache(store: HiveStore())));
+        
+    await tester.pumpWidget(MyApp(client: client,));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

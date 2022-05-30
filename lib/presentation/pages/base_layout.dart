@@ -42,7 +42,7 @@ class BaseLayout extends StatelessWidget {
                     actions: [
                       IconButton(
                         icon: Icon(Icons.add, color: ColorManager.grey),
-                        hoverColor: ColorManager.blue.withOpacity(0.6),
+                        hoverColor: ColorManager.blue,
                         onPressed: () {
                           _scaffoldKey.currentState!.openEndDrawer();
                         },
@@ -50,6 +50,7 @@ class BaseLayout extends StatelessWidget {
                     ],
                   ),
                   key: _scaffoldKey,
+                  
                   extendBodyBehindAppBar: true,
                   endDrawer: TimeblockPage(),
                   drawer: displayMobileLayout

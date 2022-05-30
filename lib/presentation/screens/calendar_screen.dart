@@ -161,7 +161,7 @@ class CalendarWidget extends StatelessWidget {
     return SizedBox(
       width: 20,
       child: PopupMenuButton(
-        offset: Offset(50, 50),
+        padding: EdgeInsets.all(0),
         iconSize: AppSize.s12,
         color: ColorManager.lightBlue,
         shape: RoundedRectangleBorder(
@@ -175,7 +175,7 @@ class CalendarWidget extends StatelessWidget {
                 onPressed: () {},
                 child: Icon(
                   Icons.edit,
-                  color: Colors.white,
+                  color: ColorManager.primaryWhite,
                   size: AppSize.s10,
                 ),
                 style: ElevatedButton.styleFrom(
@@ -197,7 +197,7 @@ class CalendarWidget extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {},
                   child: Icon(Icons.delete,
-                      color: Colors.white, size: AppSize.s10),
+                      color: ColorManager.primaryWhite, size: AppSize.s10),
                   style: ElevatedButton.styleFrom(
                     shape: CircleBorder(),
                     padding: EdgeInsets.all(AppPadding.p6),
