@@ -70,9 +70,9 @@ class _TimeblockPageState extends State<TimeblockPage> {
       } else {
         Provider.of<TimeBlocks>(context, listen: false).addTimeBlock(timeBlock);
       }
-      //Navigator.maybeOf(context)!.pop; --unexpected null value which means navigator is not in this page
-
-      locator<NavigationService>().navigateTo(Routes.calendarRoute);
+      
+      Navigator.of(context).pop();
+      //locator<NavigationService>().navigateTo(Routes.calendarRoute);
     }
   }
 
@@ -86,46 +86,45 @@ class _TimeblockPageState extends State<TimeblockPage> {
   Widget build(BuildContext context) {
     final safeArea =
         EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
-    return Builder(
-        builder: (context) => Container(
-              padding: safeArea,
-              width: isDesktop(context)
-                  ? MediaQuery.of(context).size.width * 0.30
-                  : MediaQuery.of(context).size.width,
-              child: Drawer(
-                  child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(AppPadding.p30),
-                  child: Form(
-                    key: _form,
-                    child: ListView(
-                      children: <Widget>[
-                        buildTag(),
-                        SizedBox(
-                          height: AppSize.s12,
-                        ),
-                        buildDateTimePickers(),
-                        SizedBox(
-                          height: AppSize.s20,
-                        ),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              ButtonWidget(
-                                color:ColorManager.blue,
-                                text: 'Report', 
-                                style: Theme.of(context).textTheme.headline6,
-                                onClicked: _saveForm)
-                            ]),
-                        Spacer(),
-                        // TimeBlocksItems(),
-                        buildCloseButton(context),
-                      ],
-                    ),
-                  ),
+    return Container(
+      padding: safeArea,
+      width: isDesktop(context)
+          ? MediaQuery.of(context).size.width * 0.30
+          : MediaQuery.of(context).size.width,
+      child: Drawer(
+          child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(AppPadding.p30),
+          child: Form(
+            key: _form,
+            child: ListView(
+              children: <Widget>[
+                buildTag(),
+                SizedBox(
+                  height: AppSize.s12,
                 ),
-              )),
-            ));
+                buildDateTimePickers(),
+                SizedBox(
+                  height: AppSize.s20,
+                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      ButtonWidget(
+                          color: ColorManager.blue,
+                          text: 'Report',
+                          style: Theme.of(context).textTheme.headline6,
+                          onClicked: _saveForm)
+                    ]),
+                Spacer(),
+                // TimeBlocksItems(),
+                buildCloseButton(context),
+              ],
+            ),
+          ),
+        ),
+      )),
+    );
   }
 
   Widget buildCloseButton(BuildContext context) {
@@ -140,18 +139,17 @@ class _TimeblockPageState extends State<TimeblockPage> {
                     Icons.close,
                     color: ColorManager.grey,
                   ),
-                  onPressed: () async{
-                       final route = MaterialPageRoute(
-                                builder: (context) {
-                                  return CalendarWidget();
-                                },
-                              );
-                              await Navigator.push(context, route);
-                    })))]));
-                  }
-
-  
-  
+                  onPressed: () {
+                    //  final route = MaterialPageRoute(
+                    //           builder: (context) {
+                    //             return CalendarWidget();
+                    //           },
+                    //         );
+                    //         await Navigator.push(context, route);
+                    Navigator.of(context).pop();
+                  })))
+    ]));
+  }
 
   Widget buildTag() => Container(
         padding: EdgeInsets.only(top: AppPadding.p16),

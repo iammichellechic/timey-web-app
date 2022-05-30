@@ -24,7 +24,7 @@ class CalendarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return buildCalendarWidget(context);
+    return Container(child: buildCalendarWidget(context));
   }
 
   Widget buildCalendarWidget(BuildContext context) {
@@ -92,45 +92,45 @@ class CalendarWidget extends StatelessWidget {
     final event = details.appointments.first;
 
     return Container(
-        padding: EdgeInsets.all(AppPadding.p8),
-        width: details.bounds.width,
-        height: details.bounds.height,
-        decoration: BoxDecoration(
-            color: ColorManager.blue.withOpacity(0.4),
-            border:
-                Border(left: BorderSide(color: ColorManager.blue, width: 4))),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              ListTile(
-                contentPadding: EdgeInsets.symmetric(horizontal: AppPadding.p4),
-                selected: true,
-                title: Row(children: <Widget>[
-                  Icon(Icons.av_timer_outlined,
-                      color: ColorManager.grey, size: AppSize.s14),
-                  Text(
-                    event.tag!.name,
-                    style: getAppTheme().textTheme.subtitle1,
-                  )
-                ]),
-                subtitle: Column(children: <Widget>[
-                  buildDuration(
-                    event!.reportHours.toString() +
-                        ' ' +
-                        'hrs' +
-                        ' ' +
-                        event!.remainingMinutes.toString() +
-                        ' ' +
-                        'mins',
-                  ),
-                  buildDate('From', event.startDate),
-                  buildDate('To', event.endDate),
-                ]),
-                trailing: buildActionMethods(context, event),
-              ),
-            ],
-          ),
-        ));
+      padding: EdgeInsets.all(AppPadding.p8),
+      width: details.bounds.width,
+      height: details.bounds.height,
+      decoration: BoxDecoration(
+          color: ColorManager.blue.withOpacity(0.4),
+          border: Border(left: BorderSide(color: ColorManager.blue, width: 4))),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: AppPadding.p4),
+              selected: true,
+              title: Row(children: <Widget>[
+                Icon(Icons.av_timer_outlined,
+                    color: ColorManager.grey, size: AppSize.s14),
+                Text(
+                  event.tag!.name,
+                  style: getAppTheme().textTheme.subtitle1,
+                )
+              ]),
+              subtitle: Column(children: <Widget>[
+                buildDuration(
+                  event!.reportHours.toString() +
+                      ' ' +
+                      'hrs' +
+                      ' ' +
+                      event!.remainingMinutes.toString() +
+                      ' ' +
+                      'mins',
+                ),
+                buildDate('From', event.startDate),
+                buildDate('To', event.endDate),
+              ]),
+              trailing: buildActionMethods(context, event),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget buildDate(String title, DateTime date) {
@@ -218,12 +218,9 @@ class CalendarWidget extends StatelessWidget {
   void selectedItem(BuildContext context, item, TimeBlock? entry) {
     switch (item) {
       case 0:
-        showAlignedDialog<EntryEditDialog>(
-          avoidOverflow:true,
+        showGlobalDrawer<EntryEditDialog>(
           context: context,
-          followerAnchor: Alignment.topRight,
-          targetAnchor: Alignment.bottomRight,
-          barrierColor: Colors.transparent,
+          direction: AxisDirection.right,
           duration: Duration(seconds: 1),
           builder: (context) {
             return EntryEditDialog(

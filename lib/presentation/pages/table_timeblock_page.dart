@@ -20,7 +20,7 @@ class _MyDataTableState extends State<MyDataTable> {
   bool isAscending = false;
 
   List timeblocks = [];
-  final String _query = """
+  String _query = """
   query {
   timeblocks{
     datetimeStart
@@ -188,8 +188,9 @@ class _MyDataTableState extends State<MyDataTable> {
                             )));
                   })
               : Container(
+                padding: EdgeInsets.all(8.0),
                   child: Center(
-                  child: Text("No items found"),
+                  child: Text("No timeblocks found"),
                 ));
         });
   }
