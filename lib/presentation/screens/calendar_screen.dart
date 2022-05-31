@@ -42,8 +42,14 @@ class CalendarWidget extends StatelessWidget {
         allowViewNavigation: true,
         showNavigationArrow: true,
         //showWeekNumber: true,
+        firstDayOfWeek: 1,
+        dataSource: EventDataSource(entries),
+        initialSelectedDate: DateTime.now(),
+        cellBorderColor: Colors.transparent,
         initialDisplayDate: DateTime.now(),
         appointmentBuilder: appointmentBuilder,
+        
+        //MONTHVIEW setting
         monthViewSettings: MonthViewSettings(
             showAgenda: true,
             agendaItemHeight: 150,
@@ -59,6 +65,8 @@ class CalendarWidget extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                   color: Colors.black),
             )),
+
+        //TIMESLOTVIEW
         timeSlotViewSettings: TimeSlotViewSettings(
           startHour: 7,
           endHour: 24,
@@ -75,12 +83,11 @@ class CalendarWidget extends StatelessWidget {
               fontSize: FontSize.s14,
               color: ColorManager.grey),
         ),
+
+        //SCHEDULEVIEW
         scheduleViewSettings: ScheduleViewSettings(
             appointmentItemHeight: 120, hideEmptyScheduleWeek: true),
-        firstDayOfWeek: 1,
-        dataSource: EventDataSource(entries),
-        initialSelectedDate: DateTime.now(),
-        cellBorderColor: Colors.transparent,
+        
       ),
     );
   }

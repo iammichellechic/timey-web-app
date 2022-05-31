@@ -35,6 +35,7 @@ Iterable<EntryTotal> _entryTotalsByDay(
 
     yield entryTotal;
   }
+
 }
 
 /// MONTH ////
@@ -77,6 +78,7 @@ Iterable<EntryTotal> _entryTotalsByMonth(
   var start = startMonth;
   var entriesByDay = _entriesInRange(start, endMonth, entries);
 
+ 
   for (var i = 0; i < entriesByDay.length; i++) {
     var list = entriesByDay[i];
     var entryTotal = EntryTotal(start.add(Duration(days: i)), 0);
@@ -87,10 +89,12 @@ Iterable<EntryTotal> _entryTotalsByMonth(
 
       // var totalInMinutes = entry.reportHours * 60 + entry.remainingMinutes;
       entryTotal.value += totalReportedTime;
+     
     }
-
     yield entryTotal;
   }
+ 
+
 }
 //DO: convert dec to time for the label
 

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-
 import '../resources/values_manager.dart';
 
 class ButtonWidget extends StatelessWidget {
@@ -18,15 +16,14 @@ class ButtonWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => DecoratedBox(
-        decoration: BoxDecoration(color: color),
-        child: ElevatedButton(
+  Widget build(BuildContext context) =>  ElevatedButton(
           child: Padding(
             padding: const EdgeInsets.symmetric(
                 horizontal: AppPadding.p30, vertical: AppPadding.p14),
             child: Text(text,style: style,),
           ),
+          style: ElevatedButton.styleFrom(primary: color),
           onPressed: onClicked,
-        ),
+        
       );
 }

@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:provider/provider.dart';
 import 'package:timey_web/presentation/resources/color_manager.dart';
-import 'package:timey_web/presentation/resources/font_manager.dart';
+import 'package:timey_web/presentation/widgets/chart_widget.dart';
 import '/presentation/utils/chart_utils.dart' as utils;
 import '../../data/providers/timeblocks.dart';
 import '../resources/timeFormat_manager.dart';
-import '../resources/values_manager.dart';
 
 class MonthlyChart extends StatelessWidget {
   const MonthlyChart({Key? key}) : super(key: key);
@@ -32,46 +31,15 @@ class MonthlyChart extends StatelessWidget {
           measureFn: (total, _) {
             return total.value;
           },
-          colorFn: (_, __) => charts.ColorUtil.fromDartColor(ColorManager.blue),
+          colorFn: (total, __) =>
+              charts.ColorUtil.fromDartColor(ColorManager.blue),
           // Set a label accessor to control the text of the bar label.
           labelAccessorFn: (total, _) => '${total.value}hrs'),
     ];
 
-    return Scaffold(
-      body: Container(
-        // height: 600,
-        padding: EdgeInsets.all(AppPadding.p12),
-        child: Center(
-          child: Column(
-            children: <Widget>[
-              Text(
-                'Monthly Time Report',
-                style: Theme.of(context).textTheme.headline1,
-              ),
-              SizedBox(height: AppSize.s5),
-              Expanded(
-                child: charts.BarChart(
-                  seriesData,
-                  animate: true,
-                  barGroupingType: charts.BarGroupingType.grouped,
-                  animationDuration: Duration(milliseconds: 500),
-                  barRendererDecorator: charts.BarLabelDecorator<String>(
-                      insideLabelStyleSpec: charts.TextStyleSpec(
-                          fontFamily: FontConstants.fontFamily,
-                          fontSize: 10,
-                          color: charts.ColorUtil.fromDartColor(
-                              ColorManager.primaryWhite)),
-                      outsideLabelStyleSpec: charts.TextStyleSpec(
-                          fontFamily: FontConstants.fontFamily,
-                          fontSize: 10,
-                          color: charts.ColorUtil.fromDartColor(ColorManager.blue))),
-                  domainAxis: charts.OrdinalAxisSpec(),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    return ChartWidget(
+        seriesData: seriesData,
+        text: 'Monthly Time Report',
+        style: Theme.of(context).textTheme.headline1);
   }
 }

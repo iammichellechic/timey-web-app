@@ -19,8 +19,7 @@ class _MyDataTableState extends State<MyDataTable> {
   int? sortColumnIndex;
   bool isAscending = false;
 
-  List timeblocks = [];
-  String _query = """
+  final String _query = """
   query {
   timeblocks{
     datetimeStart
@@ -36,25 +35,25 @@ class _MyDataTableState extends State<MyDataTable> {
     // final timeblocksData = Provider.of<TimeBlocks>(context);
     // final timeblocks = timeblocksData.userTimeBlock;
 
-    //sorting doesnt work
-    //initState list != null sort
-    int compareValues(bool ascending, DateTime value1, DateTime value2) =>
-        ascending ? value1.compareTo(value2) : value2.compareTo(value1);
+    // //sorting doesnt work
+    // //initState list != null sort
+    // int compareValues(bool ascending, DateTime value1, DateTime value2) =>
+    //     ascending ? value1.compareTo(value2) : value2.compareTo(value1);
 
-    void onSort(int columnIndex, bool ascending) {
-      if (columnIndex == 1) {
-        timeblocks.sort((user1, user2) =>
-            compareValues(ascending, user1.startDate, user2.startDate));
-      } else if (columnIndex == 2) {
-        timeblocks.sort((user1, user2) =>
-            compareValues(ascending, user1.endDate, user2.endDate));
-      }
+    // void onSort(int columnIndex, bool ascending) {
+    //   if (columnIndex == 1) {
+    //     timeblocks.sort((user1, user2) =>
+    //         compareValues(ascending, user1.startDate, user2.startDate));
+    //   } else if (columnIndex == 2) {
+    //     timeblocks.sort((user1, user2) =>
+    //         compareValues(ascending, user1.endDate, user2.endDate));
+    //   }
 
-      setState(() {
-        this.sortColumnIndex = columnIndex;
-        this.isAscending = ascending;
-      });
-    }
+    //   setState(() {
+    //     this.sortColumnIndex = columnIndex;
+    //     this.isAscending = ascending;
+    //   });
+    // }
 
     //ERROR unexpected null value
     //added null check--did not solve the errir
@@ -62,10 +61,15 @@ class _MyDataTableState extends State<MyDataTable> {
     return Query(
         options: QueryOptions(document: gql(_query)),
         builder: (result, {fetchMore, refetch}) {
+          if (result.hasException) {
+            return Center(child: Text(result.exception.toString()));
+          }
           if (result.isLoading) {
             return CircularProgressIndicator();
           }
-          timeblocks = result.data!["timeblocks"];
+
+          List timeblocks = result.data!["timeblocks"];
+          print(timeblocks);
 
           return (timeblocks.isNotEmpty)
               ? ListView.builder(
@@ -97,14 +101,12 @@ class _MyDataTableState extends State<MyDataTable> {
                                       style: Theme.of(context)
                                           .textTheme
                                           .subtitle1),
-                                  onSort: onSort,
                                 ),
                                 DataColumn(
                                   label: Text('End Date',
                                       style: Theme.of(context)
                                           .textTheme
                                           .subtitle1),
-                                  onSort: onSort,
                                 ),
                                 DataColumn(
                                     label: Text('Edit',
@@ -188,10 +190,10 @@ class _MyDataTableState extends State<MyDataTable> {
                             )));
                   })
               : Container(
-                padding: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Center(
-                  child: Text("No timeblocks found"),
-                ));
+                    child: Text("No timeblocks found"),
+                  ));
         });
   }
 }
