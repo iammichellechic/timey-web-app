@@ -1,39 +1,71 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:timey_web/presentation/pages/timeblock_adding_page.dart';
-import 'package:timey_web/presentation/resources/values_manager.dart';
-
 import '../../locator.dart';
 import '../../navigation-service.dart';
+import '../resources/color_manager.dart';
 import '../resources/routes_manager.dart';
 import '../shared/menu_drawer.dart';
 
 class BaseLayout extends StatelessWidget {
-  const BaseLayout({Key? key}) : super(key: key);
+  final Widget? child;
+  const BaseLayout({Key? key, this.child}) : super(key: key);
 
+//temporary solution
+//use adaptive scaffold.dart in the future
   @override
   Widget build(BuildContext context) {
-    return ResponsiveBuilder(
-        builder: (context, sizingInformation) => Scaffold(
-            drawer: MenuDrawer(
-              permanentlyDisplay: !sizingInformation.isMobile,
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final bool displayMobileLayout = MediaQuery.of(context).size.width < 600;
+
+    //ERROR: incorrect use of parentdatawidget
+    //expanded is already a direct descendant of row, column or flex
+
+    //ERROR:Navigator operation requested with a context that does not include a Navigator.
+    //fixed when a: main.dart //runApp(MaterialApp(home: MyApp()));
+    //fixed when b: app.dart //home:Baselayout() then Navigator is passed here in body
+    //however both solutions results to routename not rendering in thr URL
+    //already tried wrapping in builder
+
+
+    return Row(children: <Widget>[
+      if (!displayMobileLayout)
+        const MenuDrawer(
+          permanentlyDisplay: true,
+        ),
+      Expanded(
+          child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          iconTheme: IconThemeData(color: ColorManager.grey),
+          elevation: 0,
+          automaticallyImplyLeading: displayMobileLayout,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.add, color: ColorManager.grey),
+              hoverColor: ColorManager.blue,
+              onPressed: () {
+                _scaffoldKey.currentState!.openEndDrawer();
+              },
             ),
-            endDrawer: TimeblockPage(),
-            body: CenteredView(
-              child: Column(
-                children: [
-                  NavigationBar(),
-                  Expanded(
-                    child: Navigator(
-                      key: locator<NavigationService>().navigatorKey,
-                      onGenerateRoute: RouteGenerator.getRoute,
-                      initialRoute: Routes.overviewRoute,
-                    ),
-                  ),
-                ],
-              ),
-            )));
+          ],
+        ),
+        key: _scaffoldKey,
+        extendBodyBehindAppBar: true,
+        endDrawer: TimeblockPage(),
+        drawer: displayMobileLayout
+            ? const MenuDrawer(
+                permanentlyDisplay: false,
+              )
+            : null,
+        //body: Container(child: child)))
+        body: Navigator(
+          key: locator<NavigationService>().navigatorKey,
+          onGenerateRoute: RouteGenerator.getRoute,
+          initialRoute: Routes.overviewRoute,
+        ),
+      ))
+    ]);
   }
 }
 
@@ -44,7 +76,7 @@ class CenteredView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      //padding: const EdgeInsets.symmetric(horizontal: 20),
       alignment: Alignment.topCenter,
       child: ConstrainedBox(
         constraints: BoxConstraints(),
@@ -53,6 +85,36 @@ class CenteredView extends StatelessWidget {
     );
   }
 }
+
+//  class BaseLayout extends StatelessWidget {
+//  final Widget? child;
+//   const BaseLayout({Key? key, this.child}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ResponsiveBuilder(
+//         builder: (context, sizingInformation) => Scaffold(
+//             drawer: MenuDrawer(
+//               permanentlyDisplay: !sizingInformation.isMobile,
+//             ),
+//             endDrawer: TimeblockPage(),
+//             body: CenteredView(
+//               child: Column(
+//                 children: [
+//                   NavigationBar(),
+//                   Expanded(
+//                     child: Navigator(
+//                       key: locator<NavigationService>().navigatorKey,
+//                       onGenerateRoute: RouteGenerator.getRoute,
+//                       initialRoute: Routes.overviewRoute,
+
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             )));
+//   }
+// }
 
 class NavigationBar extends StatelessWidget {
   const NavigationBar({Key? key}) : super(key: key);
@@ -102,6 +164,7 @@ class NavigationBarTabletDesktop extends StatelessWidget {
       child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
+            //const MenuDrawer(permanentlyDisplay: true),
             SizedBox(),
             IconButton(
               icon: Icon(Icons.add),

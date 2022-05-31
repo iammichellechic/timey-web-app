@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 import '/presentation/pages/timeblock_adding_page.dart';
 import '/presentation/screens/calendar_screen.dart';
 import '/presentation/screens/chart_overview_screen.dart';
@@ -7,10 +6,10 @@ import '/presentation/screens/table_timeblock_screen.dart';
 
 class Routes {
   //temporary names
-  static const String overviewRoute = "/dashboard";
-  static const String calendarRoute = "/timereports";
-  static const String tableRoute = "/timereports-list";
-  static const String formRoute = "/edit-timereport";
+  static const String overviewRoute = "dashboard";
+  static const String calendarRoute = "timereports";
+  static const String tableRoute = "timereports-list";
+  static const String formRoute = "edit-timereport";
 }
 
 class RouteGenerator {
@@ -18,7 +17,9 @@ class RouteGenerator {
     switch (routeSettings.name) {
       case Routes.overviewRoute:
         return _GeneratePageRoute(
-            widget: OverView(), routeName: routeSettings.name!);
+          widget: OverView(),
+          routeName: routeSettings.name!,
+        );
       case Routes.calendarRoute:
         return _GeneratePageRoute(
           widget: CalendarWidget(),

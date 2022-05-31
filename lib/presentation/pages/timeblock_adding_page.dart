@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:timey_web/presentation/screens/calendar_screen.dart';
+import 'package:timey_web/presentation/widgets/button_widget.dart';
+import '../../locator.dart';
+import '../../navigation-service.dart';
+import '../resources/routes_manager.dart';
 import '/presentation/resources/color_manager.dart';
 import '/presentation/resources/values_manager.dart';
 
@@ -25,14 +30,13 @@ class _TimeblockPageState extends State<TimeblockPage> {
   final _form = GlobalKey<FormState>();
 
   List<Tag> availableTags = Tags().tags;
-  Tag? selectedTag;
+  Tag? selectedTag; //saving empty tag value
+
   late DateTime startDate;
   late DateTime endDate;
 
   @override
   void initState() {
-    super.initState();
-
     if (widget.timeBlock == null) {
       startDate = DateTime.now();
       endDate = DateTime.now().add(Duration(hours: 2));
@@ -42,11 +46,15 @@ class _TimeblockPageState extends State<TimeblockPage> {
 
       startDate = timeBlock.startDate;
       endDate = timeBlock.endDate;
-      selectedTag = timeBlock.tag; //doesnt auto populate durinh edit
+      selectedTag = timeBlock.tag; //doesnt auto populate during edit
 
     }
 
-    if (availableTags.isNotEmpty) selectedTag = availableTags.first;
+    if (availableTags.isNotEmpty) {
+      selectedTag = availableTags.first;
+    }
+
+    super.initState();
   }
 
   void _saveForm() {
@@ -62,7 +70,9 @@ class _TimeblockPageState extends State<TimeblockPage> {
       } else {
         Provider.of<TimeBlocks>(context, listen: false).addTimeBlock(timeBlock);
       }
+      
       Navigator.of(context).pop();
+      //locator<NavigationService>().navigateTo(Routes.calendarRoute);
     }
   }
 
@@ -76,95 +86,92 @@ class _TimeblockPageState extends State<TimeblockPage> {
   Widget build(BuildContext context) {
     final safeArea =
         EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
-
     return Container(
-        padding: safeArea,
-        width: isDesktop(context)
-            ? MediaQuery.of(context).size.width * 0.30
-            : MediaQuery.of(context).size.width,
-        child: Drawer(
+      padding: safeArea,
+      width: isDesktop(context)
+          ? MediaQuery.of(context).size.width * 0.30
+          : MediaQuery.of(context).size.width,
+      child: Drawer(
           child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(AppPadding.p30),
-            child: Form(
-              key: _form,
-              child: ListView(
-                children: <Widget>[
-                  buildTag(),
-                  SizedBox(
-                    height: AppSize.s12,
-                  ),
-                  buildDateTimePickers(),
-                  SizedBox(
-                    height: AppSize.s20,
-                  ),
-                  buildActionRow(context),
-               
-                ],
-              ),
+        child: Padding(
+          padding: const EdgeInsets.all(AppPadding.p30),
+          child: Form(
+            key: _form,
+            child: ListView(
+              children: <Widget>[
+                buildTag(),
+                SizedBox(
+                  height: AppSize.s12,
+                ),
+                buildDateTimePickers(),
+                SizedBox(
+                  height: AppSize.s20,
+                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      ButtonWidget(
+                          color: ColorManager.blue,
+                          text: 'Report',
+                          style: Theme.of(context).textTheme.headline6,
+                          onClicked: _saveForm)
+                    ]),
+                Spacer(),
+                // TimeBlocksItems(),
+                buildCloseButton(context),
+              ],
             ),
-          ),
-        )));
-  }
-
-Row buildActionRow(BuildContext context) => Row(children: [
-        RichText(
-            text: TextSpan(children: [
-          TextSpan(text: "Close", style: Theme.of(context).textTheme.caption),
-          WidgetSpan(
-              child: Align(
-                  alignment: FractionalOffset.bottomLeft,
-                  child: IconButton(
-                      icon: Icon(
-                        Icons.close,
-                        color: ColorManager.grey,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      })))
-        ])),
-        Spacer(),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: const [
-                  Color.fromRGBO(187, 222, 251, 1),
-                  Color.fromRGBO(13, 71, 161, 1),
-                ]),
-          ),
-          child: ElevatedButton(
-            child: Padding(
-              padding: const EdgeInsets.all(AppPadding.p8),
-              child: Text('Report'),
-            ),
-            onPressed: _saveForm,
           ),
         ),
-      ]);
-    
+      )),
+    );
+  }
+
+  Widget buildCloseButton(BuildContext context) {
+    return RichText(
+        text: TextSpan(children: [
+      TextSpan(text: "Close", style: Theme.of(context).textTheme.caption),
+      WidgetSpan(
+          child: Align(
+              alignment: FractionalOffset.bottomLeft,
+              child: IconButton(
+                  icon: Icon(
+                    Icons.close,
+                    color: ColorManager.grey,
+                  ),
+                  onPressed: () {
+                    //  final route = MaterialPageRoute(
+                    //           builder: (context) {
+                    //             return CalendarWidget();
+                    //           },
+                    //         );
+                    //         await Navigator.push(context, route);
+                    Navigator.of(context).pop();
+                  })))
+    ]));
+  }
 
   Widget buildTag() => Container(
-      padding: EdgeInsets.only(top: AppPadding.p16),
-      child: DropdownButtonFormField<Tag>(
-          decoration: InputDecoration(
-              border: UnderlineInputBorder(),
-              icon: Icon(Icons.assignment, color: ColorManager.grey),
-              labelText: 'Project',
-              labelStyle: Theme.of(context).textTheme.subtitle2),
-          value: selectedTag,
-          icon: const Icon(Icons.arrow_downward),
-          elevation: AppSize.s16.toInt(),
-          onChanged: (Tag? newValue) {
-            setState(() {
-              selectedTag = newValue!;
-            });
-          },
-          items: availableTags
-              .map<DropdownMenuItem<Tag>>((tag) =>
-                  DropdownMenuItem<Tag>(value: tag, child: Text(tag.name)))
-              .toList()));
+        padding: EdgeInsets.only(top: AppPadding.p16),
+        child: DropdownButtonFormField<Tag>(
+            decoration: InputDecoration(
+                border: UnderlineInputBorder(),
+                icon: Icon(Icons.assignment, color: ColorManager.grey),
+                labelText: 'Project',
+                labelStyle: Theme.of(context).textTheme.subtitle2),
+            value: selectedTag,
+            icon: const Icon(Icons.arrow_downward),
+            elevation: AppSize.s16.toInt(),
+            onChanged: (Tag? newValue) {
+              setState(() {
+                selectedTag = newValue!;
+              });
+            },
+            items: availableTags
+                .map<DropdownMenuItem<Tag>>((tag) =>
+                    DropdownMenuItem<Tag>(value: tag, child: Text(tag.name)))
+                .toList()),
+      );
 
   Widget buildDateTimePickers() => Column(
         children: [buildStartDate(), buildEndDate()],

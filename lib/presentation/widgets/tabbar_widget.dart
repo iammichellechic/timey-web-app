@@ -28,7 +28,7 @@ class TabBarWidget extends StatelessWidget {
               indicator: 
               BoxDecoration(
                       borderRadius: BorderRadius.circular(AppSize.s50), // Creates border
-                      color: ColorManager.blue.withOpacity(0.6)), 
+                      color: ColorManager.blue), 
             ),
             elevation: 0,
 

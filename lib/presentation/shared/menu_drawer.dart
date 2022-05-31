@@ -26,7 +26,7 @@ class MenuDrawer extends StatelessWidget {
           buildUserProfile(context),
           const SizedBox(height: 12),
           if (permanentlyDisplay)
-            const VerticalDivider(
+            VerticalDivider(
               width: 1,
             ),
         ],
@@ -34,47 +34,67 @@ class MenuDrawer extends StatelessWidget {
     );
   }
 
-  Column buildNavItems(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          leading: Icon(Icons.home),
-          title: Text('Overview', style: Theme.of(context).textTheme.subtitle1),
-          onTap: () {
-            locator<NavigationService>().navigateTo(Routes.overviewRoute);
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.calendar_month),
-          title: Text('Calendar view',
-              style: Theme.of(context).textTheme.subtitle1),
-          onTap: () {
-            locator<NavigationService>().navigateTo(Routes.calendarRoute);
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.table_chart),
-          title:
-              Text('Table view', style: Theme.of(context).textTheme.subtitle1),
-          onTap: () {
-            locator<NavigationService>().navigateTo(Routes.tableRoute);
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.payment),
-          title: Text('Payment Overview',
-              style: Theme.of(context).textTheme.subtitle1),
-          onTap: () => {},
-        ),
-        Divider(
-          color: ColorManager.grey,
-        ),
-        ListTile(
-          leading: Icon(Icons.tune),
-          title: Text('Settings', style: Theme.of(context).textTheme.subtitle1),
-          onTap: () => {},
-        ),
-      ],
+  Widget buildNavItems(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(AppPadding.p12, 0, AppPadding.p12, 0),
+      child: Column(
+        children: [
+          ListTile(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            hoverColor: ColorManager.blue,
+            leading: Icon(Icons.home),
+            title:
+                Text('Overview', style: Theme.of(context).textTheme.subtitle1),
+            onTap: () {
+              locator<NavigationService>().navigateTo(Routes.overviewRoute);
+            },
+          ),
+          ListTile(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            hoverColor: ColorManager.blue,
+            leading: Icon(Icons.calendar_month),
+            title: Text('Calendar view',
+                style: Theme.of(context).textTheme.subtitle1),
+            onTap: () {
+              locator<NavigationService>().navigateTo(Routes.calendarRoute);
+            },
+          ),
+          ListTile(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            hoverColor: ColorManager.blue,
+            leading: Icon(Icons.table_chart),
+            title: Text('Table view',
+                style: Theme.of(context).textTheme.subtitle1),
+            onTap: () {
+              locator<NavigationService>().navigateTo(Routes.tableRoute);
+            },
+          ),
+          ListTile(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            hoverColor: ColorManager.blue,
+            leading: Icon(Icons.payment),
+            title: Text('Payment Overview',
+                style: Theme.of(context).textTheme.subtitle1),
+            onTap: () => {},
+          ),
+          Divider(
+            color: ColorManager.grey,
+          ),
+          ListTile(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            hoverColor: ColorManager.blue,
+            leading: Icon(Icons.tune),
+            title:
+                Text('Settings', style: Theme.of(context).textTheme.subtitle1),
+            onTap: () => {},
+          ),
+        ],
+      ),
     );
   }
 

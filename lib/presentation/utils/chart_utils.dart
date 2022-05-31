@@ -3,7 +3,7 @@ import 'day_helpers.dart';
 
 class EntryTotal {
   final DateTime day;
-  int value;
+  double value;
 
   EntryTotal(this.day, this.value);
 }
@@ -14,6 +14,7 @@ class EntryTotal {
 List<EntryTotal> entryTotalsByDay(List<TimeBlock>? entries, int daysAgo,
     {DateTime? today}) {
   today ??= DateTime.now();
+
   return _entryTotalsByDay(entries, daysAgo, today).toList();
 }
 
@@ -27,7 +28,99 @@ Iterable<EntryTotal> _entryTotalsByDay(
     var entryTotal = EntryTotal(start.add(Duration(days: i)), 0);
 
     for (var entry in list) {
+      //make variable that adds reporthours and minutes
+      //use that variable to store value
       entryTotal.value += entry.reportHours;
+    }
+
+    yield entryTotal;
+  }
+}
+
+/// MONTH ////
+//get number of days in a month
+int getDaysInMonth(int year, int month) {
+  if (month == DateTime.february) {
+    final bool isLeapYear =
+        (year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0);
+    return isLeapYear ? 29 : 28;
+  }
+  const List<int> daysInMonth = <int>[
+    31,
+    -1,
+    31,
+    30,
+    31,
+    30,
+    31,
+    31,
+    30,
+    31,
+    30,
+    31
+  ];
+  return daysInMonth[month - 1];
+}
+
+List<EntryTotal> entryTotalsByMonth(List<TimeBlock>? entries,
+    {DateTime? startMonth, DateTime? endMonth}) {
+  DateTime today = DateTime.now();
+  startMonth = DateTime(today.year, today.month, 1);
+  endMonth = DateTime(
+      today.year, today.month, getDaysInMonth(today.year, today.month));
+
+  return _entryTotalsByMonth(entries, startMonth, endMonth).toList();
+}
+
+Iterable<EntryTotal> _entryTotalsByMonth(
+    List<TimeBlock>? entries, DateTime startMonth, DateTime endMonth) sync* {
+  var start = startMonth;
+  var entriesByDay = _entriesInRange(start, endMonth, entries);
+
+  for (var i = 0; i < entriesByDay.length; i++) {
+    var list = entriesByDay[i];
+    var entryTotal = EntryTotal(start.add(Duration(days: i)), 0);
+
+    for (var entry in list) {
+      var minsInDecimal = entry.remainingMinutes / 60;
+      var totalReportedTime = entry.reportHours + minsInDecimal;
+
+      // var totalInMinutes = entry.reportHours * 60 + entry.remainingMinutes;
+      entryTotal.value += totalReportedTime;
+    }
+
+    yield entryTotal;
+  }
+}
+//DO: convert dec to time for the label
+
+/// WEEK ////
+List<EntryTotal> entryTotalsByWeek(List<TimeBlock>? entries,
+    {DateTime? startWeek, DateTime? endWeek}) {
+  DateTime today = DateTime.now();
+
+  int daysOfWeek = today.weekday - 1;
+  startWeek = DateTime(today.year, today.month, today.day - daysOfWeek);
+  endWeek = startWeek.add(Duration(days: 6, hours: 23, minutes: 59));
+
+  return _entryTotalsByWeek(entries, startWeek, endWeek).toList();
+}
+
+Iterable<EntryTotal> _entryTotalsByWeek(
+    List<TimeBlock>? entries, DateTime startWeek, DateTime endWeek) sync* {
+  var start = startWeek;
+  var entriesByDay = _entriesInRange(start, endWeek, entries);
+
+  for (var i = 0; i < entriesByDay.length; i++) {
+    var list = entriesByDay[i];
+    var entryTotal = EntryTotal(start.add(Duration(days: i)), 0);
+
+    for (var entry in list) {
+      var minsInDecimal = entry.remainingMinutes / 60;
+      var totalReportedTime = entry.reportHours + minsInDecimal;
+
+      // var totalInMinutes = entry.reportHours * 60 + entry.remainingMinutes;
+      entryTotal.value += totalReportedTime;
     }
 
     yield entryTotal;

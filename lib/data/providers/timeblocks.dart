@@ -96,18 +96,6 @@ class TimeBlocks with ChangeNotifier {
     notifyListeners();
   }
 
-  /*chart related*/
-
-  List<TimeBlock> get recentEntries {
-    return _userTimeBlocks.where((tx) {
-      return tx.startDate.isAfter(
-        DateTime.now().subtract(
-          Duration(days: 7),
-        ),
-      );
-    }).toList();
-  }
-
   /*calendar related*/
 
   DateTime _selectedDate = DateTime.now();

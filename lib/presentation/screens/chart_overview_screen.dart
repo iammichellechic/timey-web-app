@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:timey_web/presentation/pages/charts_monthly_page.dart';
 import 'package:timey_web/presentation/pages/charts_weekly_page.dart';
 
-import '../pages/timeblock_adding_page.dart';
 import '../widgets/tabbar_widget.dart';
-import '/presentation/resources/color_manager.dart';
-
-import '../shared/menu_drawer.dart';
 
 class OverView extends StatelessWidget {
+  const OverView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,12 +19,12 @@ class OverView extends StatelessWidget {
         tabs: [
           Tab(
               icon: Icon(Icons.calendar_month),
-              child: Text('Monthly',
+              child: Text('Month',
                   style: Theme.of(context).textTheme.subtitle1)),
           Tab(
               icon: Icon(Icons.calendar_view_week),
               child:
-                  Text('Weekly', style: Theme.of(context).textTheme.subtitle1)),
+                  Text('Week', style: Theme.of(context).textTheme.subtitle1)),
           Tab(
               icon: Icon(Icons.receipt),
               child: Text('Summary',
