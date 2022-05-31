@@ -7,11 +7,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:timey_web/app/app.dart';
-
-import 'package:timey_web/main.dart';
-import 'package:timey_web/presentation/pages/base_layout.dart';
 import 'package:timey_web/presentation/shared/menu_drawer.dart';
 
 void main() {
