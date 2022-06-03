@@ -5,19 +5,17 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 import 'package:timey_web/presentation/utils/snackbar_utils.dart';
 
-import '../../data/providers/timeblock.dart';
-import '../../locator.dart';
-import '../../navigation-service.dart';
-
-import '../resources/font_manager.dart';
-import '../resources/routes_manager.dart';
-import '../resources/theme_manager.dart';
-import '../resources/timeFormat_manager.dart';
-import '../widgets/dialogs_widget.dart';
+import '../../../data/providers/timeblock.dart';
+import '../../../locator.dart';
+import '../../../navigation-service.dart';
+import '../../resources/font_manager.dart';
+import '../../resources/routes_manager.dart';
+import '../../resources/theme_manager.dart';
+import '../../resources/timeFormat_manager.dart';
+import '../../widgets/dialogs_widget.dart';
 import '/presentation/resources/color_manager.dart';
-import '../../data/providers/timeblocks.dart';
-
-import '../../model/timeblock_data_source.dart';
+import '../../../data/providers/timeblocks.dart';
+import '../../../model/timeblock_data_source.dart';
 
 class CalendarWidget extends StatelessWidget {
   const CalendarWidget({Key? key}) : super(key: key);
@@ -48,7 +46,7 @@ class CalendarWidget extends StatelessWidget {
         cellBorderColor: Colors.transparent,
         initialDisplayDate: DateTime.now(),
         appointmentBuilder: appointmentBuilder,
-        
+
         //MONTHVIEW setting
         monthViewSettings: MonthViewSettings(
             showAgenda: true,
@@ -87,7 +85,6 @@ class CalendarWidget extends StatelessWidget {
         //SCHEDULEVIEW
         scheduleViewSettings: ScheduleViewSettings(
             appointmentItemHeight: 120, hideEmptyScheduleWeek: true),
-        
       ),
     );
   }
@@ -225,9 +222,12 @@ class CalendarWidget extends StatelessWidget {
   void selectedItem(BuildContext context, item, TimeBlock? entry) {
     switch (item) {
       case 0:
-        showGlobalDrawer<EntryEditDialog>(
+        showAlignedDialog<EntryEditDialog>(
+          avoidOverflow: true,
           context: context,
-          direction: AxisDirection.right,
+          followerAnchor: Alignment.topRight,
+          targetAnchor: Alignment.bottomRight,
+          barrierColor: Colors.transparent,
           duration: Duration(seconds: 1),
           builder: (context) {
             return EntryEditDialog(
@@ -268,7 +268,7 @@ class CalendarWidget extends StatelessWidget {
                   SnackBarUtils.showSnackBar(
                     context: context,
                     text: 'Entry removed',
-                    color: ColorManager.error.withOpacity(0.7),
+                    color: ColorManager.error.withOpacity(0.2),
                     icons: Icons.delete,
                   );
                 },

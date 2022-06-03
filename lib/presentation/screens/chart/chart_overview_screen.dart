@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:timey_web/presentation/pages/charts_monthly_page.dart';
 import 'package:timey_web/presentation/pages/charts_weekly_page.dart';
+import 'package:timey_web/presentation/pages/sample_chart.dart';
 
-import '../widgets/tabbar_widget.dart';
+import '../../widgets/tabbar_widget.dart';
 
 class OverView extends StatelessWidget {
   const OverView({Key? key}) : super(key: key);
@@ -30,10 +31,10 @@ class OverView extends StatelessWidget {
               child: Text('Summary',
                   style: Theme.of(context).textTheme.subtitle1)),
         ],
-        children: [
+        children: const[
           MonthlyChart(),
           WeeklyChart(),
-          Container(),
+          SampleChart(),
         ],
       );
 }

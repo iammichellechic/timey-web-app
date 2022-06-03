@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:timey_web/presentation/screens/calendar_screen.dart';
+import 'package:timey_web/presentation/screens/calendar/calendar_screen.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
 import '../../locator.dart';
 import '../../navigation-service.dart';

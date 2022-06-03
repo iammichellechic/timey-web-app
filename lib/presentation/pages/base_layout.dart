@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:timey_web/presentation/pages/timeblock_adding_page.dart';
-import '../../locator.dart';
-import '../../navigation-service.dart';
 import '../resources/color_manager.dart';
-import '../resources/routes_manager.dart';
 import '../shared/menu_drawer.dart';
 
 class BaseLayout extends StatelessWidget {
-  final Widget? child;
-  const BaseLayout({Key? key, this.child}) : super(key: key);
+  final Widget child;
+  const BaseLayout({Key? key, required this.child}) : super(key: key);
 
 //temporary solution
 //use adaptive scaffold.dart in the future
@@ -58,13 +55,8 @@ class BaseLayout extends StatelessWidget {
                 permanentlyDisplay: false,
               )
             : null,
-        //body: Container(child: child)))
-        body: Navigator(
-          key: locator<NavigationService>().navigatorKey,
-          onGenerateRoute: RouteGenerator.getRoute,
-          initialRoute: Routes.overviewRoute,
-        ),
-      ))
+        body: Expanded(child: child)))
+      
     ]);
   }
 }
@@ -86,30 +78,21 @@ class CenteredView extends StatelessWidget {
   }
 }
 
-//  class BaseLayout extends StatelessWidget {
-//  final Widget? child;
-//   const BaseLayout({Key? key, this.child}) : super(key: key);
+// class BaseLayout extends StatelessWidget {
+//   final Widget child;
+//   const BaseLayout({Key? key, required this.child}) : super(key: key);
 
 //   @override
 //   Widget build(BuildContext context) {
 //     return ResponsiveBuilder(
 //         builder: (context, sizingInformation) => Scaffold(
-//             drawer: MenuDrawer(
-//               permanentlyDisplay: !sizingInformation.isMobile,
-//             ),
+//             drawer: MenuDrawer(),
 //             endDrawer: TimeblockPage(),
 //             body: CenteredView(
 //               child: Column(
 //                 children: [
-//                   NavigationBar(),
-//                   Expanded(
-//                     child: Navigator(
-//                       key: locator<NavigationService>().navigatorKey,
-//                       onGenerateRoute: RouteGenerator.getRoute,
-//                       initialRoute: Routes.overviewRoute,
-
-//                     ),
-//                   ),
+//                   NavigationBar(), //does not have a navigator
+//                   Expanded(child: child),
 //                 ],
 //               ),
 //             )));

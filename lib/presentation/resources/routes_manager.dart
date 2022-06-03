@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '/presentation/pages/timeblock_adding_page.dart';
-import '/presentation/screens/calendar_screen.dart';
-import '/presentation/screens/chart_overview_screen.dart';
+import '../screens/calendar/calendar_screen.dart';
+import '../screens/chart/chart_overview_screen.dart';
 import '/presentation/screens/table_timeblock_screen.dart';
 
 class Routes {

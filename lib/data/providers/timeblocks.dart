@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:timey_web/data/providers/schemas/get_timeblocks_schema.dart';
 import '/data/providers/tags.dart';
 import '../../presentation/resources/timeFormat_manager.dart';
 import './timeblock.dart';
+import 'schemas/endpoint_url.dart';
 
 class TimeBlocks with ChangeNotifier {
+  bool _status = false;
+  String _response = '';
+  dynamic _list = [];
+  bool get getStatus => _status;
+  String get getResponse => _response;
+  final EndPoint _point = EndPoint();
+
   final List<TimeBlock> _userTimeBlocks = [
     TimeBlock(
       id: '1',
@@ -93,6 +103,49 @@ class TimeBlocks with ChangeNotifier {
 
   void deleteTimeBlock(id) {
     _userTimeBlocks.removeWhere((tb) => tb.id == id);
+    notifyListeners();
+  }
+
+/*API */
+  void getTimeblocks(bool isLocal) async {
+    ValueNotifier<GraphQLClient> _client = _point.getClient();
+
+    QueryResult result = await _client.value.query(QueryOptions(
+      document: gql(GetTimeBlocks.query),
+      fetchPolicy: isLocal == true ? null : FetchPolicy.cacheFirst)
+    );
+
+    if (result.hasException) {
+      print(result.exception);
+      _status = false;
+      if (result.exception!.graphqlErrors.isEmpty) {
+        _response = "No connectivity found";
+      } else {
+        _response = result.exception!.graphqlErrors[0].message.toString();
+      }
+      notifyListeners();
+    } else {
+      print(result.data);
+      _status = false;
+      _list = result.data;
+      notifyListeners();
+    }
+  }
+
+  dynamic getResponseData() {
+    if (_list.isNotEmpty) {
+      final data = _list;
+
+      print(data['timeblocks']);
+
+      return data['timeblocks'] ?? {};
+    } else {
+      return {};
+    }
+  }
+
+  void clear() {
+    _response = '';
     notifyListeners();
   }
 

@@ -17,7 +17,7 @@ class ChartWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
           body: Container(
-        // height: 600,
+        //height: 100,
         padding: EdgeInsets.all(AppPadding.p12),
         child: Center(
           child: Column(

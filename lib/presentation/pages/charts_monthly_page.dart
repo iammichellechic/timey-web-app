@@ -12,7 +12,9 @@ class MonthlyChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: buildChartWidget(context));
+    return Scaffold(body:
+        buildChartWidget(context),
+       );
   }
 
   Widget buildChartWidget(BuildContext context) {
@@ -42,4 +44,6 @@ class MonthlyChart extends StatelessWidget {
         text: 'Monthly Time Report',
         style: Theme.of(context).textTheme.headline1);
   }
+
+  
 }

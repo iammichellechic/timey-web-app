@@ -14,10 +14,10 @@ class SnackBarUtils {
           children: <Widget>[
             Icon(
               icons,
-              color: ColorManager.primaryWhite,
+              color: ColorManager.error,
             ),
             SizedBox(width: AppSize.s16),
-            Text(text, style: Theme.of(context!).textTheme.headline6),
+            Text(text, style: Theme.of(context!).textTheme.headline5),
           ],
         ),
         duration: Duration(seconds: 3),

@@ -28,7 +28,7 @@ class _EditablePageState extends State<EditablePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: const <Widget>[
-              // Chart(timeblocksData.recentEntries), //no prupose
+              //Chart(timeblocksData.recentEntries), //no prupose
               MyDataTable()
             ],
           ),

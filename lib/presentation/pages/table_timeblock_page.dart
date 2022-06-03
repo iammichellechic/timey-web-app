@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
-
 import '/presentation/resources/color_manager.dart';
-import '/presentation/resources/timeFormat_manager.dart';
-
 import '../../data/providers/timeblocks.dart';
 import '../widgets/dialogs_widget.dart';
 
@@ -18,17 +14,7 @@ class MyDataTable extends StatefulWidget {
 class _MyDataTableState extends State<MyDataTable> {
   int? sortColumnIndex;
   bool isAscending = false;
-
-  final String _query = """
-  query {
-  timeblocks{
-    datetimeStart
-    datetimeEnd
-    reportedHours
-    reportedRemainingMinutes
-          } 
-  }
-  """;
+  bool isFetched = false;
 
   @override
   Widget build(BuildContext context) {
@@ -55,145 +41,50 @@ class _MyDataTableState extends State<MyDataTable> {
     //   });
     // }
 
-    //ERROR unexpected null value
-    //added null check--did not solve the errir
+    return Container(
+        child: Consumer<TimeBlocks>(builder: (context, task, child) {
+      if (isFetched == false) {
+        ///Fetch the data
+        task.getTimeblocks(true);
 
-    return Query(
-        options: QueryOptions(document: gql(_query)),
-        builder: (result, {fetchMore, refetch}) {
-          if (result.hasException) {
-            return Center(child: Text(result.exception.toString()));
-          }
-          if (result.isLoading) {
-            return CircularProgressIndicator();
-          }
-
-          List timeblocks = result.data!["timeblocks"];
-          print(timeblocks);
-
-          return (timeblocks.isNotEmpty)
+        Future.delayed(const Duration(seconds: 3), () => isFetched = true);
+      }
+      return RefreshIndicator(
+          onRefresh: () {
+            task.getTimeblocks(false);
+            return Future.delayed(const Duration(seconds: 3));
+          },
+          child: (task.getResponseData().isNotEmpty)
               ? ListView.builder(
-                  itemCount: timeblocks.length,
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: task.getResponseData().length,
                   itemBuilder: (context, index) {
-                    //final tb = timeblocks[index];
-                    return SingleChildScrollView(
-                        physics: BouncingScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        child: FittedBox(
-                            fit: BoxFit.fitWidth,
-                            child: DataTable(
-                              border: TableBorder.symmetric(
-                                  outside:
-                                      BorderSide(width: 3, color: Colors.amber),
-                                  inside: BorderSide(
-                                      width: 2, color: Colors.amberAccent)),
-                              columns: [
-                                DataColumn(
-                                  label: Text('Project',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle1),
-
-                                  //onSort: onSort,
-                                ),
-                                DataColumn(
-                                  label: Text('Start Date',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle1),
-                                ),
-                                DataColumn(
-                                  label: Text('End Date',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle1),
-                                ),
-                                DataColumn(
-                                    label: Text('Edit',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1),
-                                    tooltip: 'edit an entry'),
-                                DataColumn(
-                                    label: Text('Delete',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1),
-                                    tooltip: 'remove an entry'),
-                              ],
-                              rows: timeblocks
-                                  .map((data) => DataRow(cells: [
-                                        DataCell(Text(
-                                            data[index]['datetimeStart'],
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .caption)),
-                                        DataCell(Text(
-                                            Utils.toDateTime(
-                                                data[index]['datetimeStart']),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .caption)),
-                                        DataCell(Text(
-                                            Utils.toDateTime(
-                                                data[index]['datetimeEnd']),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .caption)),
-                                        DataCell(
-                                          IconButton(
-                                            icon: Icon(Icons.edit),
-                                            color: ColorManager.blue,
-                                            onPressed: () {
-                                              showDialog<EntryEditDialog>(
-                                                context: context,
-                                                builder: (context) {
-                                                  return EntryEditDialog(
-                                                    entry: data,
-                                                  );
-                                                },
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        DataCell(
-                                          IconButton(
-                                            icon: Icon(Icons.delete),
-                                            color: ColorManager.error,
-                                            onPressed: () {
-                                              ScaffoldMessenger.of(context)
-                                                  .hideCurrentSnackBar();
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                      content: Text(
-                                                        'Remove selected time report?',
-                                                      ),
-                                                      duration:
-                                                          Duration(seconds: 5),
-                                                      action: SnackBarAction(
-                                                        label: 'CONFIRM',
-                                                        textColor:
-                                                            ColorManager.blue,
-                                                        onPressed: () {
-                                                          Provider.of<TimeBlocks>(
-                                                                  context,
-                                                                  listen: false)
-                                                              .deleteTimeBlock(
-                                                                  data.id);
-                                                        },
-                                                      )));
-                                            },
-                                          ),
-                                        )
-                                      ]))
-                                  .toList(),
-                            )));
+                    final tb = task.getResponseData()[index];
+                    return Container(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("${tb["datetimeStart"]}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold)),
+                                Text("${tb["datetimeEnd"]}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold))
+                              ])
+                        ]));
                   })
               : Container(
                   padding: EdgeInsets.all(8.0),
                   child: Center(
                     child: Text("No timeblocks found"),
-                  ));
-        });
+                  )));
+    }));
   }
 }
