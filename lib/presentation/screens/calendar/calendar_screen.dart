@@ -18,7 +18,8 @@ import '../../../data/providers/timeblocks.dart';
 import '../../../model/timeblock_data_source.dart';
 
 class CalendarWidget extends StatelessWidget {
-  const CalendarWidget({Key? key}) : super(key: key);
+  bool isFetched = false;
+  CalendarWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,67 +27,81 @@ class CalendarWidget extends StatelessWidget {
   }
 
   Widget buildCalendarWidget(BuildContext context) {
-    final entries = Provider.of<TimeBlocks>(context).userTimeBlock;
+    //final entries = Provider.of<TimeBlocks>(context).getList;
 
     return Container(
-      padding: EdgeInsets.only(top: AppPadding.p40),
-      child: SfCalendar(
-        view: CalendarView.week,
-        allowedViews: const <CalendarView>[
-          CalendarView.week,
-          CalendarView.month,
-          CalendarView.schedule,
-        ],
-        allowViewNavigation: true,
-        showNavigationArrow: true,
-        //showWeekNumber: true,
-        firstDayOfWeek: 1,
-        dataSource: EventDataSource(entries),
-        initialSelectedDate: DateTime.now(),
-        cellBorderColor: Colors.transparent,
-        initialDisplayDate: DateTime.now(),
-        appointmentBuilder: appointmentBuilder,
+        padding: EdgeInsets.only(top: AppPadding.p40),
+        child: Consumer<TimeBlocks>(builder: (context, task, child) {
+          if (isFetched == false) {
+            ///Fetch the data
+            task.getTimeblocks(true);
 
-        //MONTHVIEW setting
-        monthViewSettings: MonthViewSettings(
-            showAgenda: true,
-            agendaItemHeight: 150,
-            agendaStyle: AgendaStyle(
-              dateTextStyle: TextStyle(
-                  fontStyle: FontStyle.italic,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.black),
-              dayTextStyle: TextStyle(
-                  fontStyle: FontStyle.normal,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black),
-            )),
+            Future.delayed(const Duration(seconds: 3), () => isFetched = true);
+          }
+          return RefreshIndicator(
+            onRefresh: () {
+              task.getTimeblocks(false);
+              return Future.delayed(const Duration(seconds: 3));
+            },
+            child: SfCalendar(
+              view: CalendarView.week,
+              allowedViews: const <CalendarView>[
+                CalendarView.week,
+                CalendarView.month,
+                CalendarView.schedule,
+              ],
+              allowViewNavigation: true,
+              showNavigationArrow: true,
+              //showWeekNumber: true,
+              firstDayOfWeek: 1,
+              dataSource: EventDataSource(task.getResponseFromQuery()),
+              initialSelectedDate: DateTime.now(),
+              cellBorderColor: Colors.transparent,
+              initialDisplayDate: DateTime.now(),
+              appointmentBuilder: appointmentBuilder,
+             
 
-        //TIMESLOTVIEW
-        timeSlotViewSettings: TimeSlotViewSettings(
-          startHour: 7,
-          endHour: 24,
-          numberOfDaysInView: 5,
-          // nonWorkingDays: <int>[
-          //   DateTime.saturday,
-          //   DateTime.sunday,
-          // ],
-          dayFormat: 'EEE',
-          timeFormat: 'HH:mm',
-          timeTextStyle: TextStyle(
-              fontWeight: FontWeightManager.bold,
-              fontFamily: FontConstants.fontFamily,
-              fontSize: FontSize.s14,
-              color: ColorManager.grey),
-        ),
+              //MONTHVIEW setting
+              monthViewSettings: MonthViewSettings(
+                  showAgenda: true,
+                  agendaItemHeight: 150,
+                  agendaStyle: AgendaStyle(
+                    dateTextStyle: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w300,
+                        color: Colors.black),
+                    dayTextStyle: TextStyle(
+                        fontStyle: FontStyle.normal,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black),
+                  )),
 
-        //SCHEDULEVIEW
-        scheduleViewSettings: ScheduleViewSettings(
-            appointmentItemHeight: 120, hideEmptyScheduleWeek: true),
-      ),
-    );
+              //TIMESLOTVIEW
+              timeSlotViewSettings: TimeSlotViewSettings(
+                startHour: 7,
+                endHour: 24,
+                numberOfDaysInView: 5,
+                // nonWorkingDays: <int>[
+                //   DateTime.saturday,
+                //   DateTime.sunday,
+                // ],
+                dayFormat: 'EEE',
+                timeFormat: 'HH:mm',
+                timeTextStyle: TextStyle(
+                    fontWeight: FontWeightManager.bold,
+                    fontFamily: FontConstants.fontFamily,
+                    fontSize: FontSize.s14,
+                    color: ColorManager.grey),
+              ),
+
+              //SCHEDULEVIEW
+              scheduleViewSettings: ScheduleViewSettings(
+                  appointmentItemHeight: 120, hideEmptyScheduleWeek: true),
+            ),
+          );
+        }));
   }
 
   Widget appointmentBuilder(
@@ -112,7 +127,7 @@ class CalendarWidget extends StatelessWidget {
                 Icon(Icons.av_timer_outlined,
                     color: ColorManager.grey, size: AppSize.s14),
                 Text(
-                  event.tag!.name,
+                  event.id,
                   style: getAppTheme().textTheme.subtitle1,
                 )
               ]),

@@ -31,13 +31,13 @@ class MyApp extends StatelessWidget {
         ],
               child: MaterialApp(
               //home: BaseLayout(),
-              builder: (context, child) =>BaseLayout(child: child!),
-                // Overlay(
-                // initialEntries: [
-                //   OverlayEntry(
-                //     builder: (context) => BaseLayout(child: child),
-                //   ),
-                // ],
+              builder: (context, child) =>
+                Overlay(
+                initialEntries: [
+                  OverlayEntry(
+                    builder: (context) => BaseLayout(child: child!),
+                  ),
+                ],),
               
               title: 'Timey',
               theme: getAppTheme(),

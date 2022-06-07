@@ -6,12 +6,14 @@ class ButtonWidget extends StatelessWidget {
   final VoidCallback onClicked;
   final Color? color;
   final TextStyle? style;
+  final OutlinedBorder? shape;
 
   const ButtonWidget({
     required this.text,
     required this.onClicked,
     required this.color,
     this.style,
+    this.shape,
     Key? key,
   }) : super(key: key);
 
@@ -22,7 +24,7 @@ class ButtonWidget extends StatelessWidget {
                 horizontal: AppPadding.p30, vertical: AppPadding.p14),
             child: Text(text,style: style,),
           ),
-          style: ElevatedButton.styleFrom(primary: color),
+          style: ElevatedButton.styleFrom(primary: color,shape: shape),
           onPressed: onClicked,
         
       );

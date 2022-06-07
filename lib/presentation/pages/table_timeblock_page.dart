@@ -60,25 +60,117 @@ class _MyDataTableState extends State<MyDataTable> {
                   shrinkWrap: true,
                   itemCount: task.getResponseData().length,
                   itemBuilder: (context, index) {
-                    final tb = task.getResponseData()[index];
-                    return Container(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("${tb["datetimeStart"]}",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold)),
-                                Text("${tb["datetimeEnd"]}",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold))
-                              ])
-                        ]));
+                    List tb = task.getResponseData();
+                    final t = tb[index];
+                    return SingleChildScrollView(
+                        physics: BouncingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        child: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: DataTable(
+                              border: TableBorder.symmetric(
+                                  outside:
+                                      BorderSide(width: 3, color: Colors.amber),
+                                  inside: BorderSide(
+                                      width: 2, color: Colors.amberAccent)),
+                              columns: [
+                                DataColumn(
+                                  label: Text('Project',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1),
+
+                                  //onSort: onSort,
+                                ),
+                                DataColumn(
+                                  label: Text('Start Date',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1),
+                                ),
+                                DataColumn(
+                                  label: Text('End Date',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1),
+                                ),
+                                DataColumn(
+                                    label: Text('Edit',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle1),
+                                    tooltip: 'edit an entry'),
+                                DataColumn(
+                                    label: Text('Delete',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle1),
+                                    tooltip: 'remove an entry'),
+                              ],
+                              rows: t
+                                  .map((data) => DataRow(cells: [
+                                        DataCell(Text(
+                                            "${data["datetimeStart"]}",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .caption)),
+                                        DataCell(Text(
+                                            "${data["datetimeStart"]}",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .caption)),
+                                        DataCell(Text("${data["datetimeEnd"]}",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .caption)),
+                                        DataCell(
+                                          IconButton(
+                                            icon: Icon(Icons.edit),
+                                            color: ColorManager.blue,
+                                            onPressed: () {
+                                              showDialog<EntryEditDialog>(
+                                                context: context,
+                                                builder: (context) {
+                                                  return EntryEditDialog(
+                                                    entry: data,
+                                                  );
+                                                },
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        DataCell(
+                                          IconButton(
+                                            icon: Icon(Icons.delete),
+                                            color: ColorManager.error,
+                                            onPressed: () {
+                                              ScaffoldMessenger.of(context)
+                                                  .hideCurrentSnackBar();
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                      content: Text(
+                                                        'Remove selected time report?',
+                                                      ),
+                                                      duration:
+                                                          Duration(seconds: 5),
+                                                      action: SnackBarAction(
+                                                        label: 'CONFIRM',
+                                                        textColor:
+                                                            ColorManager.blue,
+                                                        onPressed: () {
+                                                          Provider.of<TimeBlocks>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .deleteTimeBlock(
+                                                                  data.id);
+                                                        },
+                                                      )));
+                                            },
+                                          ),
+                                        )
+                                      ]))
+                                  .toList(),
+                            )));
                   })
               : Container(
                   padding: EdgeInsets.all(8.0),

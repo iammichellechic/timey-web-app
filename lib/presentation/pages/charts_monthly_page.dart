@@ -18,8 +18,9 @@ class MonthlyChart extends StatelessWidget {
   }
 
   Widget buildChartWidget(BuildContext context) {
+    //can also use consumer here than provider.of
     final timeblocksData = Provider.of<TimeBlocks>(context);
-    final timeblocks = timeblocksData.userTimeBlock; //list of timeblocks
+    final timeblocks = timeblocksData.getResponseFromQuery(); //list of timeblocks
 
     //DO: id:tags.name
 

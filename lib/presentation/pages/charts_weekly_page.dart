@@ -18,7 +18,7 @@ class WeeklyChart extends StatelessWidget {
 
   Widget buildChartWeeklyWidget(BuildContext context) {
     final timeblocksData = Provider.of<TimeBlocks>(context);
-    final timeblocks = timeblocksData.userTimeBlock;
+    final timeblocks = timeblocksData.getResponseFromQuery();
 
     List<charts.Series<utils.EntryTotal, String>> seriesData = [
       charts.Series(

@@ -73,14 +73,15 @@ class MenuDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            hoverColor: ColorManager.blue,
-            leading: Icon(Icons.payment),
-            title: Text('Payment Overview',
-                style: Theme.of(context).textTheme.subtitle1),
-            onTap: () => {},
-          ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
+              hoverColor: ColorManager.blue,
+              leading: Icon(Icons.payment),
+              title: Text('Payment Overview',
+                  style: Theme.of(context).textTheme.subtitle1),
+              onTap: () {
+                locator<NavigationService>().navigateTo(Routes.loginRoute);
+              }),
           Divider(
             color: ColorManager.grey,
           ),

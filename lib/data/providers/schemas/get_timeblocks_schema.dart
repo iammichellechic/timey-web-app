@@ -6,6 +6,7 @@ static String query = """
     datetimeEnd
     reportedHours
     reportedRemainingMinutes
+    userIdCreated
           } 
   }
   """;  

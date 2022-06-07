@@ -32,6 +32,7 @@ class ChartWidget extends StatelessWidget {
                 seriesData,
                 animate: true,
                 barGroupingType: charts.BarGroupingType.grouped,
+                behaviors: [charts.SeriesLegend()],
                 animationDuration: Duration(milliseconds: 500),
                 domainAxis: charts.OrdinalAxisSpec(
                   renderSpec: charts.SmallTickRendererSpec(
