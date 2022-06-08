@@ -1,6 +1,7 @@
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 import 'package:timey_web/presentation/utils/snackbar_utils.dart';
@@ -27,8 +28,6 @@ class CalendarWidget extends StatelessWidget {
   }
 
   Widget buildCalendarWidget(BuildContext context) {
-    //final entries = Provider.of<TimeBlocks>(context).getList;
-
     return Container(
         padding: EdgeInsets.only(top: AppPadding.p40),
         child: Consumer<TimeBlocks>(builder: (context, task, child) {
@@ -39,68 +38,64 @@ class CalendarWidget extends StatelessWidget {
             Future.delayed(const Duration(seconds: 3), () => isFetched = true);
           }
           return RefreshIndicator(
-            onRefresh: () {
-              task.getTimeblocks(false);
-              return Future.delayed(const Duration(seconds: 3));
-            },
-            child: SfCalendar(
-              view: CalendarView.week,
-              allowedViews: const <CalendarView>[
-                CalendarView.week,
-                CalendarView.month,
-                CalendarView.schedule,
-              ],
-              allowViewNavigation: true,
-              showNavigationArrow: true,
-              //showWeekNumber: true,
-              firstDayOfWeek: 1,
-              dataSource: EventDataSource(task.getResponseFromQuery()),
-              initialSelectedDate: DateTime.now(),
-              cellBorderColor: Colors.transparent,
-              initialDisplayDate: DateTime.now(),
-              appointmentBuilder: appointmentBuilder,
-             
+              onRefresh: () {
+                task.getTimeblocks(false);
+                return Future.delayed(const Duration(seconds: 3));
+              },
+              child: ResponsiveBuilder(
+                builder: (context, sizingInformation) => SfCalendar(
+                  view: CalendarView.week,
+                  allowedViews: const <CalendarView>[
+                    CalendarView.week,
+                    CalendarView.month,
+                    CalendarView.schedule,
+                  ],
+                  allowViewNavigation: true,
+                  showNavigationArrow: true,
+                  //showWeekNumber: true,
+                  firstDayOfWeek: 1,
+                  dataSource: EventDataSource(task.getResponseFromQuery()),
+                  initialSelectedDate: DateTime.now(),
+                  cellBorderColor: Colors.transparent,
+                  initialDisplayDate: DateTime.now(),
+                  appointmentBuilder: appointmentBuilder,
 
-              //MONTHVIEW setting
-              monthViewSettings: MonthViewSettings(
-                  showAgenda: true,
-                  agendaItemHeight: 150,
-                  agendaStyle: AgendaStyle(
-                    dateTextStyle: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w300,
-                        color: Colors.black),
-                    dayTextStyle: TextStyle(
-                        fontStyle: FontStyle.normal,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black),
-                  )),
+                  //MONTHVIEW setting
+                  monthViewSettings: MonthViewSettings(
+                      showAgenda: true,
+                      agendaItemHeight: 150,
+                      agendaStyle: AgendaStyle(
+                        dateTextStyle: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.black),
+                        dayTextStyle: TextStyle(
+                            fontStyle: FontStyle.normal,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black),
+                      )),
 
-              //TIMESLOTVIEW
-              timeSlotViewSettings: TimeSlotViewSettings(
-                startHour: 7,
-                endHour: 24,
-                numberOfDaysInView: 5,
-                // nonWorkingDays: <int>[
-                //   DateTime.saturday,
-                //   DateTime.sunday,
-                // ],
-                dayFormat: 'EEE',
-                timeFormat: 'HH:mm',
-                timeTextStyle: TextStyle(
-                    fontWeight: FontWeightManager.bold,
-                    fontFamily: FontConstants.fontFamily,
-                    fontSize: FontSize.s14,
-                    color: ColorManager.grey),
-              ),
+                  //TIMESLOTVIEW
+                  timeSlotViewSettings: TimeSlotViewSettings(
+                    startHour: 7,
+                    endHour: 24,
+                    numberOfDaysInView: sizingInformation.isDesktop ? 7 : 2,
+                    dayFormat: 'EEE',
+                    timeFormat: 'HH:mm',
+                    timeTextStyle: TextStyle(
+                        fontWeight: FontWeightManager.bold,
+                        fontFamily: FontConstants.fontFamily,
+                        fontSize: FontSize.s14,
+                        color: ColorManager.grey),
+                  ),
 
-              //SCHEDULEVIEW
-              scheduleViewSettings: ScheduleViewSettings(
-                  appointmentItemHeight: 120, hideEmptyScheduleWeek: true),
-            ),
-          );
+                  //SCHEDULEVIEW
+                  scheduleViewSettings: ScheduleViewSettings(
+                      appointmentItemHeight: 120, hideEmptyScheduleWeek: true),
+                ),
+              ));
         }));
   }
 
@@ -110,43 +105,46 @@ class CalendarWidget extends StatelessWidget {
   ) {
     final event = details.appointments.first;
 
-    return Container(
-      padding: EdgeInsets.all(AppPadding.p8),
-      width: details.bounds.width,
-      height: details.bounds.height,
-      decoration: BoxDecoration(
-          color: ColorManager.blue.withOpacity(0.4),
-          border: Border(left: BorderSide(color: ColorManager.blue, width: 4))),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            ListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: AppPadding.p4),
-              selected: true,
-              title: Row(children: <Widget>[
-                Icon(Icons.av_timer_outlined,
-                    color: ColorManager.grey, size: AppSize.s14),
-                Text(
-                  event.id,
-                  style: getAppTheme().textTheme.subtitle1,
-                )
-              ]),
-              subtitle: Column(children: <Widget>[
-                buildDuration(
-                  event!.reportHours.toString() +
-                      ' ' +
-                      'hrs' +
-                      ' ' +
-                      event!.remainingMinutes.toString() +
-                      ' ' +
-                      'mins',
-                ),
-                buildDate('From', event.startDate),
-                buildDate('To', event.endDate),
-              ]),
-              trailing: buildActionMethods(context, event),
-            ),
-          ],
+    return FittedBox(
+      fit:BoxFit.scaleDown,
+      child: Container(
+        padding: EdgeInsets.all(AppPadding.p8),
+        width: details.bounds.width,
+        height: details.bounds.height,
+        decoration: BoxDecoration(
+            color: ColorManager.blue.withOpacity(0.4),
+            border: Border(left: BorderSide(color: ColorManager.blue, width: 4))),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ListTile(
+                contentPadding: EdgeInsets.symmetric(horizontal: AppPadding.p4),
+                selected: true,
+                title: Row(children: <Widget>[
+                  Icon(Icons.av_timer_outlined,
+                      color: ColorManager.grey, size: AppSize.s14),
+                  Text(
+                    event.id,
+                    style: getAppTheme().textTheme.subtitle1,
+                  )
+                ]),
+                subtitle: Column(children: <Widget>[
+                  buildDuration(
+                    event!.reportHours.toString() +
+                        ' ' +
+                        'hrs' +
+                        ' ' +
+                        event!.remainingMinutes.toString() +
+                        ' ' +
+                        'mins',
+                  ),
+                  buildDate('From', event.startDate),
+                  buildDate('To', event.endDate),
+                ]),
+                trailing: buildActionMethods(context, event),
+              ),
+            ],
+          ),
         ),
       ),
     );

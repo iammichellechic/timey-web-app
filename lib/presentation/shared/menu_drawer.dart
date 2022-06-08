@@ -80,7 +80,7 @@ class MenuDrawer extends StatelessWidget {
               title: Text('Payment Overview',
                   style: Theme.of(context).textTheme.subtitle1),
               onTap: () {
-                locator<NavigationService>().navigateTo(Routes.loginRoute);
+                // locator<NavigationService>().navigateTo(Routes.loginRoute);
               }),
           Divider(
             color: ColorManager.grey,

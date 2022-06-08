@@ -122,7 +122,7 @@ class TimeBlocks with ChangeNotifier {
 
     QueryResult result = await _client.value.query(QueryOptions(
         document: gql(GetTimeBlocks.query),
-        fetchPolicy: isLocal == true ? null : FetchPolicy.cacheFirst));
+        fetchPolicy: isLocal == true ? null : FetchPolicy.cacheAndNetwork));
 
     if (result.hasException) {
       print(result.exception);
@@ -185,12 +185,11 @@ class TimeBlocks with ChangeNotifier {
     for (var data in getResponseData()) {
       TimeBlock tbData = TimeBlock(
           startDate: _convertDateFromString(data['datetimeStart']),
-          endDate: _convertDateFromString(data['datetimeStart']),
+          endDate: _convertDateFromString(data['datetimeEnd']),
           id: _convertStringFromInt(data['userIdCreated']),
           reportHours: data['reportedHours'],
-          remainingMinutes: data['reportedRemainingMinutes'] );
-          
-          
+          remainingMinutes: data['reportedRemainingMinutes']);
+
       appointmentData.add(tbData);
       notifyListeners();
     }
