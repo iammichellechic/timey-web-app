@@ -9,7 +9,7 @@ class BaseLayout extends StatelessWidget {
   const BaseLayout({Key? key, required this.child}) : super(key: key);
 
 //temporary solution
-//use adaptive scaffold.dart in the future
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -17,13 +17,6 @@ class BaseLayout extends StatelessWidget {
 
     //ERROR: incorrect use of parentdatawidget
     //expanded is already a direct descendant of row, column or flex
-
-    //ERROR:Navigator operation requested with a context that does not include a Navigator.
-    //fixed when a: main.dart //runApp(MaterialApp(home: MyApp()));
-    //fixed when b: app.dart //home:Baselayout() then Navigator is passed here in body
-    //however both solutions results to routename not rendering in thr URL
-    //already tried wrapping in builder
-
 
     return Row(children: <Widget>[
       if (!displayMobileLayout)

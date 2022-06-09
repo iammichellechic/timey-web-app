@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:timey_web/presentation/screens/calendar/calendar_screen.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
-import '../../locator.dart';
-import '../../navigation-service.dart';
-import '../resources/routes_manager.dart';
 import '/presentation/resources/color_manager.dart';
 import '/presentation/resources/values_manager.dart';
-
 import '../../data/providers/tag.dart';
 import '../../data/providers/tags.dart';
 import '../../data/providers/timeblocks.dart';
@@ -28,6 +23,7 @@ class TimeblockPage extends StatefulWidget {
 
 class _TimeblockPageState extends State<TimeblockPage> {
   final _form = GlobalKey<FormState>();
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   List<Tag> availableTags = Tags().tags;
   Tag? selectedTag; //saving empty tag value
@@ -70,9 +66,9 @@ class _TimeblockPageState extends State<TimeblockPage> {
       } else {
         Provider.of<TimeBlocks>(context, listen: false).addTimeBlock(timeBlock);
       }
-      
-      Navigator.of(context).pop();
-      //locator<NavigationService>().navigateTo(Routes.calendarRoute);
+      // SchedulerBinding.instance.addPostFrameCallback((_) {
+      //   locator<NavigationService>().navigatorKey.currentState!.pop();
+      Scaffold.of(context).closeEndDrawer();
     }
   }
 
@@ -140,13 +136,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
                     color: ColorManager.grey,
                   ),
                   onPressed: () {
-                    //  final route = MaterialPageRoute(
-                    //           builder: (context) {
-                    //             return CalendarWidget();
-                    //           },
-                    //         );
-                    //         await Navigator.push(context, route);
-                    Navigator.of(context).pop();
+                    Scaffold.of(context).closeEndDrawer();
                   })))
     ]));
   }

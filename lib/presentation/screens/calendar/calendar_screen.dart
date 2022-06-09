@@ -1,15 +1,14 @@
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_builder/responsive_builder.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 import 'package:timey_web/presentation/utils/snackbar_utils.dart';
+import 'package:timey_web/presentation/widgets/calendar_widget.dart';
 
 import '../../../data/providers/timeblock.dart';
 import '../../../locator.dart';
 import '../../../navigation-service.dart';
-import '../../resources/font_manager.dart';
 import '../../resources/routes_manager.dart';
 import '../../resources/theme_manager.dart';
 import '../../resources/timeFormat_manager.dart';
@@ -18,9 +17,9 @@ import '/presentation/resources/color_manager.dart';
 import '../../../data/providers/timeblocks.dart';
 import '../../../model/timeblock_data_source.dart';
 
-class CalendarWidget extends StatelessWidget {
+class CalendarScreen extends StatelessWidget {
   bool isFetched = false;
-  CalendarWidget({Key? key}) : super(key: key);
+  CalendarScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,59 +41,9 @@ class CalendarWidget extends StatelessWidget {
                 task.getTimeblocks(false);
                 return Future.delayed(const Duration(seconds: 3));
               },
-              child: ResponsiveBuilder(
-                builder: (context, sizingInformation) => SfCalendar(
-                  view: CalendarView.week,
-                  allowedViews: const <CalendarView>[
-                    CalendarView.week,
-                    CalendarView.month,
-                    CalendarView.schedule,
-                  ],
-                  allowViewNavigation: true,
-                  showNavigationArrow: true,
-                  //showWeekNumber: true,
-                  firstDayOfWeek: 1,
-                  dataSource: EventDataSource(task.getResponseFromQuery()),
-                  initialSelectedDate: DateTime.now(),
-                  cellBorderColor: Colors.transparent,
-                  initialDisplayDate: DateTime.now(),
-                  appointmentBuilder: appointmentBuilder,
-
-                  //MONTHVIEW setting
-                  monthViewSettings: MonthViewSettings(
-                      showAgenda: true,
-                      agendaItemHeight: 150,
-                      agendaStyle: AgendaStyle(
-                        dateTextStyle: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w300,
-                            color: Colors.black),
-                        dayTextStyle: TextStyle(
-                            fontStyle: FontStyle.normal,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black),
-                      )),
-
-                  //TIMESLOTVIEW
-                  timeSlotViewSettings: TimeSlotViewSettings(
-                    startHour: 7,
-                    endHour: 24,
-                    numberOfDaysInView: sizingInformation.isDesktop ? 7 : 2,
-                    dayFormat: 'EEE',
-                    timeFormat: 'HH:mm',
-                    timeTextStyle: TextStyle(
-                        fontWeight: FontWeightManager.bold,
-                        fontFamily: FontConstants.fontFamily,
-                        fontSize: FontSize.s14,
-                        color: ColorManager.grey),
-                  ),
-
-                  //SCHEDULEVIEW
-                  scheduleViewSettings: ScheduleViewSettings(
-                      appointmentItemHeight: 120, hideEmptyScheduleWeek: true),
-                ),
+              child: CalendarWidget(
+                appointment: appointmentBuilder,
+                dataSource: EventDataSource(task.getResponseFromQuery()),
               ));
         }));
   }
@@ -106,14 +55,15 @@ class CalendarWidget extends StatelessWidget {
     final event = details.appointments.first;
 
     return FittedBox(
-      fit:BoxFit.scaleDown,
+      fit: BoxFit.scaleDown,
       child: Container(
         padding: EdgeInsets.all(AppPadding.p8),
         width: details.bounds.width,
         height: details.bounds.height,
         decoration: BoxDecoration(
             color: ColorManager.blue.withOpacity(0.4),
-            border: Border(left: BorderSide(color: ColorManager.blue, width: 4))),
+            border:
+                Border(left: BorderSide(color: ColorManager.blue, width: 4))),
         child: SingleChildScrollView(
           child: Column(
             children: [

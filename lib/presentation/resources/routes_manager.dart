@@ -26,7 +26,7 @@ class RouteGenerator {
         );
       case Routes.calendarRoute:
         return _GeneratePageRoute(
-          widget: CalendarWidget(),
+          widget: CalendarScreen(),
           routeName: routeSettings.name!,
         );
       case Routes.tableRoute:

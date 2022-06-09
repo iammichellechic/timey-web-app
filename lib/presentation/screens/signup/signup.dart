@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
 import 'package:timey_web/presentation/widgets/textfield_container.dart';
+import 'package:timey_web/presentation/widgets/textformfield_container.dart';
 import '../../resources/color_manager.dart';
 import '../../resources/values_manager.dart';
 
@@ -38,49 +39,32 @@ class SignupScreen extends StatelessWidget {
                               ),
                               SizedBox(height: AppSize.s30),
                               TextFieldContainer(
-                                  child: TextFormField(
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  disabledBorder: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  errorBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  focusedErrorBorder: InputBorder.none,
-                                  labelText: 'USERNAME',
-                                  labelStyle:
-                                      Theme.of(context).textTheme.subtitle1,
+                                child: TextFormFieldContainer(
+                                  text: 'FIRSTNAME',
+                                  style: Theme.of(context).textTheme.subtitle1,
                                 ),
-                              )),
+                              ),
                               SizedBox(height: AppSize.s10),
                               TextFieldContainer(
-                                  child: TextFormField(
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  disabledBorder: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  errorBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  focusedErrorBorder: InputBorder.none,
-                                  labelText: 'EMAIL',
-                                  labelStyle:
-                                      Theme.of(context).textTheme.subtitle1,
+                                child: TextFormFieldContainer(
+                                  text: 'LASTNAME',
+                                  style: Theme.of(context).textTheme.subtitle1,
                                 ),
-                              )),
+                              ),
                               SizedBox(height: AppSize.s10),
                               TextFieldContainer(
-                                  child: TextFormField(
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  disabledBorder: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  errorBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  focusedErrorBorder: InputBorder.none,
-                                  labelText: 'NUMBER',
-                                  labelStyle:
-                                      Theme.of(context).textTheme.subtitle1,
+                                child: TextFormFieldContainer(
+                                  text: 'USERNAME',
+                                  style: Theme.of(context).textTheme.subtitle1,
                                 ),
-                              )),
+                              ),
+                              SizedBox(height: AppSize.s10),
+                              TextFieldContainer(
+                                child: TextFormFieldContainer(
+                                  text: 'PASSWORD',
+                                  style: Theme.of(context).textTheme.subtitle1,
+                                ),
+                              ),
                               SizedBox(height: AppSize.s10),
                               SizedBox(
                                 width: double.infinity,
