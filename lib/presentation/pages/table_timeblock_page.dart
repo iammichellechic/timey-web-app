@@ -47,6 +47,7 @@ class _MyDataTableState extends State<MyDataTable> {
         margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         padding: EdgeInsets.all(20.0),
         width: double.infinity,
+        height: 650,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10.0),

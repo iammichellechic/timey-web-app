@@ -7,6 +7,7 @@ class ButtonWidget extends StatelessWidget {
   final Color? color;
   final TextStyle? style;
   final OutlinedBorder? shape;
+  final Color? shadowColor;
 
   const ButtonWidget({
     required this.text,
@@ -14,18 +15,22 @@ class ButtonWidget extends StatelessWidget {
     required this.color,
     this.style,
     this.shape,
-    Key? key,
+    this.shadowColor,
+    Key? key, 
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) =>  ElevatedButton(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: AppPadding.p30, vertical: AppPadding.p14),
-            child: Text(text,style: style,),
+  Widget build(BuildContext context) => ElevatedButton(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppPadding.p30, vertical: AppPadding.p14),
+          child: Text(
+            text,
+            style: style,
           ),
-          style: ElevatedButton.styleFrom(primary: color,shape: shape),
-          onPressed: onClicked,
-        
+        ),
+        style: ElevatedButton.styleFrom(
+            primary: color, shape: shape, shadowColor: shadowColor),
+        onPressed: onClicked,
       );
 }

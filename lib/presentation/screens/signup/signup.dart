@@ -39,6 +39,7 @@ class SignupScreen extends StatelessWidget {
                               ),
                               SizedBox(height: AppSize.s30),
                               TextFieldContainer(
+                                borderColor: ColorManager.black,
                                 child: TextFormFieldContainer(
                                   text: 'FIRSTNAME',
                                   style: Theme.of(context).textTheme.subtitle1,
@@ -46,6 +47,7 @@ class SignupScreen extends StatelessWidget {
                               ),
                               SizedBox(height: AppSize.s10),
                               TextFieldContainer(
+                                borderColor: ColorManager.black,
                                 child: TextFormFieldContainer(
                                   text: 'LASTNAME',
                                   style: Theme.of(context).textTheme.subtitle1,
@@ -53,6 +55,7 @@ class SignupScreen extends StatelessWidget {
                               ),
                               SizedBox(height: AppSize.s10),
                               TextFieldContainer(
+                                borderColor: ColorManager.black,
                                 child: TextFormFieldContainer(
                                   text: 'USERNAME',
                                   style: Theme.of(context).textTheme.subtitle1,
@@ -60,6 +63,7 @@ class SignupScreen extends StatelessWidget {
                               ),
                               SizedBox(height: AppSize.s10),
                               TextFieldContainer(
+                                borderColor: ColorManager.black,
                                 child: TextFormFieldContainer(
                                   text: 'PASSWORD',
                                   style: Theme.of(context).textTheme.subtitle1,

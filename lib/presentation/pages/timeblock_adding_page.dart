@@ -23,7 +23,6 @@ class TimeblockPage extends StatefulWidget {
 
 class _TimeblockPageState extends State<TimeblockPage> {
   final _form = GlobalKey<FormState>();
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   List<Tag> availableTags = Tags().tags;
   Tag? selectedTag; //saving empty tag value
@@ -63,12 +62,14 @@ class _TimeblockPageState extends State<TimeblockPage> {
       if (widget.timeBlock != null) {
         Provider.of<TimeBlocks>(context, listen: false)
             .updateTimeBlock(timeBlock, widget.timeBlock!);
+        Navigator.of(context).pop();
       } else {
         Provider.of<TimeBlocks>(context, listen: false).addTimeBlock(timeBlock);
+        Scaffold.of(context).closeEndDrawer();
       }
       // SchedulerBinding.instance.addPostFrameCallback((_) {
       //   locator<NavigationService>().navigatorKey.currentState!.pop();
-      Scaffold.of(context).closeEndDrawer();
+
     }
   }
 
