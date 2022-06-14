@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:timey_web/data/providers/navigation_items.dart';
 import 'package:timey_web/presentation/pages/base_layout.dart';
-import 'package:timey_web/presentation/screens/chart/chart_overview_screen.dart';
 
 import '../locator.dart';
 import '../navigation-service.dart';
@@ -27,6 +26,9 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider.value(
             value: Tags(),
+          ),
+          ChangeNotifierProvider.value(
+            value: NavigationProvider(),
           ),
         ],
               child: MaterialApp(

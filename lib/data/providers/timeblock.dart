@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import 'tag.dart';
+import '../../model/tag.dart';
 
 class TimeBlock with ChangeNotifier {
   final String? id;
