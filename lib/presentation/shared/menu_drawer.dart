@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:timey_web/locator.dart';
-import 'package:timey_web/navigation-service.dart';
-import 'package:timey_web/presentation/resources/routes_manager.dart';
+import 'package:provider/provider.dart';
+import 'package:timey_web/presentation/resources/font_manager.dart';
+import 'package:timey_web/presentation/resources/styles_manager.dart';
+
+import '../../data/providers/navigation_items.dart';
+import '../../locator.dart';
+import '../../model/nav_items.dart';
+import '../../navigation-service.dart';
+import '../resources/routes_manager.dart';
 import '/presentation/resources/color_manager.dart';
 
 import '../resources/values_manager.dart';
@@ -14,88 +20,119 @@ class MenuDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: Column(
-        children: [
-          buildHeader(context),
-          buildNavItems(context),
-          Spacer(),
-          Divider(
-            color: ColorManager.grey,
-          ),
-          buildUserProfile(context),
-          const SizedBox(height: 12),
-          if (permanentlyDisplay)
-            VerticalDivider(
-              width: 1,
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.18,
+      child: Drawer(
+        child: Column(
+          children: [
+            buildHeader(context),
+            buildNavItems(context),
+            Spacer(),
+            Divider(
+              color: ColorManager.grey,
             ),
-        ],
+            buildUserProfile(context),
+            const SizedBox(height: 12),
+            if (permanentlyDisplay)
+              VerticalDivider(
+                width: 1,
+              ),
+          ],
+        ),
       ),
     );
   }
 
   Widget buildNavItems(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(AppPadding.p12, 0, AppPadding.p12, 0),
-      child: Column(
-        children: [
-          ListTile(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            hoverColor: ColorManager.blue,
-            leading: Icon(Icons.home),
-            title:
-                Text('Overview', style: Theme.of(context).textTheme.subtitle1),
-            onTap: () {
-              locator<NavigationService>().navigateTo(Routes.overviewRoute);
-            },
-          ),
-          ListTile(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            hoverColor: ColorManager.blue,
-            leading: Icon(Icons.calendar_month),
-            title: Text('Calendar view',
-                style: Theme.of(context).textTheme.subtitle1),
-            onTap: () {
-              locator<NavigationService>().navigateTo(Routes.calendarRoute);
-            },
-          ),
-          ListTile(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            hoverColor: ColorManager.blue,
-            leading: Icon(Icons.table_chart),
-            title: Text('Table view',
-                style: Theme.of(context).textTheme.subtitle1),
-            onTap: () {
-              locator<NavigationService>().navigateTo(Routes.tableRoute);
-            },
-          ),
-          ListTile(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            hoverColor: ColorManager.blue,
-            leading: Icon(Icons.payment),
-            title: Text('Payment Overview',
-                style: Theme.of(context).textTheme.subtitle1),
-            onTap: () => {},
-          ),
-          Divider(
-            color: ColorManager.grey,
-          ),
-          ListTile(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            hoverColor: ColorManager.blue,
-            leading: Icon(Icons.tune),
-            title:
-                Text('Settings', style: Theme.of(context).textTheme.subtitle1),
-            onTap: () => {},
-          ),
-        ],
+    return Wrap(
+      runSpacing: AppSize.s12,
+      children: [
+        buildMenuItem(
+          context,
+          item: NavigationItem.dashboard,
+          text: 'Overview',
+          icon: Icons.home,
+        ),
+        buildMenuItem(
+          context,
+          item: NavigationItem.calendar,
+          text: 'Calendar View',
+          icon: Icons.calendar_month,
+        ),
+        buildMenuItem(
+          context,
+          item: NavigationItem.table,
+          text: 'Table View',
+          icon: Icons.table_chart,
+        ),
+        buildMenuItem(
+          context,
+          item: NavigationItem.payments,
+          text: 'Payment',
+          icon: Icons.payment,
+        ),
+        Divider(
+          color: ColorManager.grey,
+        ),
+        buildMenuItem(
+          context,
+          item: NavigationItem.settings,
+          text: 'Settings',
+          icon: Icons.tune,
+        ),
+      ],
+    );
+  }
+
+  Widget buildMenuItem(
+    BuildContext context, {
+    required NavigationItem item,
+    required String text,
+    required IconData icon,
+  }) {
+    final provider = Provider.of<NavigationProvider>(context);
+    final currentItem = provider.navigationItem;
+    final isSelected = item == currentItem;
+
+    final color = isSelected ? ColorManager.blue : ColorManager.black;
+    final shape = isSelected
+        ? Border(left: BorderSide(color: ColorManager.blue, width: 5))
+        : null;
+
+    return Material(
+      color: Colors.transparent,
+      child: ListTile(
+        shape: shape,
+        selected: isSelected,
+        selectedTileColor: Colors.white24,
+        leading: Icon(icon, color: color),
+        title: Text(text,
+            style: makeYourOwnBoldStyle(fontSize: FontSize.s16, color: color)),
+        onTap: () => selectItem(context, item),
       ),
     );
+  }
+
+  dynamic selectItem(BuildContext context, NavigationItem item) {
+    final provider = Provider.of<NavigationProvider>(context, listen: false);
+    provider.setNavigationItem(item);
+
+    switch (provider.navigationItem) {
+      case NavigationItem.header:
+        return locator<NavigationService>().navigateTo(Routes.overviewRoute);
+      case NavigationItem.dashboard:
+        return locator<NavigationService>().navigateTo(Routes.overviewRoute);
+      case NavigationItem.calendar:
+        return locator<NavigationService>().navigateTo(Routes.calendarRoute);
+      case NavigationItem.table:
+        return locator<NavigationService>().navigateTo(Routes.tableRoute);
+      case NavigationItem.settings:
+        return locator<NavigationService>().navigateTo(Routes.overviewRoute);
+      case NavigationItem.login:
+        return locator<NavigationService>().navigateTo(Routes.loginRoute);
+      case NavigationItem.payments:
+        return locator<NavigationService>().navigateTo(Routes.overviewRoute);
+    }
   }
 
   Widget buildHeader(BuildContext context) {
@@ -106,10 +143,12 @@ class MenuDrawer extends StatelessWidget {
         padding: safeArea,
         height: 100,
         child: DrawerHeader(
-            child: Center(
-          child: SelectableText('Timey',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headline1),
+            child: Container(
+          padding: EdgeInsets.only(left: AppPadding.p30),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text('TIMEY', style: Theme.of(context).textTheme.headline1),
+          ),
         )));
   }
 

@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:timey_web/presentation/screens/calendar_screen.dart';
+import 'package:timey_web/presentation/utils/constant_duration_values.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
-import '../../locator.dart';
-import '../../navigation-service.dart';
-import '../resources/routes_manager.dart';
 import '/presentation/resources/color_manager.dart';
 import '/presentation/resources/values_manager.dart';
-
-import '../../data/providers/tag.dart';
+import '../../model/tag.dart';
 import '../../data/providers/tags.dart';
 import '../../data/providers/timeblocks.dart';
 import '../../data/providers/timeblock.dart';
@@ -29,11 +25,16 @@ class TimeblockPage extends StatefulWidget {
 class _TimeblockPageState extends State<TimeblockPage> {
   final _form = GlobalKey<FormState>();
 
+  List<int> itemList = constantValues.hoursItem;
+  List<int> itemMinutes = constantValues.minutesItem;
+
   List<Tag> availableTags = Tags().tags;
-  Tag? selectedTag; //saving empty tag value
+  Tag? selectedTag;
 
   late DateTime startDate;
   late DateTime endDate;
+  int? reportedHours;
+  int? remainingMinutes;
 
   @override
   void initState() {
@@ -41,11 +42,15 @@ class _TimeblockPageState extends State<TimeblockPage> {
       startDate = DateTime.now();
       endDate = DateTime.now().add(Duration(hours: 2));
       selectedTag = Tags().tags.first;
+      reportedHours = 0;
+      remainingMinutes = 0;
     } else {
       final timeBlock = widget.timeBlock!;
 
       startDate = timeBlock.startDate;
       endDate = timeBlock.endDate;
+      reportedHours = timeBlock.reportHours!;
+      remainingMinutes = timeBlock.remainingMinutes!;
       selectedTag = timeBlock.tag; //doesnt auto populate during edit
 
     }
@@ -67,12 +72,14 @@ class _TimeblockPageState extends State<TimeblockPage> {
       if (widget.timeBlock != null) {
         Provider.of<TimeBlocks>(context, listen: false)
             .updateTimeBlock(timeBlock, widget.timeBlock!);
+        Navigator.of(context).pop();
       } else {
         Provider.of<TimeBlocks>(context, listen: false).addTimeBlock(timeBlock);
+        Scaffold.of(context).closeEndDrawer();
       }
-      
-      Navigator.of(context).pop();
-      //locator<NavigationService>().navigateTo(Routes.calendarRoute);
+      // SchedulerBinding.instance.addPostFrameCallback((_) {
+      //   locator<NavigationService>().navigatorKey.currentState!.pop();
+
     }
   }
 
@@ -86,10 +93,11 @@ class _TimeblockPageState extends State<TimeblockPage> {
   Widget build(BuildContext context) {
     final safeArea =
         EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
+
     return Container(
       padding: safeArea,
       width: isDesktop(context)
-          ? MediaQuery.of(context).size.width * 0.30
+          ? MediaQuery.of(context).size.width * 0.23
           : MediaQuery.of(context).size.width,
       child: Drawer(
           child: Center(
@@ -117,7 +125,6 @@ class _TimeblockPageState extends State<TimeblockPage> {
                           onClicked: _saveForm)
                     ]),
                 Spacer(),
-                // TimeBlocksItems(),
                 buildCloseButton(context),
               ],
             ),
@@ -140,13 +147,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
                     color: ColorManager.grey,
                   ),
                   onPressed: () {
-                    //  final route = MaterialPageRoute(
-                    //           builder: (context) {
-                    //             return CalendarWidget();
-                    //           },
-                    //         );
-                    //         await Navigator.push(context, route);
-                    Navigator.of(context).pop();
+                    Scaffold.of(context).closeEndDrawer();
                   })))
     ]));
   }
@@ -174,15 +175,15 @@ class _TimeblockPageState extends State<TimeblockPage> {
       );
 
   Widget buildDateTimePickers() => Column(
-        children: [buildStartDate(), buildEndDate()],
+        children: [buildStartDate(), buildDuration()],
       );
 
   Widget buildStartDate() => buildHeader(
-        header: 'Start date and time',
+        header: 'Date and time',
         child: Row(
           children: [
             Expanded(
-              flex: 2,
+              // flex: 2,
               child: buildDropdownField(
                 text: Utils.toDate(startDate),
                 onClicked: () => pickFromDateTime(pickDate: true),
@@ -320,5 +321,51 @@ class _TimeblockPageState extends State<TimeblockPage> {
         ),
         trailing: Icon(Icons.arrow_drop_down),
         onTap: onClicked,
+      );
+
+  Widget buildDropDownFormField(
+          {required int? value,
+          required List<int> list,
+          required String? label}) =>
+      SizedBox(
+          width: 100,
+          child: DropdownButtonFormField<int>(
+            decoration: InputDecoration(
+              labelText: label,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(width: 2, color: Colors.blue),
+              ),
+            ),
+            value: value,
+            items: list
+                .map<DropdownMenuItem<int>>((item) => DropdownMenuItem<int>(
+                      value: item,
+                      child:
+                          Text(item.toString(), style: TextStyle(fontSize: 16)),
+                    ))
+                .toList(),
+            onChanged: (item) => setState(() => value = item),
+          ));
+
+  Widget dropDownHoursItems() {
+    return buildDropDownFormField(
+        value: reportedHours, list: itemList, label: "Hours");
+  }
+
+  Widget dropDownMinutesItems() {
+    return buildDropDownFormField(
+        value: remainingMinutes, list: itemMinutes, label: "Minutes");
+  }
+
+  Widget buildDuration() => buildHeader(
+        header: 'Duration',
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(child: dropDownHoursItems()),
+            Expanded(child: dropDownMinutesItems()),
+          ],
+        ),
       );
 }

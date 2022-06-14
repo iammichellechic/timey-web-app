@@ -30,11 +30,12 @@ Iterable<EntryTotal> _entryTotalsByDay(
     for (var entry in list) {
       //make variable that adds reporthours and minutes
       //use that variable to store value
-      entryTotal.value += entry.reportHours;
+      entryTotal.value += entry.reportHours!;
     }
 
     yield entryTotal;
   }
+
 }
 
 /// MONTH ////
@@ -77,20 +78,23 @@ Iterable<EntryTotal> _entryTotalsByMonth(
   var start = startMonth;
   var entriesByDay = _entriesInRange(start, endMonth, entries);
 
+ 
   for (var i = 0; i < entriesByDay.length; i++) {
     var list = entriesByDay[i];
     var entryTotal = EntryTotal(start.add(Duration(days: i)), 0);
 
     for (var entry in list) {
-      var minsInDecimal = entry.remainingMinutes / 60;
-      var totalReportedTime = entry.reportHours + minsInDecimal;
+      var minsInDecimal = entry.remainingMinutes! / 60;
+      var totalReportedTime = entry.reportHours! + minsInDecimal;
 
       // var totalInMinutes = entry.reportHours * 60 + entry.remainingMinutes;
       entryTotal.value += totalReportedTime;
+     
     }
-
     yield entryTotal;
   }
+ 
+
 }
 //DO: convert dec to time for the label
 
@@ -116,8 +120,8 @@ Iterable<EntryTotal> _entryTotalsByWeek(
     var entryTotal = EntryTotal(start.add(Duration(days: i)), 0);
 
     for (var entry in list) {
-      var minsInDecimal = entry.remainingMinutes / 60;
-      var totalReportedTime = entry.reportHours + minsInDecimal;
+      var minsInDecimal = entry.remainingMinutes! / 60;
+      var totalReportedTime = entry.reportHours! + minsInDecimal;
 
       // var totalInMinutes = entry.reportHours * 60 + entry.remainingMinutes;
       entryTotal.value += totalReportedTime;

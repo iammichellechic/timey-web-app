@@ -10,7 +10,7 @@ import '../../data/providers/timeblock.dart';
 class EntryEditDialog extends StatelessWidget {
   final TimeBlock? entry;
 
-  const EntryEditDialog({required this.entry, Key? key}) : super(key: key);
+  const EntryEditDialog({this.entry, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,5 +21,7 @@ class EntryEditDialog extends StatelessWidget {
         child: TimeblockPage(timeBlock: entry,));
   }
 }
+
+
 
 

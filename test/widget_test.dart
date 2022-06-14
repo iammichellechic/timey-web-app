@@ -13,7 +13,7 @@ void main() {
   testWidgets('Can build MenuDrawer', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     Widget testWidget = MaterialApp(
-      home: MenuDrawer(permanentlyDisplay: true),
+      home: MenuDrawer(permanentlyDisplay: true,),
     );
     await tester.pumpWidget(testWidget);
 

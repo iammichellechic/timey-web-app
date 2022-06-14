@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/data/providers/tag.dart';
+import '../../model/tag.dart';
 
 class Tags with ChangeNotifier {
   final List<Tag> _tags = [

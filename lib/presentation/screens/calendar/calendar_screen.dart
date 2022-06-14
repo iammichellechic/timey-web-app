@@ -4,23 +4,22 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 import 'package:timey_web/presentation/utils/snackbar_utils.dart';
+import 'package:timey_web/presentation/widgets/calendar_widget.dart';
 
-import '../../data/providers/timeblock.dart';
-import '../../locator.dart';
-import '../../navigation-service.dart';
-
-import '../resources/font_manager.dart';
-import '../resources/routes_manager.dart';
-import '../resources/theme_manager.dart';
-import '../resources/timeFormat_manager.dart';
-import '../widgets/dialogs_widget.dart';
+import '../../../data/providers/timeblock.dart';
+import '../../../locator.dart';
+import '../../../navigation-service.dart';
+import '../../resources/routes_manager.dart';
+import '../../resources/theme_manager.dart';
+import '../../resources/timeFormat_manager.dart';
+import '../../widgets/dialogs_widget.dart';
 import '/presentation/resources/color_manager.dart';
-import '../../data/providers/timeblocks.dart';
+import '../../../data/providers/timeblocks.dart';
+import '../../../model/timeblock_data_source.dart';
 
-import '../../model/timeblock_data_source.dart';
-
-class CalendarWidget extends StatelessWidget {
-  const CalendarWidget({Key? key}) : super(key: key);
+class CalendarScreen extends StatelessWidget {
+  bool isFetched = false;
+  CalendarScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,61 +27,25 @@ class CalendarWidget extends StatelessWidget {
   }
 
   Widget buildCalendarWidget(BuildContext context) {
-    final entries = Provider.of<TimeBlocks>(context).userTimeBlock;
-
     return Container(
-      padding: EdgeInsets.only(top: AppPadding.p40),
-      child: SfCalendar(
-        view: CalendarView.week,
-        allowedViews: const <CalendarView>[
-          CalendarView.week,
-          CalendarView.month,
-          CalendarView.schedule,
-        ],
-        allowViewNavigation: true,
-        showNavigationArrow: true,
-        //showWeekNumber: true,
-        initialDisplayDate: DateTime.now(),
-        appointmentBuilder: appointmentBuilder,
-        monthViewSettings: MonthViewSettings(
-            showAgenda: true,
-            agendaItemHeight: 150,
-            agendaStyle: AgendaStyle(
-              dateTextStyle: TextStyle(
-                  fontStyle: FontStyle.italic,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.black),
-              dayTextStyle: TextStyle(
-                  fontStyle: FontStyle.normal,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black),
-            )),
-        timeSlotViewSettings: TimeSlotViewSettings(
-          startHour: 7,
-          endHour: 24,
-          numberOfDaysInView: 5,
-          // nonWorkingDays: <int>[
-          //   DateTime.saturday,
-          //   DateTime.sunday,
-          // ],
-          dayFormat: 'EEE',
-          timeFormat: 'HH:mm',
-          timeTextStyle: TextStyle(
-              fontWeight: FontWeightManager.bold,
-              fontFamily: FontConstants.fontFamily,
-              fontSize: FontSize.s14,
-              color: ColorManager.grey),
-        ),
-        scheduleViewSettings: ScheduleViewSettings(
-            appointmentItemHeight: 120, hideEmptyScheduleWeek: true),
-        firstDayOfWeek: 1,
-        dataSource: EventDataSource(entries),
-        initialSelectedDate: DateTime.now(),
-        cellBorderColor: Colors.transparent,
-      ),
-    );
+        padding: EdgeInsets.only(top: AppPadding.p40),
+        child: Consumer<TimeBlocks>(builder: (context, task, child) {
+          if (isFetched == false) {
+            ///Fetch the data
+            task.getTimeblocks(true);
+
+            Future.delayed(const Duration(seconds: 3), () => isFetched = true);
+          }
+          return RefreshIndicator(
+              onRefresh: () {
+                task.getTimeblocks(false);
+                return Future.delayed(const Duration(seconds: 3));
+              },
+              child: CalendarWidget(
+                appointment: appointmentBuilder,
+                dataSource: EventDataSource(task.getResponseFromQuery()),
+              ));
+        }));
   }
 
   Widget appointmentBuilder(
@@ -91,43 +54,47 @@ class CalendarWidget extends StatelessWidget {
   ) {
     final event = details.appointments.first;
 
-    return Container(
-      padding: EdgeInsets.all(AppPadding.p8),
-      width: details.bounds.width,
-      height: details.bounds.height,
-      decoration: BoxDecoration(
-          color: ColorManager.blue.withOpacity(0.4),
-          border: Border(left: BorderSide(color: ColorManager.blue, width: 4))),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            ListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: AppPadding.p4),
-              selected: true,
-              title: Row(children: <Widget>[
-                Icon(Icons.av_timer_outlined,
-                    color: ColorManager.grey, size: AppSize.s14),
-                Text(
-                  event.tag!.name,
-                  style: getAppTheme().textTheme.subtitle1,
-                )
-              ]),
-              subtitle: Column(children: <Widget>[
-                buildDuration(
-                  event!.reportHours.toString() +
-                      ' ' +
-                      'hrs' +
-                      ' ' +
-                      event!.remainingMinutes.toString() +
-                      ' ' +
-                      'mins',
-                ),
-                buildDate('From', event.startDate),
-                buildDate('To', event.endDate),
-              ]),
-              trailing: buildActionMethods(context, event),
-            ),
-          ],
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Container(
+        padding: EdgeInsets.all(AppPadding.p8),
+        width: details.bounds.width,
+        height: details.bounds.height,
+        decoration: BoxDecoration(
+            color: ColorManager.blue.withOpacity(0.4),
+            border:
+                Border(left: BorderSide(color: ColorManager.blue, width: 4))),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ListTile(
+                contentPadding: EdgeInsets.symmetric(horizontal: AppPadding.p4),
+                selected: true,
+                title: Row(children: <Widget>[
+                  Icon(Icons.av_timer_outlined,
+                      color: ColorManager.grey, size: AppSize.s14),
+                  Text(
+                    event.id,
+                    style: getAppTheme().textTheme.subtitle1,
+                  )
+                ]),
+                subtitle: Column(children: <Widget>[
+                  buildDuration(
+                    event!.reportHours.toString() +
+                        ' ' +
+                        'hrs' +
+                        ' ' +
+                        event!.remainingMinutes.toString() +
+                        ' ' +
+                        'mins',
+                  ),
+                  buildDate('From', event.startDate),
+                  buildDate('To', event.endDate),
+                ]),
+                trailing: buildActionMethods(context, event),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -218,9 +185,12 @@ class CalendarWidget extends StatelessWidget {
   void selectedItem(BuildContext context, item, TimeBlock? entry) {
     switch (item) {
       case 0:
-        showGlobalDrawer<EntryEditDialog>(
+        showAlignedDialog<EntryEditDialog>(
+          avoidOverflow: true,
           context: context,
-          direction: AxisDirection.right,
+          followerAnchor: Alignment.topRight,
+          targetAnchor: Alignment.bottomRight,
+          barrierColor: Colors.transparent,
           duration: Duration(seconds: 1),
           builder: (context) {
             return EntryEditDialog(
@@ -261,7 +231,7 @@ class CalendarWidget extends StatelessWidget {
                   SnackBarUtils.showSnackBar(
                     context: context,
                     text: 'Entry removed',
-                    color: ColorManager.error.withOpacity(0.7),
+                    color: ColorManager.error.withOpacity(0.2),
                     icons: Icons.delete,
                   );
                 },

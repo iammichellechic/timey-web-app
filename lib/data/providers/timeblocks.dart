@@ -1,9 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:timey_web/data/providers/schemas/get_timeblocks_schema.dart';
 import '/data/providers/tags.dart';
 import '../../presentation/resources/timeFormat_manager.dart';
 import './timeblock.dart';
+import 'schemas/endpoint_url.dart';
 
 class TimeBlocks with ChangeNotifier {
+  bool _status = false;
+  String _response = '';
+  dynamic _list = [];
+  List tBdatas = [];
+  bool get getStatus => _status;
+  String get getResponse => _response;
+  final EndPoint _point = EndPoint();
+
+  //List<dynamic>_list=[];
+  List<dynamic> get getList => _list;
+
+  // final List<TimeBlock> userTimeBlocks;
+
   final List<TimeBlock> _userTimeBlocks = [
     TimeBlock(
       id: '1',
@@ -56,6 +72,10 @@ class TimeBlocks with ChangeNotifier {
     ),
   ];
 
+  // TimeBlocks.allTimeBlocks(Map<String, dynamic> data)
+  //     : userTimeBlocks =
+  //           data['timeblocks'].list.map((e) => TimeBlock.fromJson(e)).toList();
+
   List<TimeBlock> get userTimeBlock {
     return [..._userTimeBlocks];
   }
@@ -94,6 +114,94 @@ class TimeBlocks with ChangeNotifier {
   void deleteTimeBlock(id) {
     _userTimeBlocks.removeWhere((tb) => tb.id == id);
     notifyListeners();
+  }
+
+/*API */
+  void getTimeblocks(bool isLocal) async {
+    ValueNotifier<GraphQLClient> _client = _point.getClient();
+
+    QueryResult result = await _client.value.query(QueryOptions(
+        document: gql(GetTimeBlocks.query),
+        fetchPolicy: isLocal == true ? null : FetchPolicy.cacheAndNetwork));
+
+    if (result.hasException) {
+      print(result.exception);
+      _status = false;
+      if (result.exception!.graphqlErrors.isEmpty) {
+        _response = "No connectivity found";
+      } else {
+        _response = result.exception!.graphqlErrors[0].message.toString();
+      }
+      notifyListeners();
+    } else {
+      print(result.data);
+      _status = false;
+      _list = result.data;
+      notifyListeners();
+    }
+  }
+
+  dynamic getResponseData() {
+    if (_list.isNotEmpty) {
+      final data = _list;
+
+      print(data['timeblocks']);
+
+      return data['timeblocks'] ?? {};
+    } else {
+      return {};
+    }
+  }
+
+  void clear() {
+    _response = '';
+    notifyListeners();
+  }
+
+  // Future<List<TimeBlock>> getData() async {
+  //   ValueNotifier<GraphQLClient> _client = _point.getClient();
+
+  //   QueryResult result = await _client.value
+  //       .query(QueryOptions(document: gql(GetTimeBlocks.query)));
+
+  //   final List<TimeBlock> appointmentData = [];
+
+  //   tBdatas = result.data!['timeblocks'];
+
+  //   for (var data in getResponseData()) {
+  //     TimeBlock tbData = TimeBlock(
+  //         startDate: _convertDateFromString(data['datetimeStart']),
+  //         endDate: _convertDateFromString(data['datetimeStart']),
+  //         id: _convertStringFromInt(data['userIdCreated']));
+  //     appointmentData.add(tbData);
+  //     notifyListeners();
+  //   }
+  //   return appointmentData;
+  // }
+
+  dynamic getResponseFromQuery() {
+    final List<TimeBlock> appointmentData = [];
+
+    for (var data in getResponseData()) {
+      TimeBlock tbData = TimeBlock(
+          startDate: _convertDateFromString(data['datetimeStart']),
+          endDate: _convertDateFromString(data['datetimeEnd']),
+          id: _convertStringFromInt(data['userIdCreated']),
+          reportHours: data['reportedHours'],
+          remainingMinutes: data['reportedRemainingMinutes']);
+
+      appointmentData.add(tbData);
+      notifyListeners();
+    }
+    return appointmentData;
+  }
+
+  DateTime _convertDateFromString(String date) {
+    return DateTime.parse(date);
+  }
+
+  String _convertStringFromInt(int data) {
+    return (data).toString();
   }
 
   /*calendar related*/
