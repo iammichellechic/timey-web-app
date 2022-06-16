@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 
-import 'navigation-service.dart';
+import 'services/navigation-service.dart';
 
 GetIt locator = GetIt.instance;
 

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 import 'package:timey_web/presentation/utils/constant_duration_values.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
 import '/presentation/resources/color_manager.dart';
 import '/presentation/resources/values_manager.dart';
-import '../../model/tag.dart';
-import '../../data/providers/tags.dart';
-import '../../data/providers/timeblocks.dart';
-import '../../data/providers/timeblock.dart';
-import '../resources/timeFormat_manager.dart';
+import '../../../model/tag.dart';
+import '../../../data/providers/tags.dart';
+import '../../../data/providers/timeblocks.dart';
+import '../../../data/providers/timeblock.dart';
+import '../../resources/timeFormat_manager.dart';
 
 class TimeblockPage extends StatefulWidget {
   final TimeBlock? timeBlock;
@@ -72,65 +73,58 @@ class _TimeblockPageState extends State<TimeblockPage> {
       if (widget.timeBlock != null) {
         Provider.of<TimeBlocks>(context, listen: false)
             .updateTimeBlock(timeBlock, widget.timeBlock!);
-        Navigator.of(context).pop();
       } else {
         Provider.of<TimeBlocks>(context, listen: false).addTimeBlock(timeBlock);
-        Scaffold.of(context).closeEndDrawer();
       }
-      // SchedulerBinding.instance.addPostFrameCallback((_) {
-      //   locator<NavigationService>().navigatorKey.currentState!.pop();
-
+      //Scaffold.of(context).closeEndDrawer();
+      Navigator.of(context).pop();
     }
   }
-
-  bool isDesktop(BuildContext context) =>
-      MediaQuery.of(context).size.width >= 600;
-
-  bool isMobile(BuildContext context) =>
-      MediaQuery.of(context).size.width < 600;
 
   @override
   Widget build(BuildContext context) {
     final safeArea =
         EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
 
-    return Container(
-      padding: safeArea,
-      width: isDesktop(context)
-          ? MediaQuery.of(context).size.width * 0.23
-          : MediaQuery.of(context).size.width,
-      child: Drawer(
-          child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(AppPadding.p30),
-          child: Form(
-            key: _form,
-            child: ListView(
-              children: <Widget>[
-                buildTag(),
-                SizedBox(
-                  height: AppSize.s12,
-                ),
-                buildDateTimePickers(),
-                SizedBox(
-                  height: AppSize.s20,
-                ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      ButtonWidget(
-                          color: ColorManager.blue,
-                          text: 'Report',
-                          style: Theme.of(context).textTheme.headline6,
-                          onClicked: _saveForm)
-                    ]),
-                Spacer(),
-                buildCloseButton(context),
-              ],
+    return ResponsiveBuilder(
+      builder: (context, sizingInformation) => Container(
+        padding: safeArea,
+        width: sizingInformation.isDesktop
+            ? MediaQuery.of(context).size.width * 0.23
+            : MediaQuery.of(context).size.width,
+        child: Drawer(
+            child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(AppPadding.p30),
+            child: Form(
+              key: _form,
+              child: ListView(
+                children: <Widget>[
+                  buildTagField(),
+                  SizedBox(
+                    height: AppSize.s12,
+                  ),
+                  buildDateTimePickers(),
+                  SizedBox(
+                    height: AppSize.s20,
+                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        ButtonWidget(
+                            color: ColorManager.primaryContainer,
+                            text: 'Report',
+                            style: Theme.of(context).textTheme.headline6,
+                            onClicked: _saveForm)
+                      ]),
+                  Spacer(),
+                  buildCloseButton(context),
+                ],
+              ),
             ),
           ),
-        ),
-      )),
+        )),
+      ),
     );
   }
 
@@ -144,24 +138,25 @@ class _TimeblockPageState extends State<TimeblockPage> {
               child: IconButton(
                   icon: Icon(
                     Icons.close,
-                    color: ColorManager.grey,
                   ),
                   onPressed: () {
-                    Scaffold.of(context).closeEndDrawer();
+                    // Scaffold.of(context).closeEndDrawer();
+                    Navigator.of(context).pop();
                   })))
     ]));
   }
 
   Widget buildTag() => Container(
-        padding: EdgeInsets.only(top: AppPadding.p16),
+       //padding: EdgeInsets.only(top: AppPadding.p16),
         child: DropdownButtonFormField<Tag>(
             decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                icon: Icon(Icons.assignment, color: ColorManager.grey),
+                enabledBorder: OutlineInputBorder(),
+                //border: UnderlineInputBorder(),
+                //icon: Icon(Icons.assignment),
                 labelText: 'Project',
                 labelStyle: Theme.of(context).textTheme.subtitle2),
             value: selectedTag,
-            icon: const Icon(Icons.arrow_downward),
+            icon: Icon(Icons.arrow_downward),
             elevation: AppSize.s16.toInt(),
             onChanged: (Tag? newValue) {
               setState(() {
@@ -174,12 +169,18 @@ class _TimeblockPageState extends State<TimeblockPage> {
                 .toList()),
       );
 
+  Widget buildTagField() => buildHeader(
+    header: 'Tag', 
+    icon: Icons.assignment,
+    child: buildTag());
+
   Widget buildDateTimePickers() => Column(
         children: [buildStartDate(), buildDuration()],
       );
 
   Widget buildStartDate() => buildHeader(
         header: 'Date and time',
+        icon: Icons.calendar_month_outlined,
         child: Row(
           children: [
             Expanded(
@@ -201,6 +202,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
 
   Widget buildEndDate() => buildHeader(
         header: 'End date and time',
+        icon: Icons.calendar_month_outlined,
         child: Row(
           children: [
             Expanded(
@@ -294,17 +296,19 @@ class _TimeblockPageState extends State<TimeblockPage> {
   Widget buildHeader({
     required String header,
     required Widget child,
+    required IconData icon
   }) =>
       Container(
-        padding: EdgeInsets.symmetric(vertical: 8),
+        padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(Icons.calendar_month_outlined, color: ColorManager.grey),
+            Icon(icon),
             Text(
               header,
               style: Theme.of(context).textTheme.subtitle2,
             ),
+            SizedBox(height: AppSize.s5),
             child,
           ],
         ),
@@ -332,10 +336,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
           child: DropdownButtonFormField<int>(
             decoration: InputDecoration(
               labelText: label,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(width: 2, color: Colors.blue),
-              ),
+              enabledBorder: OutlineInputBorder(),
             ),
             value: value,
             items: list
@@ -366,6 +367,6 @@ class _TimeblockPageState extends State<TimeblockPage> {
             Expanded(child: dropDownHoursItems()),
             Expanded(child: dropDownMinutesItems()),
           ],
-        ),
+        ), icon: Icons.calendar_month_outlined,
       );
 }

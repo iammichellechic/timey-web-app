@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 import 'package:timey_web/presentation/resources/font_manager.dart';
 import 'package:timey_web/presentation/resources/styles_manager.dart';
 
 import '../../data/providers/navigation_items.dart';
 import '../../locator.dart';
 import '../../model/nav_items.dart';
-import '../../navigation-service.dart';
+import '../../services/navigation-service.dart';
 import '../resources/routes_manager.dart';
 import '/presentation/resources/color_manager.dart';
 
@@ -20,8 +21,10 @@ class MenuDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.18,
+    return ResponsiveBuilder(
+      builder: (context, sizingInformation) => Container(
+      color: ColorManager.background,
+      width: sizingInformation.isDesktop? MediaQuery.of(context).size.width * 0.18:  MediaQuery.of(context).size.width *0.6,
       child: Drawer(
         child: Column(
           children: [
@@ -29,7 +32,7 @@ class MenuDrawer extends StatelessWidget {
             buildNavItems(context),
             Spacer(),
             Divider(
-              color: ColorManager.grey,
+              color: ColorManager.onBackground,
             ),
             buildUserProfile(context),
             const SizedBox(height: 12),
@@ -40,7 +43,7 @@ class MenuDrawer extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 
   Widget buildNavItems(BuildContext context) {
@@ -72,7 +75,7 @@ class MenuDrawer extends StatelessWidget {
           icon: Icons.payment,
         ),
         Divider(
-          color: ColorManager.grey,
+          color: ColorManager.onBackground,
         ),
         buildMenuItem(
           context,
@@ -94,9 +97,9 @@ class MenuDrawer extends StatelessWidget {
     final currentItem = provider.navigationItem;
     final isSelected = item == currentItem;
 
-    final color = isSelected ? ColorManager.blue : ColorManager.black;
+    final color = isSelected ? ColorManager.primary : ColorManager.onPrimaryContainer;
     final shape = isSelected
-        ? Border(left: BorderSide(color: ColorManager.blue, width: 5))
+        ? Border(left: BorderSide(color: ColorManager.primary, width: 5))
         : null;
 
     return Material(

@@ -53,19 +53,19 @@ class ChartWidget extends StatelessWidget {
                             fontFamily: FontConstants.fontFamily,
                             fontSize: 10,
                             color: charts.ColorUtil.fromDartColor(
-                                ColorManager.primaryWhite)),
+                                ColorManager.onPrimary)),
                         outsideLabelStyleSpec: charts.TextStyleSpec(
                             fontFamily: FontConstants.fontFamily,
                             fontSize: 10,
                             color: charts.ColorUtil.fromDartColor(
-                                ColorManager.blue)))),
+                                ColorManager.primary)))),
                 primaryMeasureAxis: charts.NumericAxisSpec(
                   tickFormatterSpec: charts.BasicNumericTickFormatterSpec(
                       (num? value) => "$value \u{1F551}"),
                   renderSpec: charts.GridlineRendererSpec(
                     labelStyle: charts.TextStyleSpec(
                       fontSize: 12,
-                      color: charts.ColorUtil.fromDartColor(ColorManager.grey),
+                      color: charts.ColorUtil.fromDartColor(ColorManager.primaryContainer),
                     ),
                     labelAnchor: charts.TickLabelAnchor.after,
                   ),
