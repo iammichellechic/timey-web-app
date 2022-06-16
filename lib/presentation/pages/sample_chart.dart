@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:provider/provider.dart';
-import 'package:timey_web/presentation/resources/color_manager.dart';
-import '../resources/values_manager.dart';
+
 import '/presentation/utils/chart_utils.dart' as utils;
 import '../../data/providers/timeblocks.dart';
-import '../resources/timeFormat_manager.dart';
+
 
 
 //NOT DONE

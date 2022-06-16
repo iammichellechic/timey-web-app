@@ -5,51 +5,59 @@ import './styles_manager.dart';
 
 import 'package:flutter/material.dart';
 
+//light theme
 ThemeData getAppTheme() {
   return ThemeData(
-      //main colors of the app
-      primaryColor: ColorManager.primaryWhite,
-      primaryColorDark: ColorManager.black,
-      colorScheme:
-          ColorScheme.fromSwatch().copyWith(secondary: ColorManager.grey),
+      //main color of the app
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: ColorManager.primary,
+        brightness: Brightness.light,
+       
+      ),
+     
+      useMaterial3: true,
       visualDensity: VisualDensity.adaptivePlatformDensity,
-      scaffoldBackgroundColor: ColorManager.lightBlue,
+      scaffoldBackgroundColor: ColorManager.background,
 
       //icon theme
-      iconTheme: IconThemeData(color: ColorManager.grey),
+      iconTheme: IconThemeData(color: ColorManager.onPrimaryContainer),
 
       //app bar theme
       appBarTheme: AppBarTheme(
           centerTitle: true,
-          color: ColorManager.primaryWhite,
+          color: ColorManager.primary,
           titleTextStyle:
-              getBoldStyle(color: ColorManager.black, fontSize: FontSize.s20)),
+              getBoldStyle(color: ColorManager.onPrimary, fontSize: FontSize.s20)),
       //
       buttonTheme: ButtonThemeData(
         shape: StadiumBorder(),
-        disabledColor: ColorManager.grey,
-        buttonColor: ColorManager.black,
+        disabledColor: ColorManager.primaryContainer,
+        buttonColor: ColorManager.primary,
       ),
 
       //form button
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-              //         primary: ColorManager.blue,
-              textStyle: getBoldStyle(color: ColorManager.primaryWhite),
+             primary: ColorManager.primary,
+              textStyle: getBoldStyle(color: ColorManager.onPrimary),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero))),
 
       //text theme
       textTheme: TextTheme(
         //menu drawer
         headline1:
-            getBoldStyle(color: ColorManager.black, fontSize: FontSize.s24),
+            getBoldStyle(color: ColorManager.onPrimaryContainer, fontSize: FontSize.s24),
 
         headline2:
-            getBoldStyle(color: ColorManager.black, fontSize: FontSize.s20),
+            getBoldStyle(color: ColorManager.onPrimaryContainer, fontSize: FontSize.s20),
         headline3:
-            getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s20),
-        subtitle1:
-            getBoldStyle(color: ColorManager.black, fontSize: FontSize.s16),
+            getBoldStyle(color: ColorManager.onPrimaryContainer, fontSize: FontSize.s20),
+       
+        headline4: getRegularStyle(color: ColorManager.onPrimaryContainer),
+        headline5: getRegularStyle(color: ColorManager.error),
+        headline6: getRegularStyle(color: ColorManager.onPrimaryContainer),
+         subtitle1:
+            getBoldStyle(color: ColorManager.onPrimaryContainer, fontSize: FontSize.s16),
         subtitle2:
             getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s16),
         caption: getRegularStyle(color: ColorManager.grey),
@@ -57,19 +65,16 @@ ThemeData getAppTheme() {
             getBoldStyle(color: ColorManager.black, fontSize: FontSize.s12),
         bodyText2:
             getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s12),
-        headline4: getRegularStyle(color: ColorManager.blue),
-        headline5: getRegularStyle(color: ColorManager.error),
-        headline6: getRegularStyle(color: ColorManager.primaryWhite),
       ),
       inputDecorationTheme: InputDecorationTheme(
         contentPadding: EdgeInsets.all(AppPadding.p8),
         // hint style
         hintStyle:
-            getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s16),
+            getBoldStyle(color: ColorManager.secondary, fontSize: FontSize.s16),
 
         // label style
         labelStyle:
-            getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s16),
+            getBoldStyle(color: ColorManager.secondary, fontSize: FontSize.s16),
         // error style
         errorStyle:
             getBoldStyle(color: ColorManager.error, fontSize: FontSize.s16),
@@ -77,13 +82,13 @@ ThemeData getAppTheme() {
         // enabled border
         enabledBorder: OutlineInputBorder(
             borderSide:
-                BorderSide(color: ColorManager.grey, width: AppSize.s1_5),
+                BorderSide(color: ColorManager.onSecondaryContainer, width: AppSize.s1_5),
             borderRadius: BorderRadius.all(Radius.circular(AppSize.s8))),
 
         // focused border
         focusedBorder: OutlineInputBorder(
             borderSide:
-                BorderSide(color: ColorManager.blue, width: AppSize.s1_5),
+                BorderSide(color: ColorManager.secondary, width: AppSize.s1_5),
             borderRadius: BorderRadius.all(Radius.circular(AppSize.s8))),
 
         // error border
@@ -94,7 +99,7 @@ ThemeData getAppTheme() {
         // focused error border
         focusedErrorBorder: OutlineInputBorder(
             borderSide:
-                BorderSide(color: ColorManager.blue, width: AppSize.s1_5),
+                BorderSide(color: ColorManager.onErrorContainer, width: AppSize.s1_5),
             borderRadius: BorderRadius.all(Radius.circular(AppSize.s8))),
       ));
 }

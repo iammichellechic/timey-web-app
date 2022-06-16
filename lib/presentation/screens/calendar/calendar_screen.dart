@@ -1,18 +1,20 @@
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 import 'package:timey_web/presentation/utils/snackbar_utils.dart';
 import 'package:timey_web/presentation/widgets/calendar_widget.dart';
-
 import '../../../data/providers/timeblock.dart';
 import '../../../locator.dart';
-import '../../../navigation-service.dart';
+import '../../../services/navigation-service.dart';
 import '../../resources/routes_manager.dart';
 import '../../resources/theme_manager.dart';
 import '../../resources/timeFormat_manager.dart';
+import '../../shared/menu_drawer.dart';
 import '../../widgets/dialogs_widget.dart';
+import '../form/timeblock_adding_page.dart';
 import '/presentation/resources/color_manager.dart';
 import '../../../data/providers/timeblocks.dart';
 import '../../../model/timeblock_data_source.dart';
@@ -23,7 +25,43 @@ class CalendarScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: buildCalendarWidget(context));
+      final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+    return ResponsiveBuilder(
+        builder: (context, sizingInformation) => Row(children: <Widget>[
+              if (sizingInformation.isDesktop)
+                const MenuDrawer(
+                  permanentlyDisplay: true,
+                ),
+              Expanded(
+                  child: Scaffold(
+                      appBar: AppBar(
+                        backgroundColor: Colors.transparent,
+                        iconTheme: IconThemeData(
+                            color: ColorManager.onPrimaryContainer),
+                        elevation: 0,
+                        automaticallyImplyLeading: sizingInformation.isMobile,
+                        actions: [
+                          IconButton(
+                            icon: Icon(Icons.add,
+                                color: ColorManager.onPrimaryContainer),
+                            hoverColor: ColorManager.primaryContainer,
+                            onPressed: () {
+                              _scaffoldKey.currentState!.openEndDrawer();
+                            },
+                          ),
+                        ],
+                      ),
+                      key: _scaffoldKey,
+                      extendBodyBehindAppBar: true,
+                      endDrawer: TimeblockPage(),
+                      drawer: sizingInformation.isMobile
+                          ? const MenuDrawer(
+                              permanentlyDisplay: false,
+                            )
+                          : null,
+                      body: Expanded(child: buildCalendarWidget(context))))
+            ]));
   }
 
   Widget buildCalendarWidget(BuildContext context) {
@@ -41,10 +79,16 @@ class CalendarScreen extends StatelessWidget {
                 task.getTimeblocks(false);
                 return Future.delayed(const Duration(seconds: 3));
               },
-              child: CalendarWidget(
+              child:(task.getResponseFromQuery().isNotEmpty)? CalendarWidget(
                 appointment: appointmentBuilder,
                 dataSource: EventDataSource(task.getResponseFromQuery()),
-              ));
+              )
+              : Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text("No data found"),
+                      ))
+              );
         }));
   }
 
@@ -196,8 +240,9 @@ class CalendarScreen extends StatelessWidget {
             return EntryEditDialog(
               entry: entry,
             );
-          },
-        );
+          });
+       
+        
         break;
       case 1:
         showDialog<bool>(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timey_web/presentation/screens/login/login.dart';
 import 'package:timey_web/presentation/screens/signup/signup.dart';
-import '/presentation/pages/timeblock_adding_page.dart';
+import '../screens/form/timeblock_adding_page.dart';
 import '../screens/calendar/calendar_screen.dart';
 import '../screens/chart/chart_overview_screen.dart';
 import '../screens/table/table_timeblock_screen.dart';
@@ -31,7 +31,7 @@ class RouteGenerator {
         );
       case Routes.tableRoute:
         return _GeneratePageRoute(
-          widget: EditablePage(),
+          widget: TableScreen(),
           routeName: routeSettings.name!,
         );
       case Routes.formRoute:

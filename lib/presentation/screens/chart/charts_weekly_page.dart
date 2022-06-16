@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:provider/provider.dart';
-import '../resources/color_manager.dart';
-import '../widgets/chart_widget.dart';
+import '../../resources/color_manager.dart';
+import '../../widgets/chart_widget.dart';
 import '/presentation/utils/chart_utils.dart' as utils;
-import '../../data/providers/timeblocks.dart';
-import '../resources/timeFormat_manager.dart';
+import '../../../data/providers/timeblocks.dart';
+import '../../resources/timeFormat_manager.dart';
 
 
 class WeeklyChart extends StatelessWidget {
@@ -31,7 +31,7 @@ class WeeklyChart extends StatelessWidget {
             return total.value;
           },
           colorFn: (_, __) =>
-              charts.ColorUtil.fromDartColor(ColorManager.orange),
+              charts.ColorUtil.fromDartColor(ColorManager.secondary),
           labelAccessorFn: (total, _) => '${total.value.toString()}hrs')
     ];
 
