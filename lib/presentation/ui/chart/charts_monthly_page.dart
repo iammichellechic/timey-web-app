@@ -5,7 +5,7 @@ import 'package:timey_web/presentation/resources/color_manager.dart';
 import 'package:timey_web/presentation/widgets/chart_widget.dart';
 import '/presentation/utils/chart_utils.dart' as utils;
 import '../../../data/providers/timeblocks.dart';
-import '../../resources/timeFormat_manager.dart';
+import '../../resources/formats_manager.dart';
 
 class MonthlyChart extends StatelessWidget {
   const MonthlyChart({Key? key}) : super(key: key);

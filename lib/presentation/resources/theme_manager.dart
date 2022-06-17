@@ -17,7 +17,7 @@ ThemeData getAppTheme() {
      
       useMaterial3: true,
       visualDensity: VisualDensity.adaptivePlatformDensity,
-      scaffoldBackgroundColor: ColorManager.background,
+      scaffoldBackgroundColor: ColorManager.lightBlue.withOpacity(0.5),
 
       //icon theme
       iconTheme: IconThemeData(color: ColorManager.onPrimaryContainer),
@@ -62,7 +62,7 @@ ThemeData getAppTheme() {
             getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s16),
         caption: getRegularStyle(color: ColorManager.grey),
         bodyText1:
-            getBoldStyle(color: ColorManager.black, fontSize: FontSize.s12),
+            getBoldStyle(color: ColorManager.black, fontSize: FontSize.s14),
         bodyText2:
             getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s12),
       ),

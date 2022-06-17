@@ -9,7 +9,7 @@ import '../../../model/tag.dart';
 import '../../../data/providers/tags.dart';
 import '../../../data/providers/timeblocks.dart';
 import '../../../data/providers/timeblock.dart';
-import '../../resources/timeFormat_manager.dart';
+import '../../resources/formats_manager.dart';
 
 class TimeblockPage extends StatefulWidget {
   final TimeBlock? timeBlock;
@@ -146,63 +146,11 @@ class _TimeblockPageState extends State<TimeblockPage> {
     ]));
   }
 
-  Widget buildTag() => Container(
-       //padding: EdgeInsets.only(top: AppPadding.p16),
-        child: DropdownButtonFormField<Tag>(
-            decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(),
-                //border: UnderlineInputBorder(),
-                //icon: Icon(Icons.assignment),
-                labelText: 'Project',
-                labelStyle: Theme.of(context).textTheme.subtitle2),
-            value: selectedTag,
-            icon: Icon(Icons.arrow_downward),
-            elevation: AppSize.s16.toInt(),
-            onChanged: (Tag? newValue) {
-              setState(() {
-                selectedTag = newValue!;
-              });
-            },
-            items: availableTags
-                .map<DropdownMenuItem<Tag>>((tag) =>
-                    DropdownMenuItem<Tag>(value: tag, child: Text(tag.name)))
-                .toList()),
-      );
-
-  Widget buildTagField() => buildHeader(
-    header: 'Tag', 
-    icon: Icons.assignment,
-    child: buildTag());
-
-  Widget buildDateTimePickers() => Column(
-        children: [buildStartDate(), buildDuration()],
-      );
-
-  Widget buildStartDate() => buildHeader(
-        header: 'Date and time',
-        icon: Icons.calendar_month_outlined,
-        child: Row(
-          children: [
-            Expanded(
-              // flex: 2,
-              child: buildDropdownField(
-                text: Utils.toDate(startDate),
-                onClicked: () => pickFromDateTime(pickDate: true),
-              ),
-            ),
-            Expanded(
-              child: buildDropdownField(
-                text: Utils.toTime(startDate),
-                onClicked: () => pickFromDateTime(pickDate: false),
-              ),
-            ),
-          ],
-        ),
-      );
-
+// as of this moment we dont need end date
+/*
   Widget buildEndDate() => buildHeader(
         header: 'End date and time',
-        icon: Icons.calendar_month_outlined,
+        icon: Icons.calendar_month,
         child: Row(
           children: [
             Expanded(
@@ -222,24 +170,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
         ),
       );
 
-  Future pickFromDateTime({required bool pickDate}) async {
-    final date = await pickDateTime(
-      startDate,
-      pickDate: pickDate,
-    );
-    if (date == null) return;
-
-    if (date.isAfter(endDate)) {
-      endDate = DateTime(
-          date.year, date.month, date.day, endDate.hour, endDate.minute);
-    }
-
-    setState(() {
-      startDate = date;
-    });
-  }
-
-  Future pickToDateTime({required bool pickDate}) async {
+    Future pickToDateTime({required bool pickDate}) async {
     final date = await pickDateTime(
       endDate,
       pickDate: pickDate,
@@ -251,6 +182,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
       endDate = date;
     });
   }
+  */
 
   Future<DateTime?> pickDateTime(
     DateTime initialDate, {
@@ -293,11 +225,27 @@ class _TimeblockPageState extends State<TimeblockPage> {
     }
   }
 
-  Widget buildHeader({
-    required String header,
-    required Widget child,
-    required IconData icon
-  }) =>
+  Future pickFromDateTime({required bool pickDate}) async {
+    final date = await pickDateTime(
+      startDate,
+      pickDate: pickDate,
+    );
+    if (date == null) return;
+
+    if (date.isAfter(endDate)) {
+      endDate = DateTime(
+          date.year, date.month, date.day, endDate.hour, endDate.minute);
+    }
+
+    setState(() {
+      startDate = date;
+    });
+  }
+
+  Widget buildHeader(
+          {required String header,
+          required Widget child,
+          required IconData icon}) =>
       Container(
         padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
         child: Column(
@@ -314,6 +262,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
         ),
       );
 
+  //Date and time
   Widget buildDropdownField({
     required String text,
     required VoidCallback onClicked,
@@ -327,6 +276,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
         onTap: onClicked,
       );
 
+  //Duration
   Widget buildDropDownFormField(
           {required int? value,
           required List<int> list,
@@ -349,6 +299,47 @@ class _TimeblockPageState extends State<TimeblockPage> {
             onChanged: (item) => setState(() => value = item),
           ));
 
+  Widget buildTag() => SizedBox(
+        child: DropdownButtonFormField<Tag>(
+            decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(),
+                labelText: 'Project',
+                labelStyle: Theme.of(context).textTheme.subtitle2),
+            value: selectedTag,
+            icon: Icon(Icons.arrow_downward),
+            elevation: AppSize.s16.toInt(),
+            onChanged: (Tag? newValue) {
+              setState(() {
+                selectedTag = newValue!;
+              });
+            },
+            items: availableTags
+                .map<DropdownMenuItem<Tag>>((tag) =>
+                    DropdownMenuItem<Tag>(value: tag, child: Text(tag.name)))
+                .toList()),
+      );
+
+  Widget buildStartDate() => buildHeader(
+        header: 'Date and time',
+        icon: Icons.calendar_month_outlined,
+        child: Row(
+          children: [
+            Expanded(
+              // flex: 2,
+              child: buildDropdownField(
+                text: Utils.toDate(startDate),
+                onClicked: () => pickFromDateTime(pickDate: true),
+              ),
+            ),
+            Expanded(
+              child: buildDropdownField(
+                text: Utils.toTime(startDate),
+                onClicked: () => pickFromDateTime(pickDate: false),
+              ),
+            ),
+          ],
+        ),
+      );
   Widget dropDownHoursItems() {
     return buildDropDownFormField(
         value: reportedHours, list: itemList, label: "Hours");
@@ -367,6 +358,14 @@ class _TimeblockPageState extends State<TimeblockPage> {
             Expanded(child: dropDownHoursItems()),
             Expanded(child: dropDownMinutesItems()),
           ],
-        ), icon: Icons.calendar_month_outlined,
+        ),
+        icon: Icons.calendar_month_outlined,
+      );
+
+  Widget buildTagField() => buildHeader(
+      header: 'Tag', icon: Icons.assignment_outlined, child: buildTag());
+
+  Widget buildDateTimePickers() => Column(
+        children: [buildStartDate(), buildDuration()],
       );
 }

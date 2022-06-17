@@ -25,10 +25,4 @@ class TimeBlock with ChangeNotifier {
     this.remainingMinutes,
   });
 
-  // TimeBlock.fromJson(Map<String, dynamic> data)
-  //     : id = data['userIdCreated'],
-  //       startDate = data['datetimeStart'],
-  //       endDate = data['datetimeEnd'],
-  //       reportHours = data['reportedHours'],
-  //       remainingMinutes = data['reportedRemainingMinutes'];
 }

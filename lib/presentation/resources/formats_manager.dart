@@ -40,4 +40,12 @@ class Utils {
 
   static DateTime removeTime(DateTime dateTime) =>
       DateTime(dateTime.year, dateTime.month, dateTime.day);
+
+  static DateTime convertDateFromString(String date) {
+    return DateTime.parse(date);
+  }
+
+   static String convertStringFromInt(int data) {
+    return (data).toString();
+  }
 }

@@ -32,7 +32,7 @@ class MenuDrawer extends StatelessWidget {
             buildNavItems(context),
             Spacer(),
             Divider(
-              color: ColorManager.onBackground,
+              color: ColorManager.grey,
             ),
             buildUserProfile(context),
             const SizedBox(height: 12),
@@ -75,7 +75,7 @@ class MenuDrawer extends StatelessWidget {
           icon: Icons.payment,
         ),
         Divider(
-          color: ColorManager.onBackground,
+          color: ColorManager.grey,
         ),
         buildMenuItem(
           context,

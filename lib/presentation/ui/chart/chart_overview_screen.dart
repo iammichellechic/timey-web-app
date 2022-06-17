@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:timey_web/presentation/screens/chart/charts_monthly_page.dart';
-import 'package:timey_web/presentation/screens/chart/charts_weekly_page.dart';
+import 'package:timey_web/presentation/ui/chart/charts_monthly_page.dart';
+import 'package:timey_web/presentation/ui/chart/charts_weekly_page.dart';
 import 'package:timey_web/presentation/resources/color_manager.dart';
 
 import '../../shared/menu_drawer.dart';

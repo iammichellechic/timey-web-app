@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:timey_web/presentation/screens/table/table_timeblock_page.dart';
+import 'package:timey_web/presentation/ui/table/table_timeblock_page.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 
 import '../../resources/color_manager.dart';

@@ -6,7 +6,7 @@ import '../../data/providers/timeblock.dart';
 import '../../data/providers/timeblocks.dart';
 import '../resources/color_manager.dart';
 import '../resources/theme_manager.dart';
-import '../resources/timeFormat_manager.dart';
+import '../resources/formats_manager.dart';
 
 //NO PURPOSE
 class TimeBlocksItems extends StatefulWidget {
