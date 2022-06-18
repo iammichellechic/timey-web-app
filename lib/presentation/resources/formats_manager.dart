@@ -11,31 +11,31 @@ class Utils {
   static String toDateSingleLetter(DateTime dateTime) {
     final date = DateFormat.E().format(dateTime).substring(0, 1);
 
-    return '$date';
+    return date;
   }
 
   static String toDateAbbrLabel(DateTime dateTime) {
     final date = DateFormat(DateFormat.ABBR_WEEKDAY).format(dateTime);
 
-    return '$date';
+    return date;
   }
 
   static String toDate(DateTime dateTime) {
     final date = DateFormat.yMMMEd().format(dateTime);
 
-    return '$date';
+    return date;
   }
 
   static String toChartDate(DateTime dateTime) {
     final date = DateFormat.Md().format(dateTime);
 
-    return '$date';
+    return date;
   }
 
   static String toTime(DateTime dateTime) {
     final time = DateFormat.Hm().format(dateTime);
 
-    return '$time';
+    return time;
   }
 
   static DateTime removeTime(DateTime dateTime) =>

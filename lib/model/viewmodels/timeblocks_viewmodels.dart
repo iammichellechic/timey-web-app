@@ -8,7 +8,7 @@ import '../../services/timeblocks_service.dart';
 class TimeBlocksViewModel with ChangeNotifier {
   final _api = locator<TimeBlocksApi>();
 
-  late List<TimeBlock> _appointmentData;
+  final List<TimeBlock> _appointmentData= [];
   List<TimeBlock> get appointmentData => _appointmentData;
 
   dynamic getTimeblocksList() {
@@ -24,7 +24,7 @@ class TimeBlocksViewModel with ChangeNotifier {
 
       _appointmentData.add(tbData);
     }
-    notifyListeners();
+    //notifyListeners();
     return _appointmentData;
   }
 }

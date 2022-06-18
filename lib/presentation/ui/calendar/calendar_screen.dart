@@ -2,18 +2,15 @@ import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:stacked/stacked.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:timey_web/presentation/resources/styles_manager.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 import 'package:timey_web/presentation/utils/snackbar_utils.dart';
 import 'package:timey_web/presentation/widgets/calendar_widget.dart';
 import '../../../data/providers/timeblock.dart';
-import '../../../locator.dart';
-import '../../../model/viewmodels/timeblocks_viewmodels.dart';
-import '../../../services/navigation-service.dart';
+
 import '../../resources/font_manager.dart';
-import '../../resources/routes_manager.dart';
+
 import '../../resources/theme_manager.dart';
 import '../../resources/formats_manager.dart';
 import '../../shared/menu_drawer.dart';
@@ -23,6 +20,7 @@ import '/presentation/resources/color_manager.dart';
 import '../../../data/providers/timeblocks.dart';
 import '../../../model/timeblock_data_source.dart';
 
+// ignore: must_be_immutable
 class CalendarScreen extends StatelessWidget {
   bool isFetched = false;
   CalendarScreen({Key? key}) : super(key: key);
@@ -64,26 +62,36 @@ class CalendarScreen extends StatelessWidget {
                               permanentlyDisplay: false,
                             )
                           : null,
-                      body: Expanded(child: buildCalendarWidget(context))))
+                      body:buildCalendarWidget(context)))
             ]));
   }
 
   Widget buildCalendarWidget(BuildContext context) {
-    return ViewModelBuilder<TimeBlocksViewModel>.reactive(
-        viewModelBuilder: () => TimeBlocksViewModel(),
-        onModelReady: (model) => model.getTimeblocksList(),
-        builder: (context, model, child) => Container(
-            padding: EdgeInsets.only(top: AppPadding.p40),
-            child: (model.appointmentData.isNotEmpty)
-                ? CalendarWidget(
-                    appointment: appointmentBuilder,
-                    dataSource: EventDataSource(model.appointmentData),
-                  )
-                : Container(
-                    padding: EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text("No data found"),
-                    ))));
+    return Container(
+        padding: EdgeInsets.only(top: AppPadding.p40),
+        child: Consumer<TimeBlocks>(builder: (context, task, child) {
+      if (isFetched == false) {
+        ///Fetch the data
+        task.getTimeblocks(true);
+
+        Future.delayed(const Duration(seconds: 3), () => isFetched = true);
+      }
+      return RefreshIndicator(
+          onRefresh: () {
+            task.getTimeblocks(false);
+            return Future.delayed(const Duration(seconds: 3));
+          },
+          child: (task.getResponseFromQuery().isNotEmpty)
+              ? CalendarWidget(
+                  appointment: appointmentBuilder,
+                  dataSource: EventDataSource(task.getResponseFromQuery()),
+                )
+              : Container(
+                  padding: EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Text("No data found"),
+                  )));
+    }));
   }
 }
 
@@ -100,9 +108,9 @@ Widget appointmentBuilder(
       width: details.bounds.width,
       height: details.bounds.height,
       decoration: BoxDecoration(
-          //color: ColorManager.background,
+          color: ColorManager.primaryContainer,
           border:
-              Border(left: BorderSide(color: ColorManager.primary, width: 4))),
+              Border(left: BorderSide(color: ColorManager.primary, width: 4,))),
       child: SingleChildScrollView(
         child: Column(
           children: [

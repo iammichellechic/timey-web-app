@@ -122,27 +122,25 @@ class TimeBlocks with ChangeNotifier {
         fetchPolicy: isLocal == true ? null : FetchPolicy.cacheAndNetwork));
 
     if (result.hasException) {
-      print(result.exception);
+    
       _status = false;
       if (result.exception!.graphqlErrors.isEmpty) {
         _response = "No connectivity found";
       } else {
         _response = result.exception!.graphqlErrors[0].message.toString();
       }
-      notifyListeners();
+ 
     } else {
-      print(result.data);
+     
       _status = false;
       _list = result.data;
-      notifyListeners();
+ 
     }
   }
 
   dynamic getResponseData() {
     if (_list.isNotEmpty) {
       final data = _list;
-
-      print(data['timeblocks']);
 
       return data['timeblocks'] ?? {};
     } else {
@@ -152,7 +150,7 @@ class TimeBlocks with ChangeNotifier {
 
   void clear() {
     _response = '';
-    notifyListeners();
+  
   }
 
   // Future<List<TimeBlock>> getData() async {
@@ -188,8 +186,9 @@ class TimeBlocks with ChangeNotifier {
           remainingMinutes: data['reportedRemainingMinutes']);
 
       appointmentData.add(tbData);
-      notifyListeners();
+     
     }
+  
     return appointmentData;
   }
 

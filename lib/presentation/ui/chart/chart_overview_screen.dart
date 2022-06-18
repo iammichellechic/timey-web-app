@@ -47,7 +47,7 @@ class OverView extends StatelessWidget {
                       permanentlyDisplay: false,
                     )
                   : null,
-              body: Expanded(child: buildChartsWidget(context))))
+              body:  buildChartsWidget(context)))
     ]));
   }
 

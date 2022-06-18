@@ -23,7 +23,7 @@ class TimeBlocksApi {
         fetchPolicy: FetchPolicy.cacheAndNetwork));
 
     if (result.hasException) {
-      print(result.exception);
+      
       _status = false;
       if (result.exception!.graphqlErrors.isEmpty) {
         _response = "No connectivity found";

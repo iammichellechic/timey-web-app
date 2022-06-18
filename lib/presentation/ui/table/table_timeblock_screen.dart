@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:timey_web/presentation/ui/table/table_timeblock_page.dart';
-import 'package:timey_web/presentation/resources/values_manager.dart';
-
 import '../../resources/color_manager.dart';
 import '../../shared/menu_drawer.dart';
 import '../form/timeblock_adding_page.dart';
@@ -48,7 +46,7 @@ class TableScreen extends StatelessWidget {
                               permanentlyDisplay: false,
                             )
                           : null,
-                      body: Expanded(child: buildTableItems(context))))
+                      body:  buildTableItems(context)))
             ]));
   }
 
@@ -56,18 +54,8 @@ class TableScreen extends StatelessWidget {
 
     return Scaffold(
       body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.only(top: AppPadding.p30),
+        child: Center(
           child: MyDataTable()
-          // child: Column(
-          //   mainAxisSize: MainAxisSize.max,
-          //   crossAxisAlignment: CrossAxisAlignment.center,
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: const <Widget>[
-          //     //Chart(timeblocksData.recentEntries), //no prupose
-          //     MyDataTable()
-          //   ],
-          // ),
         ),
       ),
     );

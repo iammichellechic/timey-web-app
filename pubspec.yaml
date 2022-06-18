@@ -40,7 +40,8 @@ dependencies:
   #inversion of control
   get_it:
   injectable:
-
+  
+  #might be good to use this in the future
   # navigation
   auto_route:
   stacked_services: ^0.8.26

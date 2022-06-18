@@ -12,9 +12,7 @@ ThemeData getAppTheme() {
       colorScheme: ColorScheme.fromSeed(
         seedColor: ColorManager.primary,
         brightness: Brightness.light,
-       
       ),
-     
       useMaterial3: true,
       visualDensity: VisualDensity.adaptivePlatformDensity,
       scaffoldBackgroundColor: ColorManager.lightBlue.withOpacity(0.5),
@@ -26,8 +24,8 @@ ThemeData getAppTheme() {
       appBarTheme: AppBarTheme(
           centerTitle: true,
           color: ColorManager.primary,
-          titleTextStyle:
-              getBoldStyle(color: ColorManager.onPrimary, fontSize: FontSize.s20)),
+          titleTextStyle: getBoldStyle(
+              color: ColorManager.onPrimary, fontSize: FontSize.s20)),
       //
       buttonTheme: ButtonThemeData(
         shape: StadiumBorder(),
@@ -38,29 +36,29 @@ ThemeData getAppTheme() {
       //form button
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-             primary: ColorManager.primary,
+              primary: ColorManager.primary,
               textStyle: getBoldStyle(color: ColorManager.onPrimary),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero))),
 
       //text theme
       textTheme: TextTheme(
         //menu drawer
-        headline1:
-            getBoldStyle(color: ColorManager.onPrimaryContainer, fontSize: FontSize.s24),
+        headline1: getBoldStyle(
+            color: ColorManager.onPrimaryContainer, fontSize: FontSize.s24),
 
-        headline2:
-            getBoldStyle(color: ColorManager.onPrimaryContainer, fontSize: FontSize.s20),
-        headline3:
-            getBoldStyle(color: ColorManager.onPrimaryContainer, fontSize: FontSize.s20),
-       
+        headline2: getBoldStyle(
+            color: ColorManager.onPrimaryContainer, fontSize: FontSize.s20),
+        headline3: getBoldStyle(
+            color: ColorManager.onPrimaryContainer, fontSize: FontSize.s20),
+
         headline4: getRegularStyle(color: ColorManager.onPrimaryContainer),
         headline5: getRegularStyle(color: ColorManager.error),
-        headline6: getRegularStyle(color: ColorManager.onPrimaryContainer),
-         subtitle1:
-            getBoldStyle(color: ColorManager.onPrimaryContainer, fontSize: FontSize.s16),
+        headline6: getRegularStyle(color: ColorManager.onPrimary),
+        subtitle1: getBoldStyle(
+            color: ColorManager.onPrimaryContainer, fontSize: FontSize.s16),
         subtitle2:
             getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s16),
-        caption: getRegularStyle(color: ColorManager.grey),
+        caption: getRegularStyle(color: ColorManager.primary),
         bodyText1:
             getBoldStyle(color: ColorManager.black, fontSize: FontSize.s14),
         bodyText2:
@@ -81,8 +79,8 @@ ThemeData getAppTheme() {
 
         // enabled border
         enabledBorder: OutlineInputBorder(
-            borderSide:
-                BorderSide(color: ColorManager.onSecondaryContainer, width: AppSize.s1_5),
+            borderSide: BorderSide(
+                color: ColorManager.onSecondaryContainer, width: AppSize.s1_5),
             borderRadius: BorderRadius.all(Radius.circular(AppSize.s8))),
 
         // focused border
@@ -98,8 +96,8 @@ ThemeData getAppTheme() {
             borderRadius: BorderRadius.all(Radius.circular(AppSize.s8))),
         // focused error border
         focusedErrorBorder: OutlineInputBorder(
-            borderSide:
-                BorderSide(color: ColorManager.onErrorContainer, width: AppSize.s1_5),
+            borderSide: BorderSide(
+                color: ColorManager.onErrorContainer, width: AppSize.s1_5),
             borderRadius: BorderRadius.all(Radius.circular(AppSize.s8))),
       ));
 }
