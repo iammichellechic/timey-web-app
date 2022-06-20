@@ -1,11 +1,11 @@
-import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
+import 'package:timey_web/presentation/widgets/actionbuttons_widget.dart';
+import '../../resources/font_manager.dart';
 import '../../resources/formats_manager.dart';
 
-import '../../widgets/dialogs_widget.dart';
-
+import '../../resources/styles_manager.dart';
 import '/presentation/resources/color_manager.dart';
 import '../../../data/providers/timeblocks.dart';
 
@@ -35,137 +35,96 @@ class _MyDataTableState extends State<MyDataTable> {
             task.getTimeblocks(false);
             return Future.delayed(const Duration(seconds: 3));
           },
-          child: (task.getResponseData().isNotEmpty)
-              ? ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: task.getResponseData().length,
-                  itemBuilder: (context, index) {
-                    final tb = task.getResponseFromQuery();
-
-                    return SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Container(
-                          padding: EdgeInsets.all(20.0),
-                          margin: EdgeInsets.symmetric(
-                              horizontal: 50.0, vertical: 20.0),
-                          decoration: BoxDecoration(
-                              color: ColorManager.background,
-                              borderRadius: BorderRadius.circular(5.0),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  offset: Offset(0, 2),
-                                  blurRadius: 6.0,
-                                ),
-                              ]),
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
+          child: (task.getResponseFromQuery().isNotEmpty)
+              ? Container(
+                  padding: EdgeInsets.only(top: AppPadding.p40),
+                  child: Column(children: [
+                    buildSearchField(context),
+                    const SizedBox(height: AppSize.s30),
+                    Container(
+                        decoration: BoxDecoration(
+                            color: ColorManager.background,
+                            borderRadius: BorderRadius.circular(10.0),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                offset: Offset(0, 2),
+                                blurRadius: 6.0,
+                              ),
+                            ]),
+                        child: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            clipBehavior: Clip.hardEdge,
                             child: DataTable(
-                              //settings//
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                      left: BorderSide(
-                                          color: ColorManager.primary,
-                                          width: 4))),
-                              dataRowHeight: 60,
-                              showCheckboxColumn: false,
-                              dividerThickness: 0,
-                              columnSpacing: 80,
+                                //settings//
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        left: BorderSide(
+                                            color: ColorManager.primary,
+                                            width: 2))),
+                                dataRowHeight: 40,
+                                showCheckboxColumn: false,
+                                dividerThickness: 0,
+                                columnSpacing: 80,
+                                //headingRowColor: MaterialStateColor.resolveWith((states) {return ColorManager.primaryContainer;}),
 
-                              columns: [
-                                buildDataColumn(
-                                    text: 'Title', context: context),
-                                buildDataColumn(text: 'Date', context: context),
-                                buildDataColumn(
-                                    text: 'Hours', context: context),
-                                buildDataColumn(
-                                    text: 'Minutes', context: context),
-                                buildDataColumn(
-                                    text: 'Edit',
-                                    context: context,
-                                    tooltipText: 'edit an entry'),
-                                buildDataColumn(
-                                    text: 'Delete',
-                                    context: context,
-                                    tooltipText: 'remove an entry'),
-                              ],
-                              rows: tb
-                                  .map<DataRow>((data) => DataRow(cells: [
-                                        DataCell(Text(data.id,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .caption)),
-                                        DataCell(Text(
-                                            Utils.toDateTime(data.startDate),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .caption)),
-                                        DataCell(Text(
-                                            Utils.convertStringFromInt(
-                                                data.reportHours),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .caption)),
-                                        DataCell(Text(
-                                            Utils.convertStringFromInt(
-                                                data.remainingMinutes),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .caption)),
-                                        DataCell(
-                                          IconButton(
-                                            icon: Icon(Icons.edit),
-                                            color: ColorManager.blue,
-                                            onPressed: () {
-                                              showGlobalDrawer<EntryEditDialog>(
-                                                  direction: AxisDirection.left,
-                                                  context: context,
-                                                  duration:
-                                                      Duration(seconds: 1),
-                                                  builder: (context) {
-                                                    return EntryEditDialog(
-                                                      entry: data,
-                                                    );
-                                                  });
-                                            },
-                                          ),
-                                        ),
-                                        DataCell(
-                                          IconButton(
-                                            icon: Icon(Icons.delete),
-                                            color: ColorManager.error,
-                                            onPressed: () {
-                                              ScaffoldMessenger.of(context)
-                                                  .hideCurrentSnackBar();
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                      content: Text(
-                                                        'Remove selected time report?',
-                                                      ),
-                                                      duration:
-                                                          Duration(seconds: 5),
-                                                      action: SnackBarAction(
-                                                        label: 'CONFIRM',
-                                                        textColor:
-                                                            ColorManager.blue,
-                                                        onPressed: () {
-                                                          Provider.of<TimeBlocks>(
-                                                                  context,
-                                                                  listen: false)
-                                                              .deleteTimeBlock(
-                                                                  data.id);
-                                                        },
-                                                      )));
-                                            },
-                                          ),
-                                        )
-                                      ]))
-                                  .toList(),
-                            ),
-                          ),
-                        ));
-                  })
+                                columns: [
+                                  buildDataColumn(
+                                      text: 'Title',
+                                      context: context,
+                                      isNumeric: false),
+                                  buildDataColumn(
+                                      text: 'Date',
+                                      context: context,
+                                      isNumeric: false),
+                                  buildDataColumn(
+                                      text: 'Hours',
+                                      context: context,
+                                      isNumeric: true),
+                                  buildDataColumn(
+                                      text: 'Minutes',
+                                      context: context,
+                                      isNumeric: true),
+                                  buildDataColumn(
+                                      text: 'Actions',
+                                      context: context,
+                                      isNumeric: true,
+                                      tooltipText: 'edit or remove an entry'),
+                                ],
+                                rows: List.generate(
+                                    task.getResponseFromQuery().length,
+                                    (index) {
+                                  final tb = task.getResponseFromQuery();
+                                  return DataRow(
+                                    cells: <DataCell>[
+                                      DataCell(Text(tb[index].id,
+                                          style: makeYourOwnRegularStyle(
+                                              fontSize: FontSize.s12,
+                                              color: ColorManager.grey))),
+                                      DataCell(Text(
+                                          Utils.toDateTime(tb[index].startDate),
+                                          style: makeYourOwnRegularStyle(
+                                              fontSize: FontSize.s12,
+                                              color: ColorManager.grey))),
+                                      DataCell(Text(
+                                          Utils.convertStringFromInt(
+                                              tb[index].reportHours),
+                                          style: makeYourOwnRegularStyle(
+                                              fontSize: FontSize.s12,
+                                              color: ColorManager.primary))),
+                                      DataCell(Text(
+                                          Utils.convertStringFromInt(
+                                              tb[index].remainingMinutes),
+                                          style: makeYourOwnRegularStyle(
+                                              fontSize: FontSize.s12,
+                                              color: ColorManager.primary))),
+                                      DataCell(ActionButtonsWidget(
+                                          entry: tb[index])),
+                                    ],
+                                  );
+                                }))))
+                  ]),
+                )
               : Container(
                   padding: EdgeInsets.all(8.0),
                   child: Center(
@@ -178,6 +137,7 @@ class _MyDataTableState extends State<MyDataTable> {
 DataColumn buildDataColumn(
         {required String text,
         String? tooltipText,
+        required bool isNumeric,
         required BuildContext context}) =>
     DataColumn(
       label: Container(
@@ -187,6 +147,7 @@ DataColumn buildDataColumn(
               borderRadius: BorderRadius.circular(AppSize.s20),
               color: ColorManager.primaryContainer),
           child: Text(text, style: Theme.of(context).textTheme.subtitle1)),
+      numeric: isNumeric,
       tooltip: tooltipText,
     );
 
@@ -196,7 +157,7 @@ Widget buildSearchField(BuildContext context) {
       ? const TextStyle(color: Colors.black54)
       : const TextStyle(color: Colors.black);
   return Container(
-    margin: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+    margin: const EdgeInsets.fromLTRB(100, 16, 100, 16),
     child: TextField(
       controller: controller,
       decoration: InputDecoration(
@@ -208,11 +169,11 @@ Widget buildSearchField(BuildContext context) {
                   controller.clear();
                   FocusScope.of(context).requestFocus(FocusNode());
 
-                 // searchBook('');
+                  // searchBook('');
                 },
               )
             : null,
-        hintText: 'Book Title',
+        hintText: 'Search',
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
           borderSide: const BorderSide(color: Colors.black26),

@@ -1,3 +1,4 @@
+
 import '/data/providers/timeblock.dart';
 import 'day_helpers.dart';
 
@@ -35,7 +36,6 @@ Iterable<EntryTotal> _entryTotalsByDay(
 
     yield entryTotal;
   }
-
 }
 
 /// MONTH ////
@@ -78,7 +78,6 @@ Iterable<EntryTotal> _entryTotalsByMonth(
   var start = startMonth;
   var entriesByDay = _entriesInRange(start, endMonth, entries);
 
- 
   for (var i = 0; i < entriesByDay.length; i++) {
     var list = entriesByDay[i];
     var entryTotal = EntryTotal(start.add(Duration(days: i)), 0);
@@ -87,15 +86,21 @@ Iterable<EntryTotal> _entryTotalsByMonth(
       var minsInDecimal = entry.remainingMinutes! / 60;
       var totalReportedTime = entry.reportHours! + minsInDecimal;
 
-      // var totalInMinutes = entry.reportHours * 60 + entry.remainingMinutes;
       entryTotal.value += totalReportedTime;
-     
     }
     yield entryTotal;
   }
- 
-
 }
+
+double getMonthTotalReportedHours(List<TimeBlock>? entries) {
+  var sum = 0.0;
+  var list = entryTotalsByMonth(entries);
+  
+    sum += list.fold(0, (previous, current) => previous + current.value);
+  
+  return sum;
+}
+
 //DO: convert dec to time for the label
 
 /// WEEK ////
@@ -123,14 +128,20 @@ Iterable<EntryTotal> _entryTotalsByWeek(
       var minsInDecimal = entry.remainingMinutes! / 60;
       var totalReportedTime = entry.reportHours! + minsInDecimal;
 
-      // var totalInMinutes = entry.reportHours * 60 + entry.remainingMinutes;
       entryTotal.value += totalReportedTime;
     }
 
     yield entryTotal;
   }
 }
+double getWeekTotalReportedHours(List<TimeBlock>? entries) {
+  var sum = 0.0;
+  var list = entryTotalsByWeek(entries);
 
+  sum += list.fold(0, (previous, current) => previous + current.value);
+
+  return sum;
+}
 /// Groups entries by day between start and end. The result is a list of
 /// lists. The outer list represents the number of days since start, and the
 /// inner list is the group of entries on that day.

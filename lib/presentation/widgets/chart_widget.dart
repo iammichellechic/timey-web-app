@@ -7,11 +7,10 @@ import '../resources/values_manager.dart';
 
 class ChartWidget extends StatelessWidget {
   final List<charts.Series<EntryTotal, String>> seriesData;
-  final String text;
-  final TextStyle? style;
+
 
   const ChartWidget(
-      {Key? key, required this.seriesData, required this.text, this.style})
+      {Key? key, required this.seriesData})
       : super(key: key);
 
   @override
@@ -22,11 +21,7 @@ class ChartWidget extends StatelessWidget {
         child: Center(
           child: Column(
             children: <Widget>[
-              Text(
-                text,
-                style: style,
-              ),
-              SizedBox(height: AppSize.s5),
+             
               Expanded(
                   child: charts.BarChart(
                 seriesData,

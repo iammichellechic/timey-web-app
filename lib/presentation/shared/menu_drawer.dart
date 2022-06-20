@@ -97,7 +97,7 @@ class MenuDrawer extends StatelessWidget {
     final currentItem = provider.navigationItem;
     final isSelected = item == currentItem;
 
-    final color = isSelected ? ColorManager.primary : ColorManager.onPrimaryContainer;
+    final color = isSelected ? ColorManager.primary : ColorManager.grey;
     final shape = isSelected
         ? Border(left: BorderSide(color: ColorManager.primary, width: 5))
         : null;

@@ -32,12 +32,11 @@ class WeeklyChart extends StatelessWidget {
           },
           colorFn: (_, __) =>
               charts.ColorUtil.fromDartColor(ColorManager.secondary),
-          labelAccessorFn: (total, _) => '${total.value.toString()}hrs')
+          labelAccessorFn: (total, _) => total.value.toString())
     ];
 
     return ChartWidget(
         seriesData: seriesData,
-        text: 'Weekly Time Report',
-        style: Theme.of(context).textTheme.headline1);
+        );
   }
 }

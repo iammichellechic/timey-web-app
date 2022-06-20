@@ -6,6 +6,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:timey_web/presentation/resources/styles_manager.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 import 'package:timey_web/presentation/utils/snackbar_utils.dart';
+import 'package:timey_web/presentation/widgets/actionbuttons_widget.dart';
 import 'package:timey_web/presentation/widgets/calendar_widget.dart';
 import '../../../data/providers/timeblock.dart';
 
@@ -137,7 +138,7 @@ Widget appointmentBuilder(
                 buildDate('From', event.startDate),
                 buildDate('To', event.endDate),
               ]),
-              trailing: buildActionMethods(context, event),
+              trailing: ActionButtonsWidget(entry: event)
             ),
           ],
         ),
