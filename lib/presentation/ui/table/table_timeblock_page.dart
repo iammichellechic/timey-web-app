@@ -4,7 +4,6 @@ import 'package:timey_web/presentation/resources/values_manager.dart';
 import 'package:timey_web/presentation/widgets/actionbuttons_widget.dart';
 import '../../resources/font_manager.dart';
 import '../../resources/formats_manager.dart';
-
 import '../../resources/styles_manager.dart';
 import '/presentation/resources/color_manager.dart';
 import '../../../data/providers/timeblocks.dart';
@@ -20,6 +19,7 @@ class _MyDataTableState extends State<MyDataTable> {
   int? sortColumnIndex;
   bool isAscending = false;
   bool isFetched = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class _MyDataTableState extends State<MyDataTable> {
                     const SizedBox(height: AppSize.s30),
                     Container(
                         decoration: BoxDecoration(
-                            color: ColorManager.background,
+                            color: Theme.of(context).colorScheme.background,
                             borderRadius: BorderRadius.circular(10.0),
                             boxShadow: const [
                               BoxShadow(
@@ -56,11 +56,15 @@ class _MyDataTableState extends State<MyDataTable> {
                             fit: BoxFit.fitWidth,
                             clipBehavior: Clip.hardEdge,
                             child: DataTable(
+                                sortAscending: isAscending,
+                                sortColumnIndex: sortColumnIndex,
                                 //settings//
                                 decoration: BoxDecoration(
                                     border: Border(
                                         left: BorderSide(
-                                            color: ColorManager.primary,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                             width: 2))),
                                 dataRowHeight: 40,
                                 showCheckboxColumn: false,
@@ -72,11 +76,13 @@ class _MyDataTableState extends State<MyDataTable> {
                                   buildDataColumn(
                                       text: 'Title',
                                       context: context,
-                                      isNumeric: false),
+                                      isNumeric: false
+                                      ),
                                   buildDataColumn(
                                       text: 'Date',
                                       context: context,
-                                      isNumeric: false),
+                                      isNumeric: false,
+                                      ),
                                   buildDataColumn(
                                       text: 'Hours',
                                       context: context,
@@ -111,13 +117,17 @@ class _MyDataTableState extends State<MyDataTable> {
                                               tb[index].reportHours),
                                           style: makeYourOwnRegularStyle(
                                               fontSize: FontSize.s12,
-                                              color: ColorManager.primary))),
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary))),
                                       DataCell(Text(
                                           Utils.convertStringFromInt(
                                               tb[index].remainingMinutes),
                                           style: makeYourOwnRegularStyle(
                                               fontSize: FontSize.s12,
-                                              color: ColorManager.primary))),
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary))),
                                       DataCell(ActionButtonsWidget(
                                           entry: tb[index])),
                                     ],
@@ -137,6 +147,7 @@ class _MyDataTableState extends State<MyDataTable> {
 DataColumn buildDataColumn(
         {required String text,
         String? tooltipText,
+        void Function(int, bool)? onSort,
         required bool isNumeric,
         required BuildContext context}) =>
     DataColumn(
@@ -145,11 +156,14 @@ DataColumn buildDataColumn(
               AppPadding.p12, AppPadding.p6, AppPadding.p12, AppPadding.p6),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppSize.s20),
-              color: ColorManager.primaryContainer),
+              color: Theme.of(context).colorScheme.primaryContainer),
           child: Text(text, style: Theme.of(context).textTheme.subtitle1)),
       numeric: isNumeric,
       tooltip: tooltipText,
+      onSort: onSort,
+      
     );
+
 
 Widget buildSearchField(BuildContext context) {
   final controller = TextEditingController();

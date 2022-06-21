@@ -19,7 +19,7 @@ class ActionButtonsWidget extends StatelessWidget {
         child: PopupMenuButton(
           padding: EdgeInsets.all(0),
           iconSize: AppSize.s12,
-          color: ColorManager.lightBlue,
+          color: Theme.of(context).colorScheme.background,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0))),
           itemBuilder: (context) => [
@@ -37,7 +37,7 @@ class ActionButtonsWidget extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     shape: CircleBorder(),
                     padding: EdgeInsets.all(AppPadding.p6),
-                    primary: Colors.blue, // <-- Button color
+                    primary: Theme.of(context).colorScheme.primary, // <-- Button color
                   ),
                 ),
                 Text(
@@ -57,7 +57,7 @@ class ActionButtonsWidget extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       shape: CircleBorder(),
                       padding: EdgeInsets.all(AppPadding.p6),
-                      primary: Colors.red, // <-- Button color
+                      primary: Theme.of(context).colorScheme.error, // <-- Button color
                     ),
                   ),
                   Text(
@@ -108,13 +108,13 @@ void selectedItem(BuildContext context, item, TimeBlock? entry) {
                 final provider =
                     Provider.of<TimeBlocks>(context, listen: false);
                 provider.deleteTimeBlock(entry!.id);
-                //punshNamed vs popUntil??
-                Navigator.of(context).pop(); //it should pop before redirecting
+              
+                Navigator.of(context).pop();
 
                 SnackBarUtils.showSnackBar(
                   context: context,
                   text: 'Entry removed',
-                  color: ColorManager.errorContainer,
+                  color: Theme.of(context).colorScheme.errorContainer,
                   icons: Icons.delete,
                 );
               },

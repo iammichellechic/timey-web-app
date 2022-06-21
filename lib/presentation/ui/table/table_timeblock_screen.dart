@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:timey_web/presentation/ui/table/table_timeblock_page.dart';
-import '../../resources/color_manager.dart';
+
 import '../../shared/menu_drawer.dart';
 import '../../widgets/animatedicon_widget.dart';
 import '../form/timeblock_adding_page.dart';
@@ -23,8 +23,7 @@ class TableScreen extends StatelessWidget {
                   child: Scaffold(
                       appBar: AppBar(
                         backgroundColor: Colors.transparent,
-                        iconTheme: IconThemeData(
-                            color: ColorManager.onPrimaryContainer),
+                        iconTheme: Theme.of(context).iconTheme,
                         elevation: 0,
                         automaticallyImplyLeading: sizingInformation.isMobile,
                         actions: const [

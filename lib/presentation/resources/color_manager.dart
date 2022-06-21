@@ -29,6 +29,21 @@ class ColorManager {
   static Color onErrorContainer = Color(0xFF410002);
   static Color background = Color(0xFFFEFBFF);
   static Color onBackground = Color(0xFF1B1B1F);
+
+  //dark theme
+  static Color darkPrimary = Color(0xFFACC7FF);
+  static Color darkOnPrimary = Color(0xFF002F67);
+  static Color darkPrimaryContainer = Color(0xFF004491); //drawer
+  static Color darkOnPrimaryContainer = Color(0xFFD7E2FF); //icons and text
+  static Color darkSecondary = Color(0xFFBEC6DC);
+  static Color darkOnSecondary = Color(0xFF283041);
+  static Color darkOnSecondaryContainer = Color(0xFFDAE2F9);
+  static Color darkError = Color(0xFFFFB4AB);
+  static Color darkErrorContainer = Color(0xFF93000A);
+  static Color darkOnError = Color(0xFF690005);
+  static Color darkOnErrorContainer = Color(0xFFFFDAD6);
+  static Color darkBackground = Color(0xFF1B1B1F);
+  static Color darkOnBackground = Color(0xFFE3E2E6);
 }
 
 extension HexColor on Color {

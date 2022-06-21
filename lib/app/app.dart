@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timey_web/data/providers/navigation_items.dart';
+import 'package:timey_web/data/providers/theme_provider.dart';
 import 'package:timey_web/presentation/pages/base_layout.dart';
+import 'package:timey_web/presentation/resources/theme_dark_manager.dart';
 
 import '../locator.dart';
-import '../services/navigation-service.dart';
+import '../services/navigation_service.dart';
 import '../presentation/resources/routes_manager.dart';
-import '/presentation/resources/theme_manager.dart';
+import '../presentation/resources/theme_light_manager.dart';
 
 import '../data/providers/tags.dart';
 import '../data/providers/timeblocks.dart';
@@ -28,27 +30,32 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider.value(
             value: NavigationProvider(),
           ),
-        ],
-        child: MaterialApp(
-          //home: BaseLayout(),
-          builder: (context, child) => Overlay(
-            initialEntries: [
-              OverlayEntry(
-                builder: (context) => BaseLayout(child: child!),
-              ),
-            ],
+          ChangeNotifierProvider.value(
+            value: ThemeProvider(),
           ),
-
-          title: 'Timey',
-          theme: getAppTheme(),
-          // darkTheme: ThemeData(
-          //     colorSchemeSeed: Color(0xFFACC7FF),
-          //     brightness: Brightness.dark, // dark theme
-          //     useMaterial3: true),
-          debugShowCheckedModeBanner: false,
-          navigatorKey: locator<NavigationService>().navigatorKey,
-          onGenerateRoute: RouteGenerator.getRoute,
-          initialRoute: Routes.overviewRoute,
+        ],
+        child: Builder(
+          builder: (context) {
+            final themeProvider = Provider.of<ThemeProvider>(context);
+            return MaterialApp(
+              //home: BaseLayout(),
+              builder: (context, child) => Overlay(
+                initialEntries: [
+                  OverlayEntry(
+                    builder: (context) => BaseLayout(child: child!),
+                  ),
+                ],
+              ),
+              title: 'Timey',
+              theme: getlightAppTheme(),
+              themeMode: themeProvider.themeMode,
+              darkTheme: getdarkAppTheme(),
+              debugShowCheckedModeBanner: false,
+              navigatorKey: locator<NavigationService>().navigatorKey,
+              onGenerateRoute: RouteGenerator.getRoute,
+              initialRoute: Routes.overviewRoute,
+            );
+          }
         ));
   }
 }

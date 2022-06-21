@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:timey_web/presentation/ui/chart/charts_monthly_page.dart';
-import 'package:timey_web/presentation/ui/chart/charts_weekly_page.dart';
-import 'package:timey_web/presentation/resources/color_manager.dart';
 
 import '../../shared/menu_drawer.dart';
 import '../../widgets/animatedicon_widget.dart';
-import '../../widgets/tabbar_widget.dart';
 import '../form/timeblock_adding_page.dart';
 
-class OverView extends StatelessWidget {
-  const OverView({Key? key}) : super(key: key);
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveBuilder(
+   return ResponsiveBuilder(
         builder: (context, sizingInformation) => Row(children: <Widget>[
               if (sizingInformation.isDesktop)
                 const MenuDrawer(
@@ -38,31 +34,15 @@ class OverView extends StatelessWidget {
                               permanentlyDisplay: false,
                             )
                           : null,
-                      body: buildChartsWidget(context)))
+                      body: buildSettingsWidget(context)))
             ]));
   }
-
-  Widget buildChartsWidget(BuildContext context) => TabBarWidget(
-        // title: 'Time Reports',
-        tabs: [
-          Tab(
-              icon: Icon(
-                Icons.calendar_month,
-                color:  Theme.of(context).colorScheme.onPrimaryContainer,
-              ),
-              child:
-                  Text('Month', style: Theme.of(context).textTheme.subtitle1)),
-          Tab(
-              icon: Icon(
-                Icons.calendar_view_week,
-                color: ColorManager.onPrimaryContainer,
-              ),
-              child:
-                  Text('Week', style: Theme.of(context).textTheme.subtitle1)),
-        ],
-        children: const [
-          MonthlyChart(),
-          WeeklyChart(),
-        ],
-      );
 }
+
+
+
+  @override
+  Widget buildSettingsWidget(BuildContext context) {
+    return SizedBox(child: Center(child: Text('This is the settings section')));
+  }
+

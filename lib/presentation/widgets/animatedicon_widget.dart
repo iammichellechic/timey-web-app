@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:timey_web/presentation/resources/color_manager.dart';
+
 
 class AnimatedIconWidget extends StatefulWidget {
   const AnimatedIconWidget({Key? key}) : super(key: key);
@@ -30,8 +30,8 @@ class _AnimatedIconWidgetState extends State<AnimatedIconWidget>
 
   @override
   Widget build(BuildContext context) => IconButton(
-        splashColor: ColorManager.primaryContainer,
-        highlightColor: ColorManager.primaryContainer,
+        splashColor: Theme.of(context).colorScheme.primaryContainer,
+        highlightColor: Theme.of(context).colorScheme.primaryContainer,
         icon: AnimatedIcon(icon: AnimatedIcons.add_event, progress: controller),
         onPressed: toggleIcon,
       );

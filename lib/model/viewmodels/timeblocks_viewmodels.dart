@@ -27,4 +27,5 @@ class TimeBlocksViewModel with ChangeNotifier {
     //notifyListeners();
     return _appointmentData;
   }
+
 }

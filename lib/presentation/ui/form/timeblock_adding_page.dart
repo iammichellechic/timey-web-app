@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:timey_web/presentation/utils/constant_duration_values.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
-import '/presentation/resources/color_manager.dart';
 import '/presentation/resources/values_manager.dart';
 import '../../../model/tag.dart';
 import '../../../data/providers/tags.dart';
@@ -112,7 +111,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
                                 ButtonWidget(
-                                    color: ColorManager.primary,
+                                    color: Theme.of(context).colorScheme.primary,
                                     text: 'Report',
                                     style: Theme.of(context).textTheme.headline6,
                                     onClicked: _saveForm)

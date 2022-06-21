@@ -3,11 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:timey_web/presentation/resources/font_manager.dart';
 import 'package:timey_web/presentation/resources/styles_manager.dart';
+import 'package:timey_web/presentation/widgets/switch_theme_button_widget.dart';
 
 import '../../data/providers/navigation_items.dart';
 import '../../locator.dart';
 import '../../model/nav_items.dart';
-import '../../services/navigation-service.dart';
+import '../../services/navigation_service.dart';
 import '../resources/routes_manager.dart';
 import '/presentation/resources/color_manager.dart';
 
@@ -22,28 +23,32 @@ class MenuDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
-      builder: (context, sizingInformation) => Container(
-      color: ColorManager.background,
-      width: sizingInformation.isDesktop? MediaQuery.of(context).size.width * 0.18:  MediaQuery.of(context).size.width *0.6,
-      child: Drawer(
-        child: Column(
-          children: [
-            buildHeader(context),
-            buildNavItems(context),
-            Spacer(),
-            Divider(
-              color: ColorManager.grey,
-            ),
-            buildUserProfile(context),
-            const SizedBox(height: 12),
-            if (permanentlyDisplay)
-              VerticalDivider(
-                width: 1,
+        builder: (context, sizingInformation) => Container(
+              color: ColorManager.background,
+              width: sizingInformation.isDesktop
+                  ? MediaQuery.of(context).size.width * 0.18
+                  : MediaQuery.of(context).size.width * 0.6,
+              child: Drawer(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildHeader(context),
+                    buildNavItems(context),
+                    Spacer(),
+                    Divider(
+                      color: ColorManager.grey,
+                    ),
+                    buildUserProfile(context),
+                    SwitchThemeButtonWidget(),
+                    const SizedBox(height: 12),
+                    if (permanentlyDisplay)
+                      VerticalDivider(
+                        width: 1,
+                      ),
+                  ],
+                ),
               ),
-          ],
-        ),
-      ),
-    ));
+            ));
   }
 
   Widget buildNavItems(BuildContext context) {
@@ -97,9 +102,12 @@ class MenuDrawer extends StatelessWidget {
     final currentItem = provider.navigationItem;
     final isSelected = item == currentItem;
 
-    final color = isSelected ? ColorManager.primary : ColorManager.grey;
+    final color =
+        isSelected ? Theme.of(context).colorScheme.primary : ColorManager.grey;
     final shape = isSelected
-        ? Border(left: BorderSide(color: ColorManager.primary, width: 5))
+        ? Border(
+            left: BorderSide(
+                color: Theme.of(context).colorScheme.primary, width: 5))
         : null;
 
     return Material(
@@ -130,11 +138,11 @@ class MenuDrawer extends StatelessWidget {
       case NavigationItem.table:
         return locator<NavigationService>().navigateTo(Routes.tableRoute);
       case NavigationItem.settings:
-        return locator<NavigationService>().navigateTo(Routes.overviewRoute);
+        return locator<NavigationService>().navigateTo(Routes.settingsRoute);
       case NavigationItem.login:
         return locator<NavigationService>().navigateTo(Routes.loginRoute);
       case NavigationItem.payments:
-        return locator<NavigationService>().navigateTo(Routes.overviewRoute);
+        return locator<NavigationService>().navigateTo(Routes.paymentRoute);
     }
   }
 
@@ -164,7 +172,6 @@ class MenuDrawer extends StatelessWidget {
                 Flexible(
                   child: CircleAvatar(
                     radius: 30,
-                    // backgroundImage: NetworkImage(),
                   ),
                 ),
                 SizedBox(width: AppSize.s12),

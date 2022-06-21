@@ -6,7 +6,7 @@ import './styles_manager.dart';
 import 'package:flutter/material.dart';
 
 //light theme
-ThemeData getAppTheme() {
+ThemeData getlightAppTheme() {
   return ThemeData(
       //main color of the app
       colorScheme: ColorScheme.fromSeed(
@@ -60,7 +60,7 @@ ThemeData getAppTheme() {
             getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s16),
         caption: getRegularStyle(color: ColorManager.primary),
         bodyText1:
-            getBoldStyle(color: ColorManager.black, fontSize: FontSize.s14),
+            getBoldStyle(color: ColorManager.onPrimaryContainer, fontSize: FontSize.s14),
         bodyText2:
             getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s12),
       ),

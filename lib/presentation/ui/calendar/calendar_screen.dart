@@ -1,24 +1,22 @@
-import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:timey_web/presentation/resources/styles_manager.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
-import 'package:timey_web/presentation/utils/snackbar_utils.dart';
+
 import 'package:timey_web/presentation/widgets/actionbuttons_widget.dart';
 import 'package:timey_web/presentation/widgets/animatedicon_widget.dart';
 import 'package:timey_web/presentation/widgets/calendar_widget.dart';
-import '../../../data/providers/timeblock.dart';
 
 import '../../resources/font_manager.dart';
 
-import '../../resources/theme_manager.dart';
 import '../../resources/formats_manager.dart';
+
 import '../../shared/menu_drawer.dart';
-import '../../widgets/dialogs_widget.dart';
+
 import '../form/timeblock_adding_page.dart';
-import '/presentation/resources/color_manager.dart';
+
 import '../../../data/providers/timeblocks.dart';
 import '../../../model/timeblock_data_source.dart';
 
@@ -40,8 +38,7 @@ class CalendarScreen extends StatelessWidget {
                   child: Scaffold(
                       appBar: AppBar(
                         backgroundColor: Colors.transparent,
-                        iconTheme: IconThemeData(
-                            color: ColorManager.onPrimaryContainer),
+                        iconTheme: Theme.of(context).iconTheme,
                         elevation: 0,
                         automaticallyImplyLeading: sizingInformation.isMobile,
                         actions: const [
@@ -101,9 +98,9 @@ Widget appointmentBuilder(
       width: details.bounds.width,
       height: details.bounds.height,
       decoration: BoxDecoration(
-          color: ColorManager.primaryContainer,
+          color: Theme.of(context).colorScheme.primaryContainer,
           border:
-              Border(left: BorderSide(color: ColorManager.primary, width: 4,))),
+              Border(left: BorderSide(color: Theme.of(context).colorScheme.primary, width: 4,))),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -111,10 +108,10 @@ Widget appointmentBuilder(
               contentPadding: EdgeInsets.symmetric(horizontal: AppPadding.p4),
               title: Row(children: <Widget>[
                 Icon(Icons.av_timer_outlined,
-                    color: ColorManager.primary, size: AppSize.s14),
+                    color: Theme.of(context).colorScheme.primary, size: AppSize.s14),
                 Text(
                   event.id,
-                  style: getAppTheme().textTheme.subtitle1,
+                  style: Theme.of(context).textTheme.subtitle1,
                 )
               ]),
               subtitle: Column(children: <Widget>[
@@ -126,9 +123,10 @@ Widget appointmentBuilder(
                       event!.remainingMinutes.toString() +
                       ' ' +
                       'mins',
+                      context
                 ),
-                buildDate('From', event.startDate),
-                buildDate('To', event.endDate),
+                buildDate('From', event.startDate, context),
+                buildDate('To', event.endDate, context),
               ]),
               trailing: ActionButtonsWidget(entry: event)
             ),
@@ -139,10 +137,10 @@ Widget appointmentBuilder(
   );
 }
 
-Widget buildDate(String title, DateTime date) {
-  final styleTitle = getAppTheme().textTheme.bodyText1;
+Widget buildDate(String title, DateTime date, BuildContext context) {
+  final styleTitle = Theme.of(context).textTheme.bodyText1;
   final styleDate =
-      makeYourOwnBoldStyle(fontSize: FontSize.s12, color: ColorManager.primary);
+      makeYourOwnBoldStyle(fontSize: FontSize.s12, color: Theme.of(context).colorScheme.primary);
 
   return Container(
     padding: EdgeInsets.only(top: AppPadding.p8),
@@ -155,9 +153,9 @@ Widget buildDate(String title, DateTime date) {
   );
 }
 
-Widget buildDuration(String text) {
+Widget buildDuration(String text, BuildContext context) {
   final styleDate =
-      makeYourOwnBoldStyle(fontSize: FontSize.s12, color: ColorManager.primary);
+      makeYourOwnBoldStyle(fontSize: FontSize.s12, color: Theme.of(context).colorScheme.primary);
 
   return Container(
     padding: EdgeInsets.only(top: AppPadding.p8),
@@ -165,118 +163,4 @@ Widget buildDuration(String text) {
   );
 }
 
-Widget buildActionMethods(BuildContext context, TimeBlock? entry) {
-  return SizedBox(
-    width: 20,
-    child: PopupMenuButton(
-      padding: EdgeInsets.all(0),
-      iconSize: AppSize.s12,
-      color: ColorManager.lightBlue,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0))),
-      itemBuilder: (context) => [
-        PopupMenuItem<int>(
-          padding: EdgeInsets.all(0),
-          value: 0,
-          child: Row(children: [
-            ElevatedButton(
-              onPressed: () {},
-              child: Icon(
-                Icons.edit,
-                color: ColorManager.primaryWhite,
-                size: AppSize.s10,
-              ),
-              style: ElevatedButton.styleFrom(
-                shape: CircleBorder(),
-                padding: EdgeInsets.all(AppPadding.p6),
-                primary: Colors.blue, // <-- Button color
-              ),
-            ),
-            Text(
-              "Edit",
-              style: Theme.of(context).textTheme.headline4,
-            )
-          ]),
-        ),
-        PopupMenuItem<int>(
-            padding: EdgeInsets.all(0),
-            value: 1,
-            child: Row(children: [
-              ElevatedButton(
-                onPressed: () {},
-                child: Icon(Icons.delete,
-                    color: ColorManager.primaryWhite, size: AppSize.s10),
-                style: ElevatedButton.styleFrom(
-                  shape: CircleBorder(),
-                  padding: EdgeInsets.all(AppPadding.p6),
-                  primary: Colors.red, // <-- Button color
-                ),
-              ),
-              Text(
-                "Delete",
-                style: Theme.of(context).textTheme.headline5,
-              ),
-            ])),
-      ],
-      onSelected: (item) => selectedItem(context, item, entry),
-    ),
-  );
-}
 
-void selectedItem(BuildContext context, item, TimeBlock? entry) {
-  switch (item) {
-    case 0:
-      showAlignedDialog<EntryEditDialog>(
-          avoidOverflow: true,
-          context: context,
-          followerAnchor: Alignment.topRight,
-          targetAnchor: Alignment.bottomRight,
-          barrierColor: Colors.transparent,
-          duration: Duration(seconds: 1),
-          builder: (context) {
-            return EntryEditDialog(
-              entry: entry,
-            );
-          });
-
-      break;
-    case 1:
-      showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            'Delete entry?',
-            style: Theme.of(context).textTheme.bodyText1,
-          ),
-          actions: [
-            TextButton(
-              child:
-                  Text('Cancel', style: Theme.of(context).textTheme.headline4),
-              onPressed: () => Navigator.of(context).pop(false),
-            ),
-            TextButton(
-              child: Text(
-                'Delete',
-                style: Theme.of(context).textTheme.headline5,
-              ),
-              onPressed: () {
-                final provider =
-                    Provider.of<TimeBlocks>(context, listen: false);
-                provider.deleteTimeBlock(entry!.id);
-                //punshNamed vs popUntil??
-                Navigator.of(context).pop(); //it should pop before redirecting
-
-                SnackBarUtils.showSnackBar(
-                  context: context,
-                  text: 'Entry removed',
-                  color: ColorManager.errorContainer,
-                  icons: Icons.delete,
-                );
-              },
-            )
-          ],
-        ),
-      );
-      break;
-  }
-}
