@@ -5,6 +5,7 @@ import 'package:timey_web/presentation/ui/chart/charts_weekly_page.dart';
 import 'package:timey_web/presentation/resources/color_manager.dart';
 
 import '../../shared/menu_drawer.dart';
+import '../../widgets/animatedicon_widget.dart';
 import '../../widgets/tabbar_widget.dart';
 import '../form/timeblock_adding_page.dart';
 
@@ -13,42 +14,33 @@ class OverView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-    return  ResponsiveBuilder(
-          builder: (context, sizingInformation) =>Row(children: <Widget>[
-      if (sizingInformation.isDesktop)
-        const MenuDrawer(
-          permanentlyDisplay: true,
-        ),
-      Expanded(
-          child: Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.transparent,
-                iconTheme: IconThemeData(color: ColorManager.onPrimaryContainer),
-                elevation: 0,
-                automaticallyImplyLeading: sizingInformation.isMobile,
-                actions: [
-                  IconButton(
-                    icon:
-                        Icon(Icons.add, color: ColorManager.onPrimaryContainer),
-                    hoverColor: ColorManager.primaryContainer,
-                    onPressed: () {
-                      _scaffoldKey.currentState!.openEndDrawer();
-                    },
-                  ),
-                ],
-              ),
-              key: _scaffoldKey,
-              extendBodyBehindAppBar: true,
-              endDrawer: TimeblockPage(),
-              drawer:sizingInformation.isMobile
-                  ? const MenuDrawer(
-                      permanentlyDisplay: false,
-                    )
-                  : null,
-              body:  buildChartsWidget(context)))
-    ]));
+    return ResponsiveBuilder(
+        builder: (context, sizingInformation) => Row(children: <Widget>[
+              if (sizingInformation.isDesktop)
+                const MenuDrawer(
+                  permanentlyDisplay: true,
+                ),
+              Expanded(
+                  child: Scaffold(
+                      appBar: AppBar(
+                        backgroundColor: Colors.transparent,
+                        iconTheme: IconThemeData(
+                            color: ColorManager.onPrimaryContainer),
+                        elevation: 0,
+                        automaticallyImplyLeading: sizingInformation.isMobile,
+                        actions: const [
+                          AnimatedIconWidget(),
+                        ],
+                      ),
+                      extendBodyBehindAppBar: true,
+                      endDrawer: TimeblockPage(),
+                      drawer: sizingInformation.isMobile
+                          ? const MenuDrawer(
+                              permanentlyDisplay: false,
+                            )
+                          : null,
+                      body: buildChartsWidget(context)))
+            ]));
   }
 
   Widget buildChartsWidget(BuildContext context) => TabBarWidget(
@@ -79,7 +71,6 @@ class OverView extends StatelessWidget {
         children: const [
           MonthlyChart(),
           WeeklyChart(),
-         
         ],
       );
 }

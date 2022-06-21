@@ -7,6 +7,7 @@ import 'package:timey_web/presentation/resources/styles_manager.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 import 'package:timey_web/presentation/utils/snackbar_utils.dart';
 import 'package:timey_web/presentation/widgets/actionbuttons_widget.dart';
+import 'package:timey_web/presentation/widgets/animatedicon_widget.dart';
 import 'package:timey_web/presentation/widgets/calendar_widget.dart';
 import '../../../data/providers/timeblock.dart';
 
@@ -28,8 +29,7 @@ class CalendarScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+    
     return ResponsiveBuilder(
         builder: (context, sizingInformation) => Row(children: <Widget>[
               if (sizingInformation.isDesktop)
@@ -44,18 +44,10 @@ class CalendarScreen extends StatelessWidget {
                             color: ColorManager.onPrimaryContainer),
                         elevation: 0,
                         automaticallyImplyLeading: sizingInformation.isMobile,
-                        actions: [
-                          IconButton(
-                            icon: Icon(Icons.add,
-                                color: ColorManager.onPrimaryContainer),
-                            hoverColor: ColorManager.primaryContainer,
-                            onPressed: () {
-                              _scaffoldKey.currentState!.openEndDrawer();
-                            },
-                          ),
+                        actions: const [
+                          AnimatedIconWidget(),
                         ],
                       ),
-                      key: _scaffoldKey,
                       extendBodyBehindAppBar: true,
                       endDrawer: TimeblockPage(),
                       drawer: sizingInformation.isMobile
