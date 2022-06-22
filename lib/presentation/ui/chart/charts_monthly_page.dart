@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:provider/provider.dart';
+
+import 'package:stacked/stacked.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 import 'package:timey_web/presentation/widgets/chart_widget.dart';
 import 'package:timey_web/presentation/widgets/total_reported_time_widget.dart';
+import '../../../model/viewmodels/timeblocks_viewmodels.dart';
 import '/presentation/utils/chart_utils.dart' as utils;
-import '../../../data/providers/timeblocks.dart';
+
 import '../../resources/formats_manager.dart';
 
-class MonthlyChart extends StatelessWidget {
+class MonthlyChart extends ViewModelWidget<TimeBlocksViewModel> {
   const MonthlyChart({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final timeblocksData = Provider.of<TimeBlocks>(context);
-    final timeblocks = timeblocksData.getResponseFromQuery();
-
-    return Scaffold(
-      body: Column(
+  Widget build(BuildContext context, TimeBlocksViewModel viewModel) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+          AppPadding.p12, AppPadding.p24, AppPadding.p12, AppPadding.p12),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -25,32 +26,25 @@ class MonthlyChart extends StatelessWidget {
             child: Text('Monthly Time Report',
                 style: Theme.of(context).textTheme.headline1),
           ),
-          const SizedBox(height: AppPadding.p6),
-          Padding(
-            padding: EdgeInsets.only(left: AppPadding.p20),
-            child: TotalReportedTimeWidget(
-              label: 'Total Reported Time',
-              text: '${utils.getMonthTotalReportedHours(timeblocks)}hrs',
-            ),
+          const SizedBox(height: AppPadding.p12),
+          TotalReportedTimeWidget(
+            label: 'Total Reported Time',
+            text:
+                '${utils.getMonthTotalReportedHours(viewModel.appointmentData)}hrs',
           ),
-          buildChartWidget(context),
+          buildChartWidget(context, viewModel),
         ],
       ),
     );
   }
 
-  Widget buildChartWidget(BuildContext context) {
-    //can also use consumer here than provider.of
-    final timeblocksData = Provider.of<TimeBlocks>(context);
-    final timeblocks =
-        timeblocksData.getResponseFromQuery(); //list of timeblocks
-
+  Widget buildChartWidget(BuildContext context, TimeBlocksViewModel viewModel) {
     //DO: id:tags.name
 
     List<charts.Series<utils.EntryTotal, String>> seriesData = [
       charts.Series(
           id: 'Reported Hours',
-          data: utils.entryTotalsByMonth(timeblocks),
+          data: utils.entryTotalsByMonth(viewModel.appointmentData),
           domainFn: (entryTotal, _) {
             return Utils.toChartDate(entryTotal.day);
           },

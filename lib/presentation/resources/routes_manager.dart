@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:timey_web/presentation/ui/login/login.dart';
 import 'package:timey_web/presentation/ui/payment/payment_screen.dart';
 import 'package:timey_web/presentation/ui/signup/signup.dart';
+import '../ui/chart/chart_overview_screen.dart';
 import '../ui/form/timeblock_adding_page.dart';
 import '../ui/calendar/calendar_screen.dart';
-import '../ui/chart/chart_overview_screen.dart';
 import '../ui/settings/settings_screen.dart';
 import '../ui/table/table_timeblock_screen.dart';
 
@@ -25,7 +25,7 @@ class RouteGenerator {
     switch (routeSettings.name) {
       case Routes.overviewRoute:
         return _GeneratePageRoute(
-          widget: OverView(),
+          widget: DashBoardScreen(),
           routeName: routeSettings.name!,
         );
       case Routes.calendarRoute:

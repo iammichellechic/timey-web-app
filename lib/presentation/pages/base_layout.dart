@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:stacked/stacked.dart';
 
+import '../../model/viewmodels/timeblocks_viewmodels.dart';
 import '../shared/menu_drawer.dart';
 
 class BaseLayout extends StatelessWidget {
@@ -9,20 +11,25 @@ class BaseLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveBuilder(
-        builder: (context, sizingInformation) => Scaffold(
-            drawer: sizingInformation.isMobile
-            ? MenuDrawer(permanentlyDisplay: false)
-            : null,
-           // endDrawer: TimeblockPage(),
-            body: CenteredView(
-              child: Column(
-                children: [
-                  //NavigationBar(), //does not have a navigator so the form doesnt work
-                  Expanded(child: child),
-                ],
-              ),
-            )));
+    return ViewModelBuilder<
+        TimeBlocksViewModel>.nonReactive(
+        viewModelBuilder:()=>  TimeBlocksViewModel(),
+        onModelReady: (viewModel)=> viewModel.getTimeblocksList(),
+        builder: (context,viewModel, _) =>
+        ResponsiveBuilder(
+          builder: (context, sizingInformation) => Scaffold(
+              drawer: sizingInformation.isMobile
+              ? MenuDrawer(permanentlyDisplay: false)
+              : null,
+              body: CenteredView(
+                child: Column(
+                  children: [
+                    //NavigationBar(), //does not have a navigator so the form doesnt work
+                    Expanded(child: child),
+                  ],
+                ),
+              ))),
+    );
   }
 }
 

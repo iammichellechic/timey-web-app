@@ -1,15 +1,14 @@
-import 'package:flutter/foundation.dart';
-
 import '../../model/tag.dart';
+import '../../presentation/resources/formats_manager.dart';
 
-class TimeBlock with ChangeNotifier {
+class TimeBlock {
   final String? id;
   Tag? tag;
   DateTime startDate;
   DateTime endDate;
   final int? reportHours;
   final int? remainingMinutes;
-  
+
   // Temporary calculation - will be replaced with data from db.
   //int? get reportHours => endDate.difference(startDate).inHours;
 
@@ -25,4 +24,10 @@ class TimeBlock with ChangeNotifier {
     this.remainingMinutes,
   });
 
+  TimeBlock.fromJson(Map<String, dynamic> data)
+      : startDate = Utils.convertDateFromString(data['datetimeStart']),
+        endDate = Utils.convertDateFromString(data['datetimeEnd']),
+        id = Utils.convertStringFromInt(data['userIdCreated']),
+        reportHours = data['reportedHours'],
+        remainingMinutes = data['reportedRemainingMinutes'];
 }

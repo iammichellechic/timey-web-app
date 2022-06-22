@@ -7,7 +7,7 @@ import '../../widgets/animatedicon_widget.dart';
 import '../form/timeblock_adding_page.dart';
 
 
-class TableScreen extends StatelessWidget {
+class TableScreen extends StatelessWidget{
   const TableScreen({Key? key}) : super(key: key);
 
   @override

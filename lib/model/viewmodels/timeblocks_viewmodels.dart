@@ -1,31 +1,24 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../../data/providers/timeblock.dart';
 import '../../locator.dart';
-import '../../presentation/resources/formats_manager.dart';
 import '../../services/timeblocks_service.dart';
 
 class TimeBlocksViewModel with ChangeNotifier {
   final _api = locator<TimeBlocksApi>();
 
-  final List<TimeBlock> _appointmentData= [];
+  List<TimeBlock> _appointmentData = [];
   List<TimeBlock> get appointmentData => _appointmentData;
 
-  dynamic getTimeblocksList() {
-    var timeblockResults = _api.getList;
+  Future getTimeblocksList() async {
+    var timeblockResults = await _api.getTimeblocks();
 
-    for (var data in timeblockResults) {
-      TimeBlock tbData = TimeBlock(
-          startDate: Utils.convertDateFromString(data['datetimeStart']),
-          endDate: Utils.convertDateFromString(data['datetimeEnd']),
-          id: Utils.convertStringFromInt(data['userIdCreated']),
-          reportHours: data['reportedHours'],
-          remainingMinutes: data['reportedRemainingMinutes']);
-
-      _appointmentData.add(tbData);
+    if (timeblockResults is String) {
+      // show error
+    } else {
+      _appointmentData = timeblockResults;
     }
-    //notifyListeners();
-    return _appointmentData;
-  }
 
+    notifyListeners();
+  }
 }

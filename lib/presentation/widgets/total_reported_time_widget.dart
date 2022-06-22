@@ -9,14 +9,14 @@ class TotalReportedTimeWidget extends StatelessWidget {
   final String label;
   final String text;
 
-  const TotalReportedTimeWidget({Key? key,required this.label, required this.text}) : super(key: key);
+  const TotalReportedTimeWidget(
+      {Key? key, required this.label, required this.text})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    
     return Container(
         width: AppSize.s250,
-        height: AppSize.s60,
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.secondaryContainer,
             borderRadius: BorderRadius.circular(10.0),
@@ -28,7 +28,9 @@ class TotalReportedTimeWidget extends StatelessWidget {
               ),
             ]),
         child: ListTile(
-          contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 15),
+          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+          dense: true,
+          visualDensity: VisualDensity(horizontal: 0, vertical: -4),
           title: Text(label,
               style: makeYourOwnRegularStyle(
                   letterSpacing: 1.2,

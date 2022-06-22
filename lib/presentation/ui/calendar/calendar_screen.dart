@@ -1,32 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:stacked/stacked.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:timey_web/model/viewmodels/timeblocks_viewmodels.dart';
 import 'package:timey_web/presentation/resources/styles_manager.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 
 import 'package:timey_web/presentation/widgets/actionbuttons_widget.dart';
 import 'package:timey_web/presentation/widgets/animatedicon_widget.dart';
 import 'package:timey_web/presentation/widgets/calendar_widget.dart';
-
 import '../../resources/font_manager.dart';
-
 import '../../resources/formats_manager.dart';
-
 import '../../shared/menu_drawer.dart';
-
 import '../form/timeblock_adding_page.dart';
-
-import '../../../data/providers/timeblocks.dart';
 import '../../../model/timeblock_data_source.dart';
 
-// ignore: must_be_immutable
-class CalendarScreen extends StatelessWidget {
-  bool isFetched = false;
-  CalendarScreen({Key? key}) : super(key: key);
+
+class CalendarScreen extends ViewModelWidget<TimeBlocksViewModel> {
+  //bool isFetched = false;
+ const  CalendarScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, TimeBlocksViewModel viewModel) {
     
     return ResponsiveBuilder(
         builder: (context, sizingInformation) => Row(children: <Widget>[
@@ -52,36 +47,18 @@ class CalendarScreen extends StatelessWidget {
                               permanentlyDisplay: false,
                             )
                           : null,
-                      body:buildCalendarWidget(context)))
+                      body:buildCalendarWidget(context, viewModel)))
             ]));
   }
 
-  Widget buildCalendarWidget(BuildContext context) {
+  Widget buildCalendarWidget(BuildContext context, TimeBlocksViewModel viewModel) {
     return Container(
         padding: EdgeInsets.only(top: AppPadding.p40),
-        child: Consumer<TimeBlocks>(builder: (context, task, child) {
-      if (isFetched == false) {
-        ///Fetch the data
-        task.getTimeblocks(true);
-
-        Future.delayed(const Duration(seconds: 3), () => isFetched = true);
-      }
-      return RefreshIndicator(
-          onRefresh: () {
-            task.getTimeblocks(false);
-            return Future.delayed(const Duration(seconds: 3));
-          },
-          child: (task.getResponseFromQuery().isNotEmpty)
-              ? CalendarWidget(
+        child: CalendarWidget(
                   appointment: appointmentBuilder,
-                  dataSource: EventDataSource(task.getResponseFromQuery()),
-                )
-              : Container(
-                  padding: EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Text("No data found"),
-                  )));
-    }));
+                  dataSource: EventDataSource(viewModel.appointmentData))
+                    
+    );
   }
 }
 

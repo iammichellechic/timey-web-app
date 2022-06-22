@@ -1,41 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:stacked/stacked.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 import 'package:timey_web/presentation/widgets/actionbuttons_widget.dart';
+import '../../../model/viewmodels/timeblocks_viewmodels.dart';
 import '../../resources/font_manager.dart';
 import '../../resources/formats_manager.dart';
 import '../../resources/styles_manager.dart';
 import '/presentation/resources/color_manager.dart';
-import '../../../data/providers/timeblocks.dart';
 
-class MyDataTable extends StatefulWidget {
+class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
   const MyDataTable({Key? key}) : super(key: key);
 
-  @override
-  State<MyDataTable> createState() => _MyDataTableState();
-}
-
-class _MyDataTableState extends State<MyDataTable> {
-  int? sortColumnIndex;
-  bool isAscending = false;
-  bool isFetched = false;
-
 
   @override
-  Widget build(BuildContext context) {
-    return Consumer<TimeBlocks>(builder: (context, task, child) {
-      if (isFetched == false) {
-        ///Fetch the data
-        task.getTimeblocks(true);
-
-        Future.delayed(const Duration(seconds: 3), () => isFetched = true);
-      }
-      return RefreshIndicator(
-          onRefresh: () {
-            task.getTimeblocks(false);
-            return Future.delayed(const Duration(seconds: 3));
-          },
-          child: (task.getResponseFromQuery().isNotEmpty)
+  Widget build(BuildContext context, TimeBlocksViewModel viewModel) {
+    return
+          (viewModel.appointmentData.isNotEmpty)
               ? Container(
                   padding: EdgeInsets.only(top: AppPadding.p40),
                   child: Column(children: [
@@ -56,8 +36,6 @@ class _MyDataTableState extends State<MyDataTable> {
                             fit: BoxFit.fitWidth,
                             clipBehavior: Clip.hardEdge,
                             child: DataTable(
-                                sortAscending: isAscending,
-                                sortColumnIndex: sortColumnIndex,
                                 //settings//
                                 decoration: BoxDecoration(
                                     border: Border(
@@ -98,12 +76,12 @@ class _MyDataTableState extends State<MyDataTable> {
                                       tooltipText: 'edit or remove an entry'),
                                 ],
                                 rows: List.generate(
-                                    task.getResponseFromQuery().length,
+                                 viewModel.appointmentData.length,
                                     (index) {
-                                  final tb = task.getResponseFromQuery();
+                                  final tb = viewModel.appointmentData;
                                   return DataRow(
                                     cells: <DataCell>[
-                                      DataCell(Text(tb[index].id,
+                                      DataCell(Text(tb[index].id!,
                                           style: makeYourOwnRegularStyle(
                                               fontSize: FontSize.s12,
                                               color: ColorManager.grey))),
@@ -114,7 +92,7 @@ class _MyDataTableState extends State<MyDataTable> {
                                               color: ColorManager.grey))),
                                       DataCell(Text(
                                           Utils.convertStringFromInt(
-                                              tb[index].reportHours),
+                                              tb[index].reportHours!),
                                           style: makeYourOwnRegularStyle(
                                               fontSize: FontSize.s12,
                                               color: Theme.of(context)
@@ -122,7 +100,7 @@ class _MyDataTableState extends State<MyDataTable> {
                                                   .primary))),
                                       DataCell(Text(
                                           Utils.convertStringFromInt(
-                                              tb[index].remainingMinutes),
+                                              tb[index].remainingMinutes!),
                                           style: makeYourOwnRegularStyle(
                                               fontSize: FontSize.s12,
                                               color: Theme.of(context)
@@ -139,8 +117,8 @@ class _MyDataTableState extends State<MyDataTable> {
                   padding: EdgeInsets.all(8.0),
                   child: Center(
                     child: Text("No timeblocks found"),
-                  )));
-    });
+                  )
+    );
   }
 }
 
