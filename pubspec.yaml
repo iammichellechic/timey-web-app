@@ -32,12 +32,21 @@ dependencies:
 
   #state management
   provider: ^6.0.2
+  stacked: ^2.3.12
 
   #handle dates
   intl: ^0.17.0
 
+  #inversion of control
   get_it:
+  injectable:
+  
+  #might be good to use this in the future
+  # navigation
+  auto_route:
+  stacked_services: ^0.8.26
 
+  #responsive
   responsive_builder:
 
   #graphQl

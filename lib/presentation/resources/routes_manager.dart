@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:timey_web/presentation/screens/login/login.dart';
-import 'package:timey_web/presentation/screens/signup/signup.dart';
-import '../screens/form/timeblock_adding_page.dart';
-import '../screens/calendar/calendar_screen.dart';
-import '../screens/chart/chart_overview_screen.dart';
-import '../screens/table/table_timeblock_screen.dart';
+import 'package:timey_web/presentation/ui/login/login.dart';
+import 'package:timey_web/presentation/ui/payment/payment_screen.dart';
+import 'package:timey_web/presentation/ui/signup/signup.dart';
+import '../ui/chart/chart_overview_screen.dart';
+import '../ui/form/timeblock_adding_page.dart';
+import '../ui/calendar/calendar_screen.dart';
+import '../ui/settings/settings_screen.dart';
+import '../ui/table/table_timeblock_screen.dart';
 
 class Routes {
   //temporary names
@@ -14,6 +16,8 @@ class Routes {
   static const String formRoute = "edit-timereport";
   static const String loginRoute = "login";
   static const String signupRoute = "signup";
+  static const String paymentRoute = "payment";
+  static const String settingsRoute = "settings";
 }
 
 class RouteGenerator {
@@ -21,7 +25,7 @@ class RouteGenerator {
     switch (routeSettings.name) {
       case Routes.overviewRoute:
         return _GeneratePageRoute(
-          widget: OverView(),
+          widget: DashBoardScreen(),
           routeName: routeSettings.name!,
         );
       case Routes.calendarRoute:
@@ -47,6 +51,16 @@ class RouteGenerator {
       case Routes.signupRoute:
         return _GeneratePageRoute(
           widget: SignupScreen(),
+          routeName: routeSettings.name!,
+        );
+       case Routes.paymentRoute:
+        return _GeneratePageRoute(
+          widget: PaymentScreen(),
+          routeName: routeSettings.name!,
+        );
+         case Routes.settingsRoute:
+        return _GeneratePageRoute(
+          widget: SettingsScreen(),
           routeName: routeSettings.name!,
         );
       default:

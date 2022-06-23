@@ -7,11 +7,10 @@ import '../resources/values_manager.dart';
 
 class ChartWidget extends StatelessWidget {
   final List<charts.Series<EntryTotal, String>> seriesData;
-  final String text;
-  final TextStyle? style;
+
 
   const ChartWidget(
-      {Key? key, required this.seriesData, required this.text, this.style})
+      {Key? key, required this.seriesData})
       : super(key: key);
 
   @override
@@ -22,11 +21,7 @@ class ChartWidget extends StatelessWidget {
         child: Center(
           child: Column(
             children: <Widget>[
-              Text(
-                text,
-                style: style,
-              ),
-              SizedBox(height: AppSize.s5),
+             
               Expanded(
                   child: charts.BarChart(
                 seriesData,
@@ -53,19 +48,20 @@ class ChartWidget extends StatelessWidget {
                             fontFamily: FontConstants.fontFamily,
                             fontSize: 10,
                             color: charts.ColorUtil.fromDartColor(
-                                ColorManager.onPrimary)),
+                                Theme.of(context).colorScheme.onPrimary)),
                         outsideLabelStyleSpec: charts.TextStyleSpec(
                             fontFamily: FontConstants.fontFamily,
                             fontSize: 10,
                             color: charts.ColorUtil.fromDartColor(
-                                ColorManager.primary)))),
+                                Theme.of(context).colorScheme.primary)))),
                 primaryMeasureAxis: charts.NumericAxisSpec(
                   tickFormatterSpec: charts.BasicNumericTickFormatterSpec(
                       (num? value) => "$value \u{1F551}"),
                   renderSpec: charts.GridlineRendererSpec(
                     labelStyle: charts.TextStyleSpec(
                       fontSize: 12,
-                      color: charts.ColorUtil.fromDartColor(ColorManager.primaryContainer),
+                      color: charts.ColorUtil.fromDartColor(
+                          Theme.of(context).colorScheme.primaryContainer),
                     ),
                     labelAnchor: charts.TickLabelAnchor.after,
                   ),

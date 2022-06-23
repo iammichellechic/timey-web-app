@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:timey_web/presentation/pages/base_layout.dart';
+
 import 'package:timey_web/presentation/resources/assets_manager.dart';
 import 'package:timey_web/presentation/resources/font_manager.dart';
 import 'package:timey_web/presentation/resources/styles_manager.dart';
@@ -9,7 +9,7 @@ import 'package:timey_web/presentation/widgets/clip_path_widget.dart';
 import 'package:timey_web/presentation/widgets/textfield_container.dart';
 import 'package:timey_web/presentation/widgets/textformfield_container.dart';
 import '../../../locator.dart';
-import '../../../services/navigation-service.dart';
+import '../../../services/navigation_service.dart';
 import '../../resources/color_manager.dart';
 import '../../resources/routes_manager.dart';
 import '../../resources/values_manager.dart';

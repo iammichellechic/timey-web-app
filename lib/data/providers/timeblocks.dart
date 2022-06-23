@@ -2,80 +2,77 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:timey_web/data/providers/schemas/get_timeblocks_schema.dart';
 import '/data/providers/tags.dart';
-import '../../presentation/resources/timeFormat_manager.dart';
+import '../../presentation/resources/formats_manager.dart';
 import './timeblock.dart';
 import 'schemas/endpoint_url.dart';
 
+// this has been broken down into different services and view models
+//this will remain until the crud operation (timeblocks) /mutations  is done
+
 class TimeBlocks with ChangeNotifier {
+  final EndPoint _point = EndPoint();
   bool _status = false;
   String _response = '';
   dynamic _list = [];
-  List tBdatas = [];
+
   bool get getStatus => _status;
   String get getResponse => _response;
-  final EndPoint _point = EndPoint();
-
-  //List<dynamic>_list=[];
   List<dynamic> get getList => _list;
 
-  // final List<TimeBlock> userTimeBlocks;
 
   final List<TimeBlock> _userTimeBlocks = [
     TimeBlock(
       id: '1',
       tag: Tags().tags[0],
       startDate:
-          DateTime.now().subtract(new Duration(days: 1, hours: 8, minutes: 15)),
-      endDate: DateTime.now().subtract(new Duration(days: 1, hours: 0)),
+          DateTime.now().subtract( Duration(days: 1, hours: 8, minutes: 15)),
+      endDate: DateTime.now().subtract( Duration(days: 1, hours: 0)),
     ),
     TimeBlock(
         id: '2',
         tag: Tags().tags[1],
-        endDate: DateTime.now().subtract(new Duration(days: 3, hours: 0)),
-        startDate: DateTime.now().subtract(new Duration(days: 3, hours: 8))),
+        endDate: DateTime.now().subtract( Duration(days: 3, hours: 0)),
+        startDate: DateTime.now().subtract( Duration(days: 3, hours: 8))),
     TimeBlock(
         id: '3',
         tag: Tags().tags[0],
-        endDate: DateTime.now().subtract(new Duration(days: 2, hours: 0)),
-        startDate: DateTime.now().subtract(new Duration(days: 2, hours: 8))),
+        endDate: DateTime.now().subtract( Duration(days: 2, hours: 0)),
+        startDate: DateTime.now().subtract( Duration(days: 2, hours: 8))),
     TimeBlock(
         id: '4',
         tag: Tags().tags[0],
-        endDate: DateTime.now().subtract(new Duration(days: 6, hours: 0)),
-        startDate: DateTime.now().subtract(new Duration(days: 6, hours: 9))),
+        endDate: DateTime.now().subtract( Duration(days: 6, hours: 0)),
+        startDate: DateTime.now().subtract( Duration(days: 6, hours: 9))),
     TimeBlock(
         id: '5',
         tag: Tags().tags[0],
-        startDate: DateTime.now().add(new Duration(days: 4, hours: 0)),
-        endDate: DateTime.now().add(new Duration(days: 4, hours: 8))),
+        startDate: DateTime.now().add( Duration(days: 4, hours: 0)),
+        endDate: DateTime.now().add( Duration(days: 4, hours: 8))),
     TimeBlock(
         id: '6',
         tag: Tags().tags[1],
-        endDate: DateTime.now().subtract(new Duration(days: 7, hours: 0)),
-        startDate: DateTime.now().subtract(new Duration(days: 7, hours: 6))),
+        endDate: DateTime.now().subtract( Duration(days: 7, hours: 0)),
+        startDate: DateTime.now().subtract(Duration(days: 7, hours: 6))),
     TimeBlock(
         id: '7',
         tag: Tags().tags[0],
-        endDate: DateTime.now().subtract(new Duration(days: 5, hours: 0)),
-        startDate: DateTime.now().subtract(new Duration(days: 5, hours: 3))),
+        endDate: DateTime.now().subtract( Duration(days: 5, hours: 0)),
+        startDate: DateTime.now().subtract(Duration(days: 5, hours: 3))),
     TimeBlock(
       id: '8',
       tag: Tags().tags[1],
-      startDate: DateTime.now().add(new Duration(days: 1, hours: 0)),
-      endDate: DateTime.now().add(new Duration(days: 1, hours: 10)),
+      startDate: DateTime.now().add( Duration(days: 1, hours: 0)),
+      endDate: DateTime.now().add(Duration(days: 1, hours: 10)),
     ),
     TimeBlock(
       id: '9',
       tag: Tags().tags[0],
-      startDate: DateTime.now().add(new Duration(days: 2, hours: 0)),
-      endDate: DateTime.now().add(new Duration(days: 2, hours: 5)),
+      startDate: DateTime.now().add(Duration(days: 2, hours: 0)),
+      endDate: DateTime.now().add( Duration(days: 2, hours: 5)),
     ),
   ];
 
-  // TimeBlocks.allTimeBlocks(Map<String, dynamic> data)
-  //     : userTimeBlocks =
-  //           data['timeblocks'].list.map((e) => TimeBlock.fromJson(e)).toList();
-
+ 
   List<TimeBlock> get userTimeBlock {
     return [..._userTimeBlocks];
   }
@@ -125,27 +122,25 @@ class TimeBlocks with ChangeNotifier {
         fetchPolicy: isLocal == true ? null : FetchPolicy.cacheAndNetwork));
 
     if (result.hasException) {
-      print(result.exception);
+    
       _status = false;
       if (result.exception!.graphqlErrors.isEmpty) {
         _response = "No connectivity found";
       } else {
         _response = result.exception!.graphqlErrors[0].message.toString();
       }
-      notifyListeners();
+ 
     } else {
-      print(result.data);
+     
       _status = false;
       _list = result.data;
-      notifyListeners();
+ 
     }
   }
 
   dynamic getResponseData() {
     if (_list.isNotEmpty) {
       final data = _list;
-
-      print(data['timeblocks']);
 
       return data['timeblocks'] ?? {};
     } else {
@@ -155,7 +150,7 @@ class TimeBlocks with ChangeNotifier {
 
   void clear() {
     _response = '';
-    notifyListeners();
+  
   }
 
   // Future<List<TimeBlock>> getData() async {
@@ -191,8 +186,9 @@ class TimeBlocks with ChangeNotifier {
           remainingMinutes: data['reportedRemainingMinutes']);
 
       appointmentData.add(tbData);
-      notifyListeners();
+     
     }
+  
     return appointmentData;
   }
 
