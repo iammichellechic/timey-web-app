@@ -16,7 +16,8 @@ import '../form/timeblock_adding_page.dart';
 import '../../../model/timeblock_data_source.dart';
 
 
-class CalendarScreen extends ViewModelWidget<TimeBlocksViewModel> {
+class CalendarScreen extends 
+ViewModelWidget<TimeBlocksViewModel> {
   //bool isFetched = false;
  const  CalendarScreen({Key? key}) : super(key: key);
 
@@ -78,7 +79,7 @@ Widget appointmentBuilder(
           color: Theme.of(context).colorScheme.primaryContainer,
           border:
               Border(left: BorderSide(color: Theme.of(context).colorScheme.primary, width: 4,))),
-      child: SingleChildScrollView(
+      child: Expanded(
         child: Column(
           children: [
             ListTile(
@@ -86,24 +87,24 @@ Widget appointmentBuilder(
               title: Row(children: <Widget>[
                 Icon(Icons.av_timer_outlined,
                     color: Theme.of(context).colorScheme.primary, size: AppSize.s14),
-                Text(
-                  event.id,
-                  style: Theme.of(context).textTheme.subtitle1,
-                )
+                // Text(
+                //   event.id,
+                //   style: Theme.of(context).textTheme.subtitle1,
+                // )
               ]),
               subtitle: Column(children: <Widget>[
                 buildDuration(
-                  event!.reportHours.toString() +
+                  event!.reportedMinutes.toString() +
                       ' ' +
-                      'hrs' +
-                      ' ' +
-                      event!.remainingMinutes.toString() +
-                      ' ' +
+                      // 'hrs' +
+                      // ' ' +
+                      // event!.remainingMinutes.toString() +
+                      // ' ' +
                       'mins',
                       context
                 ),
                 buildDate('From', event.startDate, context),
-                buildDate('To', event.endDate, context),
+               // buildDate('To', event.endDate, context),
               ]),
               trailing: ActionButtonsWidget(entry: event)
             ),

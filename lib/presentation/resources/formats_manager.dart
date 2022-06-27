@@ -45,7 +45,11 @@ class Utils {
     return DateTime.parse(date);
   }
 
-   static String convertStringFromInt(int data) {
-    return (data).toString();
+  static String convertStringFromInt(int data) {
+    return data.toString();
+  }
+
+  static num roundADecimalValue(double data, int count) {
+    return num.parse(data.toStringAsFixed(count));
   }
 }

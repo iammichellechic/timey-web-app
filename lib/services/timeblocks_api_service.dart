@@ -1,23 +1,25 @@
-
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:timey_web/data/providers/timeblock.dart';
 
 import '../data/providers/schemas/endpoint_url.dart';
-import '../data/providers/schemas/get_timeblocks_schema.dart';
+import '../data/providers/schemas/timeblocks_schema.dart';
 
 class TimeBlocksApi {
   String _response = '';
 
   String get getResponse => _response;
 
+  List<TimeBlock> timeblocksList = [];
+  
   final EndPoint _point = EndPoint();
 
-  Future<dynamic> getTimeblocks() async {
+
+  Future<dynamic> getTimeblocks(ReportedTime reportedTime) async {
     ValueNotifier<GraphQLClient> _client = _point.getClient();
 
     QueryResult result = await _client.value.query(QueryOptions(
-        document: gql(GetTimeBlocks.query),
+        document: gql(TimeBlocksSchema.getTimeblocks),
         fetchPolicy: FetchPolicy.cacheAndNetwork));
 
     if (result.hasException) {
@@ -27,15 +29,24 @@ class TimeBlocksApi {
         _response = result.exception!.graphqlErrors[0].message.toString();
       }
     } else {
-
-      var episodes = (result.data!['timeblocks'] as List<dynamic>)
-          .map((episode) => TimeBlock.fromJson(episode))
+      timeblocksList = (result.data!['timeblocks'] as List<dynamic>)
+          .map((tb) => TimeBlock.fromJson(tb, reportedTime))
           .toList();
-      return episodes;
+
+      return timeblocksList;
     }
   }
+
+  
+  // Future<dynamic> addTimeblocks(int userId) async{
+  //   ValueNotifier<GraphQLClient> _client = _point.getClient();
+
+  // }
+
 
   void clear() {
     _response = '';
   }
+  
+  
 }

@@ -48,9 +48,9 @@ class _TimeblockPageState extends State<TimeblockPage> {
       final timeBlock = widget.timeBlock!;
 
       startDate = timeBlock.startDate;
-      endDate = timeBlock.endDate;
-      reportedHours = timeBlock.reportHours!;
-      remainingMinutes = timeBlock.remainingMinutes!;
+      endDate = timeBlock.endDate!;
+      reportedHours = timeBlock.reportedTime!.reportHours!;
+      remainingMinutes = timeBlock.reportedTime!.remainingMinutes!;
       selectedTag = timeBlock.tag; //doesnt auto populate during edit
 
     }
@@ -86,45 +86,43 @@ class _TimeblockPageState extends State<TimeblockPage> {
         EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
 
     return ResponsiveBuilder(
-      builder: (context, sizingInformation) => 
-        Container(
-            padding: safeArea,
-            width: sizingInformation.isDesktop
-                ? MediaQuery.of(context).size.width * 0.23
-                : MediaQuery.of(context).size.width,
-            child: Drawer(
-              child:  Padding(
-                  padding: const EdgeInsets.all(AppPadding.p30),
-                    child: Form(
-                      key: _form,
-                      child: Column(
-                        children: <Widget>[
-                          buildTagField(),
-                          SizedBox(
-                            height: AppSize.s12,
-                          ),
-                          buildDateTimePickers(),
-                          SizedBox(
-                            height: AppSize.s20,
-                          ),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                ButtonWidget(
-                                    color: Theme.of(context).colorScheme.primary,
-                                    text: 'Report',
-                                    style: Theme.of(context).textTheme.headline6,
-                                    onClicked: _saveForm)
-                              ]),
-                          Spacer(),
-                          buildCloseButton(context),
-                        ],
-                      ),
-                    ),
+      builder: (context, sizingInformation) => Container(
+        padding: safeArea,
+        width: sizingInformation.isDesktop
+            ? MediaQuery.of(context).size.width * 0.23
+            : MediaQuery.of(context).size.width,
+        child: Drawer(
+          child: Padding(
+            padding: const EdgeInsets.all(AppPadding.p30),
+            child: Form(
+              key: _form,
+              child: Column(
+                children: <Widget>[
+                  buildTagField(),
+                  SizedBox(
+                    height: AppSize.s12,
                   ),
+                  buildDateTimePickers(),
+                  SizedBox(
+                    height: AppSize.s20,
+                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        ButtonWidget(
+                            color: Theme.of(context).colorScheme.primary,
+                            text: 'Report',
+                            style: Theme.of(context).textTheme.headline6,
+                            onClicked: _saveForm)
+                      ]),
+                  Spacer(),
+                  buildCloseButton(context),
+                ],
               ),
-              ),
-            
+            ),
+          ),
+        ),
+      ),
     );
   }
 

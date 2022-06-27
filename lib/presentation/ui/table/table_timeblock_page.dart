@@ -61,10 +61,10 @@ class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
                                       context: context,
                                       isNumeric: false,
                                       ),
-                                  buildDataColumn(
-                                      text: 'Hours',
-                                      context: context,
-                                      isNumeric: true),
+                                  // buildDataColumn(
+                                  //     text: 'Hours',
+                                  //     context: context,
+                                  //     isNumeric: true),
                                   buildDataColumn(
                                       text: 'Minutes',
                                       context: context,
@@ -92,20 +92,20 @@ class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
                                               color: ColorManager.grey))),
                                       DataCell(Text(
                                           Utils.convertStringFromInt(
-                                              tb[index].reportHours!),
+                                              tb[index].reportedMinutes!),
                                           style: makeYourOwnRegularStyle(
                                               fontSize: FontSize.s12,
                                               color: Theme.of(context)
                                                   .colorScheme
                                                   .primary))),
-                                      DataCell(Text(
-                                          Utils.convertStringFromInt(
-                                              tb[index].remainingMinutes!),
-                                          style: makeYourOwnRegularStyle(
-                                              fontSize: FontSize.s12,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary))),
+                                      // DataCell(Text(
+                                      //     Utils.convertStringFromInt(
+                                      //         tb[index].remainingMinutes!),
+                                      //     style: makeYourOwnRegularStyle(
+                                      //         fontSize: FontSize.s12,
+                                      //         color: Theme.of(context)
+                                      //             .colorScheme
+                                      //             .primary))),
                                       DataCell(ActionButtonsWidget(
                                           entry: tb[index])),
                                     ],

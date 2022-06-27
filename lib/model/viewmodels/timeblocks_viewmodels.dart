@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../data/providers/timeblock.dart';
 import '../../locator.dart';
-import '../../services/timeblocks_service.dart';
+import '../../services/timeblocks_api_service.dart';
 
 class TimeBlocksViewModel with ChangeNotifier {
   final _api = locator<TimeBlocksApi>();
@@ -11,7 +11,7 @@ class TimeBlocksViewModel with ChangeNotifier {
   List<TimeBlock> get appointmentData => _appointmentData;
 
   Future getTimeblocksList() async {
-    var timeblockResults = await _api.getTimeblocks();
+    var timeblockResults = await _api.getTimeblocks(ReportedTime());
 
     if (timeblockResults is String) {
       // show error

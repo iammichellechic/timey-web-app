@@ -1,3 +1,4 @@
+import '/data/providers/user.dart';
 import '../../model/tag.dart';
 import '../../presentation/resources/formats_manager.dart';
 
@@ -5,29 +6,55 @@ class TimeBlock {
   final String? id;
   Tag? tag;
   DateTime startDate;
-  DateTime endDate;
-  final int? reportHours;
-  final int? remainingMinutes;
+  DateTime? endDate;
+  int? reportHours;
+  int? remainingMinutes;
+  int? reportedMinutes;
+  ReportedTime? reportedTime;
+  User? userId;
 
-  // Temporary calculation - will be replaced with data from db.
-  //int? get reportHours => endDate.difference(startDate).inHours;
+  int? totalReportedTime() {
+    reportedTime!.reportHours! * 60 + reportedTime!.remainingMinutes!;
+    return reportedMinutes;
+  }
 
-  // Temporary calculation - will be replaced with data from db.
-//int get remainingMinutes => endDate.difference(startDate).inMinutes - (reportHours * 60);
+  static ReportedTime convertToHrsAndMins(TimeBlock tb) {
+    var hours = (tb.reportedMinutes! / 60);
+    var reportHours = hours.floor();
+    var remainingMinutes = (hours - reportHours) * 60;
 
-  TimeBlock({
-    this.id, // lets ignore id for now
-    this.tag,
-    required this.startDate,
-    required this.endDate,
-    this.reportHours,
-    this.remainingMinutes,
-  });
+    return ReportedTime(
+        reportHours: reportHours, remainingMinutes: remainingMinutes as int);
+  }
 
-  TimeBlock.fromJson(Map<String, dynamic> data)
+  TimeBlock(
+      {this.id,
+      this.tag,
+      required this.startDate,
+      this.endDate,
+      this.reportedMinutes,
+      this.reportedTime,
+      this.reportHours,
+      this.remainingMinutes});
+
+  TimeBlock.fromJson(Map<String, dynamic> data, ReportedTime reportedTime)
       : startDate = Utils.convertDateFromString(data['datetimeStart']),
         endDate = Utils.convertDateFromString(data['datetimeEnd']),
         id = Utils.convertStringFromInt(data['userIdCreated']),
-        reportHours = data['reportedHours'],
-        remainingMinutes = data['reportedRemainingMinutes'];
+        reportedMinutes = data['reportedMinutes'],
+        reportHours = reportedTime.reportHours,
+        remainingMinutes = reportedTime.remainingMinutes;
+
+  TimeBlock.toMap(Map<String, dynamic> data)
+      : id = data['timeBlockGuid'],
+        startDate = data['datetimeStart'],
+        reportedMinutes = data['reportedMinutes'],
+        userId = data['userIdCreated'];
+}
+
+class ReportedTime {
+  int? reportHours;
+  int? remainingMinutes;
+
+  ReportedTime({this.reportHours, this.remainingMinutes});
 }
