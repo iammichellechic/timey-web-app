@@ -57,7 +57,7 @@ ViewModelWidget<TimeBlocksViewModel> {
         padding: EdgeInsets.only(top: AppPadding.p40),
         child: CalendarWidget(
                   appointment: appointmentBuilder,
-                  dataSource: EventDataSource(viewModel.appointmentData))
+                  dataSource: EventDataSource(viewModel.tbData))
                     
     );
   }
@@ -69,7 +69,7 @@ Widget appointmentBuilder(
 ) {
   final event = details.appointments.first;
 
-  return FittedBox(
+  return  FittedBox(
     fit: BoxFit.scaleDown,
     child: Container(
       padding: EdgeInsets.all(AppPadding.p8),
@@ -77,43 +77,46 @@ Widget appointmentBuilder(
       height: details.bounds.height,
       decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primaryContainer,
-          border:
-              Border(left: BorderSide(color: Theme.of(context).colorScheme.primary, width: 4,))),
-      child: Expanded(
+          border: Border(
+              left: BorderSide(
+            color: Theme.of(context).colorScheme.primary,
+            width: 4,
+          ))),
+      child: SingleChildScrollView(
         child: Column(
           children: [
             ListTile(
-              contentPadding: EdgeInsets.symmetric(horizontal: AppPadding.p4),
-              title: Row(children: <Widget>[
-                Icon(Icons.av_timer_outlined,
-                    color: Theme.of(context).colorScheme.primary, size: AppSize.s14),
-                // Text(
-                //   event.id,
-                //   style: Theme.of(context).textTheme.subtitle1,
-                // )
-              ]),
-              subtitle: Column(children: <Widget>[
-                buildDuration(
-                  event!.reportedMinutes.toString() +
-                      ' ' +
-                      // 'hrs' +
-                      // ' ' +
-                      // event!.remainingMinutes.toString() +
-                      // ' ' +
-                      'mins',
-                      context
-                ),
-                buildDate('From', event.startDate, context),
-               // buildDate('To', event.endDate, context),
-              ]),
-              trailing: ActionButtonsWidget(entry: event)
-            ),
+                contentPadding: EdgeInsets.symmetric(horizontal: AppPadding.p4),
+                title: Row(children: <Widget>[
+                  Icon(Icons.av_timer_outlined,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: AppSize.s14),
+                  // Text(
+                  //   event.id,
+                  //   style: Theme.of(context).textTheme.subtitle1,
+                  // )
+                ]),
+                subtitle: Column(children: <Widget>[
+                  buildDuration(
+                      event!.reportedMinutes.toString() +
+                          // ' ' +
+                          // 'hrs' +
+                          // ' ' +
+                          // event!.remainingMinutes.toString() +
+                          // ' ' +
+                          'mins',
+                      context),
+                  buildDate('From', event.startDate, context),
+                 // buildDate('To', event.endDate, context),
+                ]),
+                trailing: ActionButtonsWidget(entry: event)),
           ],
         ),
       ),
     ),
   );
 }
+
 
 Widget buildDate(String title, DateTime date, BuildContext context) {
   final styleTitle = Theme.of(context).textTheme.bodyText1;

@@ -11,16 +11,14 @@ class BaseLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<
-        TimeBlocksViewModel>.nonReactive(
-        viewModelBuilder:()=>  TimeBlocksViewModel(),
-        onModelReady: (viewModel)=> viewModel.getTimeblocksList(),
-        builder: (context,viewModel, _) =>
-        ResponsiveBuilder(
+    return ViewModelBuilder<TimeBlocksViewModel>.nonReactive(
+      viewModelBuilder: () => TimeBlocksViewModel(),
+      onModelReady: (viewModel) => viewModel.getList(),
+      builder: (context, viewModel, _) => ResponsiveBuilder(
           builder: (context, sizingInformation) => Scaffold(
               drawer: sizingInformation.isMobile
-              ? MenuDrawer(permanentlyDisplay: false)
-              : null,
+                  ? MenuDrawer(permanentlyDisplay: false)
+                  : null,
               body: CenteredView(
                 child: Column(
                   children: [
@@ -49,7 +47,6 @@ class CenteredView extends StatelessWidget {
     );
   }
 }
-
 
 class NavigationBar extends StatelessWidget {
   const NavigationBar({Key? key}) : super(key: key);

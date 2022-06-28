@@ -6,6 +6,7 @@ import 'package:timey_web/presentation/pages/base_layout.dart';
 import 'package:timey_web/presentation/resources/theme_dark_manager.dart';
 
 import '../locator.dart';
+import '../presentation/navigation/navigator_observer.dart';
 import '../services/navigation_service.dart';
 import '../presentation/resources/routes_manager.dart';
 import '../presentation/resources/theme_light_manager.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
               navigatorKey: locator<NavigationService>().navigatorKey,
               onGenerateRoute: RouteGenerator.getRoute,
               initialRoute: Routes.overviewRoute,
+              navigatorObservers: [NavigationObserver()],
             );
           }
         ));

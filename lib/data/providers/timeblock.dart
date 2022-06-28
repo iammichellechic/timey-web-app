@@ -3,7 +3,7 @@ import '../../model/tag.dart';
 import '../../presentation/resources/formats_manager.dart';
 
 class TimeBlock {
-  final String? id;
+  String? id;
   Tag? tag;
   DateTime startDate;
   DateTime? endDate;
@@ -18,13 +18,13 @@ class TimeBlock {
     return reportedMinutes;
   }
 
-  static ReportedTime convertToHrsAndMins(TimeBlock tb) {
+  ReportedTime convertToHrsAndMins(TimeBlock tb) {
     var hours = (tb.reportedMinutes! / 60);
-    var reportHours = hours.floor();
-    var remainingMinutes = (hours - reportHours) * 60;
+    reportHours = hours.floor();
+    remainingMinutes = (hours - reportHours!) * 60 as int;
 
     return ReportedTime(
-        reportHours: reportHours, remainingMinutes: remainingMinutes as int);
+        reportHours: reportHours, remainingMinutes: remainingMinutes);
   }
 
   TimeBlock(
@@ -37,13 +37,11 @@ class TimeBlock {
       this.reportHours,
       this.remainingMinutes});
 
-  TimeBlock.fromJson(Map<String, dynamic> data, ReportedTime reportedTime)
+  TimeBlock.fromJson(Map<String, dynamic> data)
       : startDate = Utils.convertDateFromString(data['datetimeStart']),
         endDate = Utils.convertDateFromString(data['datetimeEnd']),
         id = Utils.convertStringFromInt(data['userIdCreated']),
-        reportedMinutes = data['reportedMinutes'],
-        reportHours = reportedTime.reportHours,
-        remainingMinutes = reportedTime.remainingMinutes;
+        reportedMinutes = data['reportedMinutes'];
 
   TimeBlock.toMap(Map<String, dynamic> data)
       : id = data['timeBlockGuid'],

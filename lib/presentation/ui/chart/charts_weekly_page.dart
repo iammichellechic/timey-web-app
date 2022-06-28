@@ -30,7 +30,7 @@ class WeeklyChart extends ViewModelWidget<TimeBlocksViewModel> {
           TotalReportedTimeWidget(
             label: 'Total Reported Time',
             text:
-                '${utils.getWeekTotalReportedHours(viewModel.appointmentData)}hrs',
+                '${utils.getWeekTotalReportedHours(viewModel.tbData)}hrs',
           ),
           buildChartWeeklyWidget(context, viewModel),
         ],
@@ -43,7 +43,7 @@ class WeeklyChart extends ViewModelWidget<TimeBlocksViewModel> {
     List<charts.Series<utils.EntryTotal, String>> seriesData = [
       charts.Series(
           id: 'Reported Hours',
-          data: utils.entryTotalsByWeek(viewModel.appointmentData),
+          data: utils.entryTotalsByWeek(viewModel.tbData),
           domainFn: (entryTotal, _) {
             return Utils.toChartDate(entryTotal.day);
           },

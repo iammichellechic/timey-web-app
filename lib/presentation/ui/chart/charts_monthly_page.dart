@@ -30,7 +30,7 @@ class MonthlyChart extends ViewModelWidget<TimeBlocksViewModel> {
           TotalReportedTimeWidget(
             label: 'Total Reported Time',
             text:
-                '${utils.getMonthTotalReportedHours(viewModel.appointmentData)}hrs',
+                '${utils.getMonthTotalReportedHours(viewModel.tbData)}hrs',
           ),
           buildChartWidget(context, viewModel),
         ],
@@ -44,7 +44,7 @@ class MonthlyChart extends ViewModelWidget<TimeBlocksViewModel> {
     List<charts.Series<utils.EntryTotal, String>> seriesData = [
       charts.Series(
           id: 'Reported Hours',
-          data: utils.entryTotalsByMonth(viewModel.appointmentData),
+          data: utils.entryTotalsByMonth(viewModel.tbData),
           domainFn: (entryTotal, _) {
             return Utils.toChartDate(entryTotal.day);
           },

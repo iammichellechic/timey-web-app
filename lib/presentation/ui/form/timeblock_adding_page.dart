@@ -98,10 +98,6 @@ class _TimeblockPageState extends State<TimeblockPage> {
               key: _form,
               child: Column(
                 children: <Widget>[
-                  buildTagField(),
-                  SizedBox(
-                    height: AppSize.s12,
-                  ),
                   buildDateTimePickers(),
                   SizedBox(
                     height: AppSize.s20,

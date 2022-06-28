@@ -15,7 +15,7 @@ class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
   @override
   Widget build(BuildContext context, TimeBlocksViewModel viewModel) {
     return
-          (viewModel.appointmentData.isNotEmpty)
+          (viewModel.tbData.isNotEmpty)
               ? Container(
                   padding: EdgeInsets.only(top: AppPadding.p40),
                   child: Column(children: [
@@ -76,12 +76,12 @@ class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
                                       tooltipText: 'edit or remove an entry'),
                                 ],
                                 rows: List.generate(
-                                 viewModel.appointmentData.length,
+                                 viewModel.tbData.length,
                                     (index) {
-                                  final tb = viewModel.appointmentData;
+                                  final tb = viewModel.tbData;
                                   return DataRow(
                                     cells: <DataCell>[
-                                      DataCell(Text(tb[index].id!,
+                                      DataCell(Text( Utils.toDateTime(tb[index].startDate),
                                           style: makeYourOwnRegularStyle(
                                               fontSize: FontSize.s12,
                                               color: ColorManager.grey))),
@@ -92,7 +92,7 @@ class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
                                               color: ColorManager.grey))),
                                       DataCell(Text(
                                           Utils.convertStringFromInt(
-                                              tb[index].reportedMinutes!),
+                                              tb[index].reportHours!),
                                           style: makeYourOwnRegularStyle(
                                               fontSize: FontSize.s12,
                                               color: Theme.of(context)

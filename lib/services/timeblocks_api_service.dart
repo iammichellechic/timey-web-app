@@ -7,15 +7,12 @@ import '../data/providers/schemas/timeblocks_schema.dart';
 
 class TimeBlocksApi {
   String _response = '';
-
   String get getResponse => _response;
-
   List<TimeBlock> timeblocksList = [];
-  
   final EndPoint _point = EndPoint();
 
 
-  Future<dynamic> getTimeblocks(ReportedTime reportedTime) async {
+  Future<dynamic> getTimeblocks() async {
     ValueNotifier<GraphQLClient> _client = _point.getClient();
 
     QueryResult result = await _client.value.query(QueryOptions(
@@ -30,23 +27,38 @@ class TimeBlocksApi {
       }
     } else {
       timeblocksList = (result.data!['timeblocks'] as List<dynamic>)
-          .map((tb) => TimeBlock.fromJson(tb, reportedTime))
+          .map((tb) => TimeBlock.fromJson(
+                tb
+              ))
           .toList();
-
       return timeblocksList;
     }
   }
 
-  
-  // Future<dynamic> addTimeblocks(int userId) async{
-  //   ValueNotifier<GraphQLClient> _client = _point.getClient();
+  void addTask({int userId = 1, DateTime? date, int? reportedMinutes}) async {
+    ValueNotifier<GraphQLClient> _client = _point.getClient();
 
-  // }
+    QueryResult result = await _client.value.mutate(MutationOptions(
+        document: gql(TimeBlocksSchema.createTimeblocks),
+        variables: {
+          'userId': userId,
+          'startTime': date,
+          'reportedMinutes': reportedMinutes
+        }));
 
+    if (result.hasException) {
+      if (result.exception!.graphqlErrors.isEmpty) {
+        _response = "No connectivity found";
+      } else {
+        _response = result.exception!.graphqlErrors[0].message.toString();
+      }
+    } else {
+      print(result.data);
+      _response = "Timeblock was successfully added";
+    }
+  }
 
   void clear() {
     _response = '';
   }
-  
-  
 }
