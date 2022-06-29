@@ -20,9 +20,9 @@ jobs:
           projectDirectory: '.'
           entryPoint: 'lib/main.dart'
 
-      - task: FlutterTest@0
-        inputs:
-          projectDirectory: '.'
+      #- task: FlutterTest@0
+      #  inputs:
+      #    projectDirectory: '.'
 
       - task: PublishBuildArtifacts@1
         inputs:
