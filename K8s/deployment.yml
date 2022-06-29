@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: timey-web-deployment
+  labels:
+    app: timey-web
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: timey-web
+      labels:
+        app: timey-web
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+      - name: timey-web
+        image:  zero8containerregistry.azurecr.io/master/web/timey:$(Build.BuildId)
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Development"
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: .3
+            memory: 256Mi
+          requests:
+            cpu: .3
+            memory: 256Mi
+        ports:
+          - containerPort: 80
+      imagePullSecrets:
+          - name: timey-pull-secret
+  selector:
+    matchLabels:
+      app: timey-web
