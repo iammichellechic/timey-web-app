@@ -1,25 +1,20 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+trigger:
+  branches:
+    include:
+    - master
 
-jobs:
-  - job: Web
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-      - task: FlutterInstall@0
-        inputs:
-          mode: 'auto'
-          channel: 'stable'
-          version: 'latest'
+pool:  
+  vmImage: 'ubuntu-latest'  
+resources:
+  repositories:
+  - repository: templates
+    type: git
+    name: Pipelines-Templates/Pipelines-Templates
 
-      - task: FlutterBuild@0
-        inputs:
-          target: 'web'
-          projectDirectory: '.'
-          entryPoint: 'lib/main.dart'
-
-      - task: FlutterTest@0
-        inputs:
-          projectDirectory: '.'
+steps:
+- template: 'pipeline-templates/flutter/v3/build-and-publish-web.yml@templates'
+  parameters:
+    buildConfiguration: '$(Build.SourceBranchName)'
+    tags: '$(Build.BuildId)'
+    imageRepository: '$(Build.SourceBranchName)/web/timey'
+    containerRegistry: 'Zero8-Container-Registry'

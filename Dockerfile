@@ -1,40 +1,27 @@
-# Flutter Web Docker Example Dockerfile
+# Lightweight Web server. 
+# It can also act as a reverse proxy, load balancer, etc. 
+FROM nginx:alpine
 
-# Install dependencies
-FROM debian:latest AS build-env
-RUN apt-get update 
-RUN apt-get install -y curl git wget unzip libgconf-2-4 gdb libglu1-mesa fonts-droid-fallback python3 psmisc
-RUN apt-get clean
+# Let me know if this does explode.
+LABEL author="Christian Ekenstedt"
 
-# Clone the flutter repo
-RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
+# Set working directory to nginx asset directory.
+# WORKDIR /usr/share/nginx/html
 
-# Set flutter path
-ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PATH}"
+# Update timezone.
+ENV TZ=Europe/Stockholm
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Enable flutter web
-RUN flutter channel master
-RUN flutter upgrade
-RUN flutter config --enable-web
+# Remove default nginx static assets, default nginx web hello world web page.
+# RUN rm -rf ./*
 
-# Run flutter doctor
-RUN flutter doctor -v
+# Copy the build and put it to NGINX folder.
+# NOTE: NGINX serves content from that folder
+COPY build/web /usr/share/nginx/html
 
-# Copy the app files
-COPY . /usr/local/bin/app
-WORKDIR /usr/local/bin/app
+# We expose docker ports on both http https default ports.
+EXPOSE 80 4040
 
-# Get App Dependencies
-RUN flutter pub get
-
-# Build the app for the web
-RUN flutter build web
-
-# Document the exposed port
-EXPOSE 4040
-
-# Set the server startup script as executable
-RUN ["chmod", "+x", "/usr/local/bin/app/server/server.sh"]
-
-# Start the web server
-ENTRYPOINT [ "/usr/local/bin/app/server/server.sh" ]
+# It sets the command and parameters that are run when the container is run.
+# In other words, the container starts, and it starts nginx
+ENTRYPOINT [ "nginx", "-g", "daemon off;" ]
