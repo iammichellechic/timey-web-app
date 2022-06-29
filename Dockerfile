@@ -17,7 +17,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Copy the build and put it to NGINX folder.
 # NOTE: NGINX serves content from that folder
-COPY dist/pk2-angular/browser /usr/share/nginx/html
+COPY . /usr/share/nginx/html
 
 # We expose docker ports on both http https default ports.
 EXPOSE 80 443
