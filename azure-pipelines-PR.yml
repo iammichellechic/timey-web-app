@@ -24,6 +24,12 @@ jobs:
       #  inputs:
       #    projectDirectory: '.'
 
+      - task: CopyFiles@2
+        displayName: 'Copy Files'
+        inputs:
+          SourceFolder: '$(Build.SourcesDirectory)/build/web'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: '$(Build.ArtifactStagingDirectory)'
