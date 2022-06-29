@@ -20,7 +20,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 COPY . /usr/share/nginx/html
 
 # We expose docker ports on both http https default ports.
-EXPOSE 80 443
+EXPOSE 80 4040
 
 # It sets the command and parameters that are run when the container is run.
 # In other words, the container starts, and it starts nginx
