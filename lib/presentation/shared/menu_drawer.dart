@@ -27,7 +27,7 @@ class MenuDrawer extends StatelessWidget {
               color: ColorManager.background,
               width: sizingInformation.isDesktop
                   ? MediaQuery.of(context).size.width * 0.18
-                  : MediaQuery.of(context).size.width * 0.6,
+                  : MediaQuery.of(context).size.width,
               child: Drawer(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,7 +180,7 @@ class MenuDrawer extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     SelectableText(
-                      'Dev. Waleed H.',
+                      'Dev. Rick and Morty.',
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                     SelectableText(

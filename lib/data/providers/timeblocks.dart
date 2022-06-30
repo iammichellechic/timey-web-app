@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/data/providers/tags.dart';
+
 import '../../presentation/resources/formats_manager.dart';
 import './timeblock.dart';
 
@@ -9,76 +9,26 @@ import './timeblock.dart';
 
 class TimeBlocks with ChangeNotifier {
 
-  final List<TimeBlock> _userTimeBlocks = [
-    TimeBlock(
-      id: '1',
-      tag: Tags().tags[0],
-      startDate:
-          DateTime.now().subtract( Duration(days: 1, hours: 8, minutes: 15)),
-      endDate: DateTime.now().subtract( Duration(days: 1, hours: 0)),
-    ),
-    TimeBlock(
-        id: '2',
-        tag: Tags().tags[1],
-        endDate: DateTime.now().subtract( Duration(days: 3, hours: 0)),
-        startDate: DateTime.now().subtract( Duration(days: 3, hours: 8))),
-    TimeBlock(
-        id: '3',
-        tag: Tags().tags[0],
-        endDate: DateTime.now().subtract( Duration(days: 2, hours: 0)),
-        startDate: DateTime.now().subtract( Duration(days: 2, hours: 8))),
-    TimeBlock(
-        id: '4',
-        tag: Tags().tags[0],
-        endDate: DateTime.now().subtract( Duration(days: 6, hours: 0)),
-        startDate: DateTime.now().subtract( Duration(days: 6, hours: 9))),
-    TimeBlock(
-        id: '5',
-        tag: Tags().tags[0],
-        startDate: DateTime.now().add( Duration(days: 4, hours: 0)),
-        endDate: DateTime.now().add( Duration(days: 4, hours: 8))),
-    TimeBlock(
-        id: '6',
-        tag: Tags().tags[1],
-        endDate: DateTime.now().subtract( Duration(days: 7, hours: 0)),
-        startDate: DateTime.now().subtract(Duration(days: 7, hours: 6))),
-    TimeBlock(
-        id: '7',
-        tag: Tags().tags[0],
-        endDate: DateTime.now().subtract( Duration(days: 5, hours: 0)),
-        startDate: DateTime.now().subtract(Duration(days: 5, hours: 3))),
-    TimeBlock(
-      id: '8',
-      tag: Tags().tags[1],
-      startDate: DateTime.now().add( Duration(days: 1, hours: 0)),
-      endDate: DateTime.now().add(Duration(days: 1, hours: 10)),
-    ),
-    TimeBlock(
-      id: '9',
-      tag: Tags().tags[0],
-      startDate: DateTime.now().add(Duration(days: 2, hours: 0)),
-      endDate: DateTime.now().add( Duration(days: 2, hours: 5)),
-    ),
-  ];
+  final List<TimeBlock> _userTimeBlocks = [];
 
  
   List<TimeBlock> get userTimeBlock {
     return [..._userTimeBlocks];
   }
 
-  TimeBlock findById(String id) {
-    return _userTimeBlocks.firstWhere((tb) => tb.id == id);
-  }
+  // TimeBlock findById(String id) {
+  //   return _userTimeBlocks.firstWhere((tb) => tb.id == id);
+  // }
 
-  void addTimeBlock(TimeBlock timeBlock) {
-    final newEntry = TimeBlock(
-        tag: timeBlock.tag,
-        startDate: timeBlock.startDate,
-        endDate: timeBlock.endDate,
-        id: DateTime.now().toString());
-    _userTimeBlocks.add(newEntry);
-    notifyListeners();
-  }
+  // void addTimeBlock(TimeBlock timeBlock) {
+  //   final newEntry = TimeBlock(
+  //       tag: timeBlock.tag,
+  //       startDate: timeBlock.startDate,
+  //       endDate: timeBlock.endDate,
+  //       id: DateTime.now().toString());
+  //   _userTimeBlocks.add(newEntry);
+  //   notifyListeners();
+  // }
 
   // void updateTimeBlock(id, TimeBlock? newEntry) {
   //   final entryIndex = _userTimeBlocks.indexWhere((tb) => tb.id == id);

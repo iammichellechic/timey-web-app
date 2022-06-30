@@ -1,9 +1,9 @@
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:timey_web/data/providers/delete_timeblock_provider.dart';
 import 'package:timey_web/data/providers/timeblock.dart';
 
-import '../../data/providers/timeblocks.dart';
 import '../resources/color_manager.dart';
 import '../resources/values_manager.dart';
 import '../utils/snackbar_utils.dart';
@@ -105,10 +105,10 @@ void selectedItem(BuildContext context, item, TimeBlock? entry) {
                 style: Theme.of(context).textTheme.headline5,
               ),
               onPressed: () {
-                final provider =
-                    Provider.of<TimeBlocks>(context, listen: false);
-                provider.deleteTimeBlock(entry!.id);
-              
+               
+                Provider.of<DeleteTimeBlockProvider>(context, listen: false).
+                deleteTimeBlock(timeBlockId: entry!.id);
+                  
                 Navigator.of(context).pop();
 
                 SnackBarUtils.showSnackBar(

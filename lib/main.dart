@@ -12,7 +12,5 @@ void main() async {
   // ValueNotifier<GraphQLClient> client = ValueNotifier(
   //     GraphQLClient(link: link, cache: GraphQLCache(store: HiveStore())));
   setupLocator();
-  runApp(MyApp(
-   
-  ));
+  runApp(MyApp());
 }

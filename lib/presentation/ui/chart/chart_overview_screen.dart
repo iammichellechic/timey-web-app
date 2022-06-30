@@ -15,7 +15,10 @@ class DashBoardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
-        builder: (context, sizingInformation) => Row(children: <Widget>[
+        builder: (context, sizingInformation) => 
+        Row(
+          children: <Widget>
+          [
               if (sizingInformation.isDesktop)
                 const MenuDrawer(
                   permanentlyDisplay: true,
@@ -38,7 +41,9 @@ class DashBoardScreen extends StatelessWidget {
                         permanentlyDisplay: false,
                       )
                     : null,
-                body: buildChartsWidget(context),
+                body: 
+                   // BreadCrumbNavigator(),
+                   buildChartsWidget(context),
               ))
             ]));
   }

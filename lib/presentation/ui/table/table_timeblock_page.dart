@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 import 'package:timey_web/presentation/widgets/actionbuttons_widget.dart';
-import '../../../model/viewmodels/timeblocks_viewmodels.dart';
+import '/viewmodels/timeblocks_viewmodels.dart';
 import '../../resources/font_manager.dart';
 import '../../resources/formats_manager.dart';
 import '../../resources/styles_manager.dart';
@@ -15,7 +15,7 @@ class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
   @override
   Widget build(BuildContext context, TimeBlocksViewModel viewModel) {
     return
-          (viewModel.tbData.isNotEmpty)
+          (viewModel.appointmentData.isNotEmpty)
               ? Container(
                   padding: EdgeInsets.only(top: AppPadding.p40),
                   child: Column(children: [
@@ -61,10 +61,10 @@ class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
                                       context: context,
                                       isNumeric: false,
                                       ),
-                                  // buildDataColumn(
-                                  //     text: 'Hours',
-                                  //     context: context,
-                                  //     isNumeric: true),
+                                  buildDataColumn(
+                                      text: 'Hours',
+                                      context: context,
+                                      isNumeric: true),
                                   buildDataColumn(
                                       text: 'Minutes',
                                       context: context,
@@ -76,9 +76,10 @@ class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
                                       tooltipText: 'edit or remove an entry'),
                                 ],
                                 rows: List.generate(
-                                 viewModel.tbData.length,
+                                
+                                 viewModel.appointmentData.length,
                                     (index) {
-                                  final tb = viewModel.tbData;
+                                  final tb = viewModel.appointmentData;
                                   return DataRow(
                                     cells: <DataCell>[
                                       DataCell(Text( Utils.toDateTime(tb[index].startDate),
@@ -91,21 +92,21 @@ class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
                                               fontSize: FontSize.s12,
                                               color: ColorManager.grey))),
                                       DataCell(Text(
-                                          Utils.convertStringFromInt(
-                                              tb[index].reportHours!),
+                                          Utils.convertInttoString(
+                                              tb[index].hours!),
                                           style: makeYourOwnRegularStyle(
                                               fontSize: FontSize.s12,
                                               color: Theme.of(context)
                                                   .colorScheme
                                                   .primary))),
-                                      // DataCell(Text(
-                                      //     Utils.convertStringFromInt(
-                                      //         tb[index].remainingMinutes!),
-                                      //     style: makeYourOwnRegularStyle(
-                                      //         fontSize: FontSize.s12,
-                                      //         color: Theme.of(context)
-                                      //             .colorScheme
-                                      //             .primary))),
+                                      DataCell(Text(
+                                          Utils.convertDoubletoString(
+                                              tb[index].minutes!),
+                                          style: makeYourOwnRegularStyle(
+                                              fontSize: FontSize.s12,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary))),
                                       DataCell(ActionButtonsWidget(
                                           entry: tb[index])),
                                     ],

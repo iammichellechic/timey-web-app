@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:timey_web/presentation/utils/constant_duration_values.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
+import '../../../data/providers/add_timeblock_provider.dart';
 import '/presentation/resources/values_manager.dart';
 import '../../../model/tag.dart';
 import '../../../data/providers/tags.dart';
-import '../../../data/providers/timeblocks.dart';
 import '../../../data/providers/timeblock.dart';
 import '../../resources/formats_manager.dart';
 
@@ -24,35 +24,32 @@ class TimeblockPage extends StatefulWidget {
 
 class _TimeblockPageState extends State<TimeblockPage> {
   final _form = GlobalKey<FormState>();
-
   List<int> itemList = constantValues.hoursItem;
   List<int> itemMinutes = constantValues.minutesItem;
-
   List<Tag> availableTags = Tags().tags;
   Tag? selectedTag;
-
   late DateTime startDate;
-  late DateTime endDate;
-  int? reportedHours;
-  int? remainingMinutes;
+  //late DateTime endDate;
+  int? hours;
+  int? minutes;
+  int? userId = 1;
 
   @override
   void initState() {
     if (widget.timeBlock == null) {
       startDate = DateTime.now();
-      endDate = DateTime.now().add(Duration(hours: 2));
+      //endDate = DateTime.now().add(Duration(hours: 2));
       selectedTag = Tags().tags.first;
-      reportedHours = 0;
-      remainingMinutes = 0;
+      hours = itemList.first;
+      minutes = itemMinutes.first;
     } else {
       final timeBlock = widget.timeBlock!;
 
       startDate = timeBlock.startDate;
-      endDate = timeBlock.endDate!;
-      reportedHours = timeBlock.reportedTime!.reportHours!;
-      remainingMinutes = timeBlock.reportedTime!.remainingMinutes!;
-      selectedTag = timeBlock.tag; //doesnt auto populate during edit
-
+      //endDate = timeBlock.endDate!;
+      hours = timeBlock.hours;
+      minutes = timeBlock.minutes! as int;
+      selectedTag = timeBlock.tag;
     }
 
     if (availableTags.isNotEmpty) {
@@ -66,16 +63,25 @@ class _TimeblockPageState extends State<TimeblockPage> {
     final isValid = _form.currentState!.validate();
 
     if (isValid) {
-      final timeBlock =
-          TimeBlock(tag: selectedTag, startDate: startDate, endDate: endDate);
+      final timeBlock = TimeBlock(
+          startDate: startDate,
+          userId: userId,
+          hours: hours,
+          minutes: minutes as double,    
+          reportedMinutes: (hours! * 60) + minutes!);
 
-      if (widget.timeBlock != null) {
-        Provider.of<TimeBlocks>(context, listen: false)
-            .updateTimeBlock(timeBlock, widget.timeBlock!);
-      } else {
-        Provider.of<TimeBlocks>(context, listen: false).addTimeBlock(timeBlock);
+      if (startDate != null && userId != null && hours != null) {
+        Provider.of<AddTimeBlockProvider>(context, listen: false)
+            .addTimeBlock(timeblock: timeBlock);
       }
-      //Scaffold.of(context).closeEndDrawer();
+
+      // if (widget.timeBlock != null) {
+      //   Provider.of<AddTimeBlockProvider>(context, listen: false)
+      //       .updateTimeBlock(timeBlock, widget.timeBlock!);
+      // } else {
+      //   Provider.of<AddTimeBlockProvider>(context, listen: false).addTimeBlock(timeblock: timeBlock);
+      // }
+
       Navigator.of(context).pop();
     }
   }
@@ -109,7 +115,9 @@ class _TimeblockPageState extends State<TimeblockPage> {
                             color: Theme.of(context).colorScheme.primary,
                             text: 'Report',
                             style: Theme.of(context).textTheme.headline6,
-                            onClicked: _saveForm)
+                            onClicked: () {
+                              _saveForm();
+                            })
                       ]),
                   Spacer(),
                   buildCloseButton(context),
@@ -225,10 +233,10 @@ class _TimeblockPageState extends State<TimeblockPage> {
     );
     if (date == null) return;
 
-    if (date.isAfter(endDate)) {
-      endDate = DateTime(
-          date.year, date.month, date.day, endDate.hour, endDate.minute);
-    }
+    // if (date.isAfter(endDate)) {
+    //   endDate = DateTime(
+    //       date.year, date.month, date.day, endDate.hour, endDate.minute);
+    // }
 
     setState(() {
       startDate = date;
@@ -334,13 +342,12 @@ class _TimeblockPageState extends State<TimeblockPage> {
         ),
       );
   Widget dropDownHoursItems() {
-    return buildDropDownFormField(
-        value: reportedHours, list: itemList, label: "Hours");
+    return buildDropDownFormField(value: hours, list: itemList, label: "Hours");
   }
 
   Widget dropDownMinutesItems() {
     return buildDropDownFormField(
-        value: remainingMinutes, list: itemMinutes, label: "Minutes");
+        value: minutes, list: itemMinutes, label: "Minutes");
   }
 
   Widget buildDuration() => buildHeader(

@@ -1,3 +1,4 @@
+
 import 'package:intl/intl.dart';
 
 class Utils {
@@ -41,11 +42,19 @@ class Utils {
   static DateTime removeTime(DateTime dateTime) =>
       DateTime(dateTime.year, dateTime.month, dateTime.day);
 
-  static DateTime convertDateFromString(String date) {
+  static DateTime convertStringtoDate(String date) {
     return DateTime.parse(date);
   }
 
-  static String convertStringFromInt(int data) {
+  static String convertDatetoString(DateTime data) {
+    return data.toString();
+  }
+
+  static String convertInttoString(int data) {
+    return data.toString();
+  }
+
+  static String convertDoubletoString(double data) {
     return data.toString();
   }
 

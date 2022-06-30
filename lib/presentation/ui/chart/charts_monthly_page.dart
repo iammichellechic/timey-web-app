@@ -5,13 +5,17 @@ import 'package:stacked/stacked.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 import 'package:timey_web/presentation/widgets/chart_widget.dart';
 import 'package:timey_web/presentation/widgets/total_reported_time_widget.dart';
-import '../../../model/viewmodels/timeblocks_viewmodels.dart';
+import '/viewmodels/timeblocks_viewmodels.dart';
 import '/presentation/utils/chart_utils.dart' as utils;
 
 import '../../resources/formats_manager.dart';
 
 class MonthlyChart extends ViewModelWidget<TimeBlocksViewModel> {
   const MonthlyChart({Key? key}) : super(key: key);
+
+    // static MaterialPageRoute getRoute() => MaterialPageRoute(
+    //   settings: RouteSettings(name: 'Monthly'),
+    //   builder: (context) => MonthlyChart());
 
   @override
   Widget build(BuildContext context, TimeBlocksViewModel viewModel) {
@@ -30,7 +34,7 @@ class MonthlyChart extends ViewModelWidget<TimeBlocksViewModel> {
           TotalReportedTimeWidget(
             label: 'Total Reported Time',
             text:
-                '${utils.getMonthTotalReportedHours(viewModel.tbData)}hrs',
+                '${utils.getMonthTotalReportedHours(viewModel.appointmentData)}hrs',
           ),
           buildChartWidget(context, viewModel),
         ],
@@ -44,7 +48,7 @@ class MonthlyChart extends ViewModelWidget<TimeBlocksViewModel> {
     List<charts.Series<utils.EntryTotal, String>> seriesData = [
       charts.Series(
           id: 'Reported Hours',
-          data: utils.entryTotalsByMonth(viewModel.tbData),
+          data: utils.entryTotalsByMonth(viewModel.appointmentData),
           domainFn: (entryTotal, _) {
             return Utils.toChartDate(entryTotal.day);
           },

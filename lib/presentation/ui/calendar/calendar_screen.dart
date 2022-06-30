@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:stacked/stacked.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:timey_web/model/viewmodels/timeblocks_viewmodels.dart';
+import '/viewmodels/timeblocks_viewmodels.dart';
 import 'package:timey_web/presentation/resources/styles_manager.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 
@@ -18,14 +18,16 @@ import '../../../model/timeblock_data_source.dart';
 
 class CalendarScreen extends 
 ViewModelWidget<TimeBlocksViewModel> {
-  //bool isFetched = false;
+
  const  CalendarScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, TimeBlocksViewModel viewModel) {
     
     return ResponsiveBuilder(
-        builder: (context, sizingInformation) => Row(children: <Widget>[
+        builder: (context, sizingInformation) => Row(
+          children: <Widget>
+          [
               if (sizingInformation.isDesktop)
                 const MenuDrawer(
                   permanentlyDisplay: true,
@@ -57,7 +59,7 @@ ViewModelWidget<TimeBlocksViewModel> {
         padding: EdgeInsets.only(top: AppPadding.p40),
         child: CalendarWidget(
                   appointment: appointmentBuilder,
-                  dataSource: EventDataSource(viewModel.tbData))
+                  dataSource: EventDataSource(viewModel.appointmentData))
                     
     );
   }
@@ -98,12 +100,12 @@ Widget appointmentBuilder(
                 ]),
                 subtitle: Column(children: <Widget>[
                   buildDuration(
-                      event!.reportedMinutes.toString() +
-                          // ' ' +
-                          // 'hrs' +
-                          // ' ' +
-                          // event!.remainingMinutes.toString() +
-                          // ' ' +
+                      event!.hours.toString() +
+                          ' ' +
+                          'hrs' +
+                          ' ' +
+                          event!.minutes.toString() +
+                          ' ' +
                           'mins',
                       context),
                   buildDate('From', event.startDate, context),

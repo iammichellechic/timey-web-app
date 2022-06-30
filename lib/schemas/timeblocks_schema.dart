@@ -11,7 +11,7 @@ class TimeBlocksSchema {
   }
   """;
 
-static String createTimeblocks = """
+  static String createTimeblocks = """
 mutation(\$userId:Int, \$startTime: DateTime, \$reportedMinutes: Int){
   createTimeBlock(input:{userId:\$userId,startTime:\$startTime,reportedMinutes:\$reportedMinutes}){
     timeBlockGuid,
@@ -22,6 +22,14 @@ mutation(\$userId:Int, \$startTime: DateTime, \$reportedMinutes: Int){
 }
 
  """;
+
+  static String deleteTimeBlock = """
+ mutation(\$timeBlockGuid: Guid){
+  deleteTimeBlock(input:{timeBlockGuid:\$timeBlockGuid}){
+    datetimeStart,
+    reportedMinutes,
+    userIdCreated
+    }
+  }
+  """;
 }
-
-

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:stacked/stacked.dart';
 
-import '../../../model/viewmodels/timeblocks_viewmodels.dart';
+import '/viewmodels/timeblocks_viewmodels.dart';
 import '../../resources/values_manager.dart';
 import '../../widgets/chart_widget.dart';
 import '../../widgets/total_reported_time_widget.dart';
@@ -12,6 +12,10 @@ import '../../resources/formats_manager.dart';
 
 class WeeklyChart extends ViewModelWidget<TimeBlocksViewModel> {
   const WeeklyChart({Key? key}) : super(key: key);
+
+    // static MaterialPageRoute getRoute() => MaterialPageRoute(
+    //   settings: RouteSettings(name: 'Weekly'),
+    //   builder: (context) => WeeklyChart());
 
   @override
   Widget build(BuildContext context, TimeBlocksViewModel viewModel) {
@@ -30,7 +34,7 @@ class WeeklyChart extends ViewModelWidget<TimeBlocksViewModel> {
           TotalReportedTimeWidget(
             label: 'Total Reported Time',
             text:
-                '${utils.getWeekTotalReportedHours(viewModel.tbData)}hrs',
+                '${utils.getWeekTotalReportedHours(viewModel.appointmentData)}hrs',
           ),
           buildChartWeeklyWidget(context, viewModel),
         ],
@@ -43,7 +47,7 @@ class WeeklyChart extends ViewModelWidget<TimeBlocksViewModel> {
     List<charts.Series<utils.EntryTotal, String>> seriesData = [
       charts.Series(
           id: 'Reported Hours',
-          data: utils.entryTotalsByWeek(viewModel.tbData),
+          data: utils.entryTotalsByWeek(viewModel.appointmentData),
           domainFn: (entryTotal, _) {
             return Utils.toChartDate(entryTotal.day);
           },

@@ -1,6 +1,6 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:timey_web/presentation/navigation/navigator_observer.dart';
+import '../navigation/navigator_observer.dart';
 
 class BreadCrumbNavigator extends StatelessWidget {
   final List<Route> currentRouteStack;
@@ -21,9 +21,7 @@ class BreadCrumbNavigator extends StatelessWidget {
                           (route) => route == currentRouteStack[index]);
                     },
                     child: _BreadButton(
-                        index == 0
-                            ? 'Month'
-                            : currentRouteStack[index].settings.name,
+                        currentRouteStack[index].settings.name,
                         index == 0))),
           )
           .values),
