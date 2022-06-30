@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../resources/color_manager.dart';
-import '../resources/font_manager.dart';
+import '../../resources/color_manager.dart';
+import '../../resources/font_manager.dart';
 
-class CalendarWidget extends StatelessWidget {
+class CalendarPage extends StatelessWidget {
   final CalendarDataSource<Object?>? dataSource;
   final Widget Function(BuildContext, CalendarAppointmentDetails)?
       appointment;
-  const CalendarWidget({Key? key, required this.dataSource, required this.appointment}) : super(key: key);
+  const CalendarPage({Key? key, required this.dataSource, required this.appointment}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

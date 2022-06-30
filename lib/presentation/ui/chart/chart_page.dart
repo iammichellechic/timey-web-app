@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import '../resources/color_manager.dart';
-import '../resources/font_manager.dart';
-import '../utils/chart_utils.dart';
-import '../resources/values_manager.dart';
+import '../../resources/color_manager.dart';
+import '../../resources/font_manager.dart';
+import '../../utils/chart_utils.dart';
+import '../../resources/values_manager.dart';
 
-class ChartWidget extends StatelessWidget {
+class ChartPage extends StatelessWidget {
   final List<charts.Series<EntryTotal, String>> seriesData;
 
 
-  const ChartWidget(
+  const ChartPage(
       {Key? key, required this.seriesData})
       : super(key: key);
 
@@ -44,11 +44,14 @@ class ChartWidget extends StatelessWidget {
                 defaultRenderer: charts.BarRendererConfig(
                     cornerStrategy: charts.ConstCornerStrategy(10),
                     barRendererDecorator: charts.BarLabelDecorator<String>(
+                      labelPadding: 10,
                         insideLabelStyleSpec: charts.TextStyleSpec(
                             fontFamily: FontConstants.fontFamily,
                             fontSize: 10,
+                            lineHeight: 2 ,
                             color: charts.ColorUtil.fromDartColor(
-                                Theme.of(context).colorScheme.onPrimary)),
+                                Theme.of(context).colorScheme.onPrimary)
+                                ),
                         outsideLabelStyleSpec: charts.TextStyleSpec(
                             fontFamily: FontConstants.fontFamily,
                             fontSize: 10,

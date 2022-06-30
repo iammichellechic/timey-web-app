@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:timey_web/data/providers/timeblock.dart';
+import 'package:timey_web/model/timeblock.dart';
 import 'package:timey_web/schemas/timeblocks_schema.dart';
 
 import '../../schemas/endpoint_url.dart';

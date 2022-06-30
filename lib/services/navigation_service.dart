@@ -1,3 +1,4 @@
+
 import 'package:flutter/widgets.dart';
 
 class NavigationService {
@@ -13,4 +14,8 @@ class NavigationService {
   goBack() {
     navigatorKey.currentState!.pop();
   }
+
+  // popUntil(){
+  //   navigatorKey.currentState!.popUntil(Route<dynamic> route);
+  // }
 }

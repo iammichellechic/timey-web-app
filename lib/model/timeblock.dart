@@ -1,16 +1,24 @@
-import '../../model/tag.dart';
-import '../../presentation/resources/formats_manager.dart';
+import 'tag.dart';
+import '../presentation/resources/formats_manager.dart';
 
 //TODO: use json serializer soon
 class TimeBlock {
   String? id;
   Tag? tag;
   DateTime startDate;
-  DateTime? endDate;
   int? hours;
   double? minutes;
   int? reportedMinutes;
   int? userId;
+  DateTime? endDate;
+
+  // DateTime get endDateVariable =>
+  //     endDate!.add(Duration(minutes: reportedMinutes!));
+
+  DateTime get endDateVariable {
+    endDate!.add(Duration(minutes: reportedMinutes!));
+    return endDate!;
+  }
 
   TimeBlock(
       {this.id,
@@ -28,13 +36,9 @@ class TimeBlock {
         id = data['timeBlockGuid'],
         reportedMinutes = data['reportedMinutes'];
 
-   Map<String, dynamic> toJson() => {
-   
-      'userIdCreated': userId,
-      'reportedMinutes': reportedMinutes,
-      'datetimeStart': startDate,
-
-    };
-  }
-
-
+  Map<String, dynamic> toJson() => {
+        'userIdCreated': userId,
+        'reportedMinutes': reportedMinutes,
+        'datetimeStart': startDate,
+      };
+}

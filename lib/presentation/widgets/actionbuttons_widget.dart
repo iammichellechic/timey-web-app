@@ -2,7 +2,7 @@ import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timey_web/data/providers/delete_timeblock_provider.dart';
-import 'package:timey_web/data/providers/timeblock.dart';
+import 'package:timey_web/model/timeblock.dart';
 
 import '../resources/color_manager.dart';
 import '../resources/values_manager.dart';

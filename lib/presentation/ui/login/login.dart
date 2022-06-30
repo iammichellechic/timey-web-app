@@ -11,7 +11,7 @@ import 'package:timey_web/presentation/widgets/textformfield_container.dart';
 import '../../../locator.dart';
 import '../../../services/navigation_service.dart';
 import '../../resources/color_manager.dart';
-import '../../resources/routes_manager.dart';
+import '../../../navigation/routes_manager.dart';
 import '../../resources/values_manager.dart';
 
 class LoginScreen extends StatelessWidget {

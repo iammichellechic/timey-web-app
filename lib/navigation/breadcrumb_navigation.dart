@@ -1,11 +1,14 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/material.dart';
+import '../locator.dart';
 import '../navigation/navigator_observer.dart';
+import '../services/navigation_service.dart';
 
 class BreadCrumbNavigator extends StatelessWidget {
   final List<Route> currentRouteStack;
+    final NavigationService _navigationService = locator<NavigationService>();
 
-  BreadCrumbNavigator() : currentRouteStack = routeStack.toList();
+  BreadCrumbNavigator({Key? key}) : currentRouteStack = routeStack.toList(), super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,7 @@ class _BreadButton extends StatelessWidget {
   final String? text;
   final bool isFirstButton;
 
-  _BreadButton(this.text, this.isFirstButton);
+  const _BreadButton(this.text, this.isFirstButton);
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +66,7 @@ class _TriangleClipper extends CustomClipper<Path> {
 
   @override
   Path getClip(Size size) {
-    final Path path = new Path();
+    final Path path = Path();
     if (twoSideClip) {
       path.moveTo(20, 0.0);
       path.lineTo(0.0, size.height / 2);

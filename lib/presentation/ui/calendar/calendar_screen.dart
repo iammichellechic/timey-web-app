@@ -8,26 +8,20 @@ import 'package:timey_web/presentation/resources/values_manager.dart';
 
 import 'package:timey_web/presentation/widgets/actionbuttons_widget.dart';
 import 'package:timey_web/presentation/widgets/animatedicon_widget.dart';
-import 'package:timey_web/presentation/widgets/calendar_widget.dart';
+import 'package:timey_web/presentation/ui/calendar/calendar_page.dart';
 import '../../resources/font_manager.dart';
 import '../../resources/formats_manager.dart';
 import '../../shared/menu_drawer.dart';
 import '../form/timeblock_adding_page.dart';
-import '../../../model/timeblock_data_source.dart';
+import '../../../model/calendar_data_model.dart';
 
-
-class CalendarScreen extends 
-ViewModelWidget<TimeBlocksViewModel> {
-
- const  CalendarScreen({Key? key}) : super(key: key);
+class CalendarScreen extends ViewModelWidget<TimeBlocksViewModel> {
+  const CalendarScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, TimeBlocksViewModel viewModel) {
-    
     return ResponsiveBuilder(
-        builder: (context, sizingInformation) => Row(
-          children: <Widget>
-          [
+        builder: (context, sizingInformation) => Row(children: <Widget>[
               if (sizingInformation.isDesktop)
                 const MenuDrawer(
                   permanentlyDisplay: true,
@@ -50,18 +44,24 @@ ViewModelWidget<TimeBlocksViewModel> {
                               permanentlyDisplay: false,
                             )
                           : null,
-                      body:buildCalendarWidget(context, viewModel)))
+                      body: buildCalendarWidget(context, viewModel)))
             ]));
   }
 
-  Widget buildCalendarWidget(BuildContext context, TimeBlocksViewModel viewModel) {
+  Widget buildCalendarWidget(
+      BuildContext context, TimeBlocksViewModel viewModel) {
     return Container(
         padding: EdgeInsets.only(top: AppPadding.p40),
-        child: CalendarWidget(
-                  appointment: appointmentBuilder,
-                  dataSource: EventDataSource(viewModel.appointmentData))
-                    
-    );
+        child: (viewModel.appointmentData.isNotEmpty)
+            ? CalendarPage(
+                appointment: appointmentBuilder,
+                dataSource: EventDataSource(viewModel.appointmentData))
+            : Center(
+                child: CircularProgressIndicator(
+                  valueColor:
+                      AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                ),
+              ));
   }
 }
 
@@ -71,7 +71,7 @@ Widget appointmentBuilder(
 ) {
   final event = details.appointments.first;
 
-  return  FittedBox(
+  return FittedBox(
     fit: BoxFit.scaleDown,
     child: Container(
       padding: EdgeInsets.all(AppPadding.p8),
@@ -109,7 +109,7 @@ Widget appointmentBuilder(
                           'mins',
                       context),
                   buildDate('From', event.startDate, context),
-                 // buildDate('To', event.endDate, context),
+                  // buildDate('To', event.endDate, context),
                 ]),
                 trailing: ActionButtonsWidget(entry: event)),
           ],
@@ -119,11 +119,10 @@ Widget appointmentBuilder(
   );
 }
 
-
 Widget buildDate(String title, DateTime date, BuildContext context) {
   final styleTitle = Theme.of(context).textTheme.bodyText1;
-  final styleDate =
-      makeYourOwnBoldStyle(fontSize: FontSize.s12, color: Theme.of(context).colorScheme.primary);
+  final styleDate = makeYourOwnBoldStyle(
+      fontSize: FontSize.s12, color: Theme.of(context).colorScheme.primary);
 
   return Container(
     padding: EdgeInsets.only(top: AppPadding.p8),
@@ -137,13 +136,11 @@ Widget buildDate(String title, DateTime date, BuildContext context) {
 }
 
 Widget buildDuration(String text, BuildContext context) {
-  final styleDate =
-      makeYourOwnBoldStyle(fontSize: FontSize.s12, color: Theme.of(context).colorScheme.primary);
+  final styleDate = makeYourOwnBoldStyle(
+      fontSize: FontSize.s12, color: Theme.of(context).colorScheme.primary);
 
   return Container(
     padding: EdgeInsets.only(top: AppPadding.p8),
     child: Text(text, style: styleDate),
   );
 }
-
-

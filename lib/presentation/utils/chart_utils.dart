@@ -1,5 +1,5 @@
 import '../resources/formats_manager.dart';
-import '/data/providers/timeblock.dart';
+import '../../model/timeblock.dart';
 import 'day_helpers.dart';
 
 class EntryTotal {

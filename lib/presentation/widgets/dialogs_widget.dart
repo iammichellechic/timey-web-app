@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../ui/form/timeblock_adding_page.dart';
 
-import '../../data/providers/timeblock.dart';
+import '../../model/timeblock.dart';
 
 
 //becomes a showdialog when desktop

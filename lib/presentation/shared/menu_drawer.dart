@@ -9,7 +9,7 @@ import '../../data/providers/navigation_items.dart';
 import '../../locator.dart';
 import '../../model/nav_items.dart';
 import '../../services/navigation_service.dart';
-import '../resources/routes_manager.dart';
+import '../../navigation/routes_manager.dart';
 import '/presentation/resources/color_manager.dart';
 
 import '../resources/values_manager.dart';
@@ -36,7 +36,8 @@ class MenuDrawer extends StatelessWidget {
                     buildNavItems(context),
                     Spacer(),
                     Divider(
-                      color: ColorManager.grey,
+                      indent: AppMargin.m12,
+                      endIndent: AppMargin.m12,
                     ),
                     buildUserProfile(context),
                     SwitchThemeButtonWidget(),
@@ -64,13 +65,13 @@ class MenuDrawer extends StatelessWidget {
         buildMenuItem(
           context,
           item: NavigationItem.calendar,
-          text: 'Calendar View',
+          text: 'Calendar',
           icon: Icons.calendar_month,
         ),
         buildMenuItem(
           context,
           item: NavigationItem.table,
-          text: 'Table View',
+          text: 'Table',
           icon: Icons.table_chart,
         ),
         buildMenuItem(
@@ -80,7 +81,8 @@ class MenuDrawer extends StatelessWidget {
           icon: Icons.payment,
         ),
         Divider(
-          color: ColorManager.grey,
+          indent: AppMargin.m12,
+          endIndent: AppMargin.m12,
         ),
         buildMenuItem(
           context,
@@ -158,7 +160,7 @@ class MenuDrawer extends StatelessWidget {
           padding: EdgeInsets.only(left: AppPadding.p30),
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Text('TIMEY', style: Theme.of(context).textTheme.headline1),
+            child: Text('ZERO8', style: Theme.of(context).textTheme.headline1),
           ),
         )));
   }
@@ -180,7 +182,7 @@ class MenuDrawer extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     SelectableText(
-                      'Dev. Rick and Morty.',
+                      'Dev. Rick Morty.',
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                     SelectableText(

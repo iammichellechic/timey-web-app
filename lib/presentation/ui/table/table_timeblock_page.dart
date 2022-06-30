@@ -82,7 +82,7 @@ class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
                                   final tb = viewModel.appointmentData;
                                   return DataRow(
                                     cells: <DataCell>[
-                                      DataCell(Text( Utils.toDateTime(tb[index].startDate),
+                                      DataCell(Text(tb[index].id!,
                                           style: makeYourOwnRegularStyle(
                                               fontSize: FontSize.s12,
                                               color: ColorManager.grey))),
@@ -114,11 +114,11 @@ class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
                                 }))))
                   ]),
                 )
-              : Container(
-                  padding: EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Text("No timeblocks found"),
-                  )
+              : Center(
+            child: CircularProgressIndicator(
+              valueColor:
+                  AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+            ),
     );
   }
 }

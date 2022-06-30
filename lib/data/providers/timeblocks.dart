@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../presentation/resources/formats_manager.dart';
-import './timeblock.dart';
+import '../../model/timeblock.dart';
 
 
 // this has been broken down into different services and view models

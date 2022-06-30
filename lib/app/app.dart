@@ -11,7 +11,7 @@ import '../locator.dart';
 
 import '../navigation/navigator_observer.dart';
 import '../services/navigation_service.dart';
-import '../presentation/resources/routes_manager.dart';
+import '../navigation/routes_manager.dart';
 import '../presentation/resources/theme_light_manager.dart';
 
 class MyApp extends StatelessWidget {

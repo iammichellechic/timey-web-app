@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:timey_web/data/providers/timeblock.dart';
+import 'package:timey_web/model/timeblock.dart';
 
 import '../schemas/endpoint_url.dart';
 import '../schemas/timeblocks_schema.dart';
@@ -11,13 +13,12 @@ class TimeBlocksApi{
   List<TimeBlock> timeblocksList = [];
   final EndPoint _point = EndPoint();
 
-
   Future<dynamic> getTimeblocks() async {
     ValueNotifier<GraphQLClient> _client = _point.getClient();
 
     QueryResult result = await _client.value.query(QueryOptions(
         document: gql(TimeBlocksSchema.getTimeblocks),
-        fetchPolicy: FetchPolicy.networkOnly));
+        fetchPolicy: FetchPolicy.cacheAndNetwork));
 
     if (result.hasException) {
       if (result.exception!.graphqlErrors.isEmpty) {
@@ -32,5 +33,7 @@ class TimeBlocksApi{
       return timeblocksList;
     }
   }
+
+
 
 }

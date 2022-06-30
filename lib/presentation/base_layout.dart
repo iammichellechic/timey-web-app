@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:stacked/stacked.dart';
+import 'package:timey_web/navigation/breadcrumb_navigation.dart';
+import 'package:timey_web/presentation/widgets/switch_theme_button_widget.dart';
 
 import '../viewmodels/timeblocks_viewmodels.dart';
 import 'shared/menu_drawer.dart';
@@ -16,14 +18,14 @@ class BaseLayout extends StatelessWidget {
       onModelReady: (viewModel) => viewModel.getTimeblocksList(),
       builder: (context, viewModel, _) => ResponsiveBuilder(
           builder: (context, sizingInformation) => Scaffold(
-              drawer: sizingInformation.isMobile
-                  ? MenuDrawer(permanentlyDisplay: false)
-                  : null,
-              body: CenteredView(
+                drawer: sizingInformation.isMobile
+                    ? MenuDrawer(permanentlyDisplay: false)
+                    : null,
+                body: CenteredView(
                   child: Expanded(
                     child: Column(
                       children: [
-                        //NavigationBar(), //does not have a navigator so the form doesnt work
+                       // NavigationBar(), //does not have a navigator so the form doesnt work
                         Expanded(child: child),
                       ],
                     ),
@@ -57,7 +59,7 @@ class NavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenTypeLayout(
-      mobile: NavigationBarMobile(),
+      mobile: NavigationBarTabletDesktop(),
       tablet: NavigationBarTabletDesktop(),
       desktop: NavigationBarTabletDesktop(),
     );
@@ -99,12 +101,11 @@ class NavigationBarTabletDesktop extends StatelessWidget {
       child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            //const MenuDrawer(permanentlyDisplay: true),
-            SizedBox(),
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () async => Scaffold.of(context).openEndDrawer(),
-            )
+            Text('TIMEY', style: Theme.of(context).textTheme.headline1),
+            SizedBox(height: 50,
+            width: 500,
+            child: BreadCrumbNavigator()),
+            SwitchThemeButtonWidget()
           ]),
     );
   }

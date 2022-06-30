@@ -28,7 +28,7 @@ class Utils {
   }
 
   static String toChartDate(DateTime dateTime) {
-    final date = DateFormat.Md().format(dateTime);
+    final date = DateFormat('dd/MM').format(dateTime);
 
     return date;
   }
