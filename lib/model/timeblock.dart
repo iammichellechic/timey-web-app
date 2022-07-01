@@ -14,16 +14,6 @@ class TimeBlock {
   int? userId;
   DateTime? endDate;
 
-  DateTime get endDateVariable {
-   // for (var tb in TimeBlocksViewModel().appointmentData)
-   //  {
-      endDate = endDate!.add(Duration(minutes: reportedMinutes!));
-   // }
-    print(endDate);
-    print(reportedMinutes);
-    return endDate!;
-  }
-
   TimeBlock(
       {this.id,
       this.tag,

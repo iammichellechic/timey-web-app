@@ -22,6 +22,7 @@ class TimeBlocksViewModel extends ChangeNotifier {
         var hours = tb.reportedMinutes! / 60;
         tb.hours = hours.floor();
         tb.minutes = ((hours - tb.hours!) * 60).floor();
+        tb.endDate = tb.endDate!.add(Duration(minutes: tb.reportedMinutes!));
       }
     }
     notifyListeners();
