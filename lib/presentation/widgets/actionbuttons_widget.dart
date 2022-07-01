@@ -75,14 +75,15 @@ void selectedItem(BuildContext context, item, TimeBlock? entry) {
   switch (item) {
     case 0:
       showGlobalDrawer<EntryEditDialog>(
-          direction: AxisDirection.right,
-          context: context,
-          duration: Duration(seconds: 1),
-          builder: (context) {
-            return EntryEditDialog(
-              entry: entry,
-            );
-          });
+        context: context,
+        direction: AxisDirection.right,
+        duration: Duration(seconds: 1),
+        builder: (context) {
+          return EntryEditDialog(
+            entry: entry,
+          );
+        },
+      );
 
       break;
     case 1:

@@ -14,10 +14,6 @@ import '../../resources/formats_manager.dart';
 class WeeklyChart extends ViewModelWidget<TimeBlocksViewModel> {
   const WeeklyChart({Key? key}) : super(key: key);
 
-    // static MaterialPageRoute getRoute() => MaterialPageRoute(
-    //   settings: RouteSettings(name: 'Weekly'),
-    //   builder: (context) => WeeklyChart());
-
   @override
   Widget build(BuildContext context, TimeBlocksViewModel viewModel) {
     return Padding(
@@ -27,11 +23,7 @@ class WeeklyChart extends ViewModelWidget<TimeBlocksViewModel> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Center(
-          //   child: Text('Weekly Time Report',
-          //       style: Theme.of(context).textTheme.headline1),
-          // ),
-          // const SizedBox(height: AppPadding.p12),
+         
           TotalReportedTimeWidget(
             label: 'Total Reported Time',
             text:

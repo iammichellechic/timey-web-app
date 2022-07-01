@@ -1,11 +1,12 @@
+import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:stacked/stacked.dart';
 import 'package:timey_web/navigation/breadcrumb_navigation.dart';
+import 'package:timey_web/presentation/resources/values_manager.dart';
 import 'package:timey_web/presentation/widgets/switch_theme_button_widget.dart';
 
 import '../viewmodels/timeblocks_viewmodels.dart';
-import 'shared/menu_drawer.dart';
 
 class BaseLayout extends StatelessWidget {
   final Widget child;
@@ -16,22 +17,34 @@ class BaseLayout extends StatelessWidget {
     return ViewModelBuilder<TimeBlocksViewModel>.reactive(
       viewModelBuilder: () => TimeBlocksViewModel(),
       onModelReady: (viewModel) => viewModel.getTimeblocksList(),
-      builder: (context, viewModel, _) => ResponsiveBuilder(
-          builder: (context, sizingInformation) => Scaffold(
-                drawer: sizingInformation.isMobile
-                    ? MenuDrawer(permanentlyDisplay: false)
-                    : null,
-                body: CenteredView(
-                  child: Expanded(
-                    child: Column(
-                      children: [
-                       // NavigationBar(), //does not have a navigator so the form doesnt work
-                        Expanded(child: child),
-                      ],
-                    ),
-                  ),
-                ),
-              )),
+      builder: (context, viewModel, _) => Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 5,
+          leadingWidth: 200,
+          leading: Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                  AppPadding.p40, AppPadding.p12, 0, AppPadding.p12),
+              child: Text('TIMEY', style: Theme.of(context).textTheme.headline1),
+            ),
+          ),
+          actions: [
+            buildSearchField(context),
+             SwitchThemeButtonWidget()],
+        ),
+        body: CenteredView(
+          child: Expanded(
+            child: Column(
+              children: [
+                // NavigationBar(),
+                Expanded(child: child),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -98,15 +111,58 @@ class NavigationBarTabletDesktop extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 80,
-      child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text('TIMEY', style: Theme.of(context).textTheme.headline1),
-            SizedBox(height: 50,
-            width: 500,
-            child: BreadCrumbNavigator()),
-            SwitchThemeButtonWidget()
-          ]),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: RowSuper(mainAxisSize: MainAxisSize.max,
+            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text('TIMEY', style: Theme.of(context).textTheme.headline1),
+              SizedBox(
+                  height: 50,
+                  // width: 500,
+                  child: BreadCrumbNavigator()),
+              buildSearchField(context),
+              SwitchThemeButtonWidget()
+            ]),
+      ),
     );
   }
+}
+
+Widget buildSearchField(BuildContext context) {
+  final controller = TextEditingController();
+  final style = controller.text.isEmpty
+      ? const TextStyle(color: Colors.black54)
+      : const TextStyle(color: Colors.black);
+  return ResponsiveBuilder(
+      builder: (context, sizingInformation) => Container(
+            width: sizingInformation.isDesktop
+                ? MediaQuery.of(context).size.width * 0.20
+                : MediaQuery.of(context).size.width * 0.30,
+            height: 50,
+            margin: const EdgeInsets.fromLTRB(100, 16, 100, 16),
+            child: TextField(
+              controller: controller,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: controller.text.isNotEmpty
+                    ? GestureDetector(
+                        child: Icon(Icons.close, color: style.color),
+                        onTap: () {
+                          controller.clear();
+                          FocusScope.of(context).requestFocus(FocusNode());
+
+                          // searchBook('');
+                        },
+                      )
+                    : null,
+                hintText: 'Search',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.zero,
+                  borderSide: const BorderSide(color: Colors.black26),
+                ),
+              ),
+              //onChanged: searchBook,
+            ),
+          ));
 }

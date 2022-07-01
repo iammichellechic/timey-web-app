@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:timey_web/presentation/resources/font_manager.dart';
 import 'package:timey_web/presentation/resources/styles_manager.dart';
-import 'package:timey_web/presentation/widgets/switch_theme_button_widget.dart';
 
 import '../../data/providers/navigation_items.dart';
 import '../../locator.dart';
@@ -40,7 +39,7 @@ class MenuDrawer extends StatelessWidget {
                       endIndent: AppMargin.m12,
                     ),
                     buildUserProfile(context),
-                    SwitchThemeButtonWidget(),
+                    //SwitchThemeButtonWidget(),
                     const SizedBox(height: 12),
                     if (permanentlyDisplay)
                       VerticalDivider(
@@ -156,7 +155,7 @@ class MenuDrawer extends StatelessWidget {
         padding: safeArea,
         height: 100,
         child: DrawerHeader(
-            child: Container(
+          child: Container(
           padding: EdgeInsets.only(left: AppPadding.p30),
           child: Align(
             alignment: Alignment.centerLeft,
@@ -182,7 +181,7 @@ class MenuDrawer extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     SelectableText(
-                      'Dev. Rick Morty.',
+                      'Dev. Obi-Wan',
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                     SelectableText(

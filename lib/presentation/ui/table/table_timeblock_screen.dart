@@ -30,7 +30,7 @@ class TableScreen extends StatelessWidget{
                           AnimatedIconWidget(),
                         ],
                       ),
-                      extendBodyBehindAppBar: true,
+                       extendBodyBehindAppBar: true,
                       endDrawer: TimeblockPage(),
                       drawer: sizingInformation.isMobile
                           ? const MenuDrawer(

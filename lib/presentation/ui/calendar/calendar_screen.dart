@@ -37,7 +37,8 @@ class CalendarScreen extends ViewModelWidget<TimeBlocksViewModel> {
                           AnimatedIconWidget(),
                         ],
                       ),
-                      extendBodyBehindAppBar: true,
+                     
+                      extendBodyBehindAppBar: false,
                       endDrawer: TimeblockPage(),
                       drawer: sizingInformation.isMobile
                           ? const MenuDrawer(
@@ -55,7 +56,8 @@ class CalendarScreen extends ViewModelWidget<TimeBlocksViewModel> {
         child: (viewModel.appointmentData.isNotEmpty)
             ? CalendarPage(
                 appointment: appointmentBuilder,
-                dataSource: EventDataSource(viewModel.appointmentData))
+                dataSource: EventDataSource(viewModel.appointmentData)
+                )
             : Center(
                 child: CircularProgressIndicator(
                   valueColor:

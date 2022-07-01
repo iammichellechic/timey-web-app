@@ -6,9 +6,11 @@ import '../services/navigation_service.dart';
 
 class BreadCrumbNavigator extends StatelessWidget {
   final List<Route> currentRouteStack;
-    final NavigationService _navigationService = locator<NavigationService>();
+  final NavigationService _navigationService = locator<NavigationService>();
 
-  BreadCrumbNavigator({Key? key}) : currentRouteStack = routeStack.toList(), super(key: key);
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  BreadCrumbNavigator() : currentRouteStack = routeStack.toList();
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +22,12 @@ class BreadCrumbNavigator extends StatelessWidget {
                 index,
                 GestureDetector(
                     onTap: () {
-                      Navigator.popUntil(context,
+                      //_navigationService.goTothisScreen(index);
+                      navigatorKey.currentState!.popUntil(
                           (route) => route == currentRouteStack[index]);
                     },
                     child: _BreadButton(
-                        currentRouteStack[index].settings.name,
-                        index == 0))),
+                        currentRouteStack[index].settings.name, index == 0))),
           )
           .values),
       mainAxisSize: MainAxisSize.max,
@@ -45,7 +47,7 @@ class _BreadButton extends StatelessWidget {
     return ClipPath(
       clipper: _TriangleClipper(!isFirstButton),
       child: Container(
-        color: Colors.blue,
+        color: Colors.transparent,
         child: Padding(
           padding: EdgeInsetsDirectional.only(
               start: isFirstButton ? 8 : 20, end: 28, top: 8, bottom: 8),

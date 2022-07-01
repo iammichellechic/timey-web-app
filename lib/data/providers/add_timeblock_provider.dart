@@ -3,8 +3,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:timey_web/model/timeblock.dart';
 import 'package:timey_web/schemas/timeblocks_schema.dart';
 
-import '../../schemas/endpoint_url.dart';
-import '../../viewmodels/timeblocks_viewmodels.dart';
+import '../../endpoint_url.dart';
+
 
 class AddTimeBlockProvider extends ChangeNotifier {
   bool _status = false;
@@ -13,7 +13,7 @@ class AddTimeBlockProvider extends ChangeNotifier {
   String get getResponse => _response;
   final EndPoint _point = EndPoint();
 
-  Future<void> addTimeBlock({TimeBlock? timeblock}) async {
+  Future <void> addTimeBlock({TimeBlock? timeblock}) async {
     _status = true;
     _response = "Please wait...";
     ValueNotifier<GraphQLClient> _client = _point.getClient();
@@ -23,7 +23,7 @@ class AddTimeBlockProvider extends ChangeNotifier {
         variables: {
           'userId': timeblock!.userId == null ? null : timeblock.userId,
           'startTime': timeblock.startDate.toIso8601String(),
-          'reportedMinutes': timeblock.hours
+          'reportedMinutes': timeblock.reportedMinutes
         }));
 
     if (result.hasException) {
@@ -39,7 +39,7 @@ class AddTimeBlockProvider extends ChangeNotifier {
       _status = false;
       _response = "Task was successfully added";
       
-      await TimeBlocksViewModel().getTimeblocksList(); //does not work
+     // await TimeBlocksViewModel().getTimeblocksList(); //does not work
       //TimeBlock.fromJson(jsonDecode(result.data!['timeblocks']));
       // notifyListeners();
     }

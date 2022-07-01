@@ -1,3 +1,5 @@
+import 'package:timey_web/viewmodels/timeblocks_viewmodels.dart';
+
 import 'tag.dart';
 import '../presentation/resources/formats_manager.dart';
 
@@ -7,16 +9,18 @@ class TimeBlock {
   Tag? tag;
   DateTime startDate;
   int? hours;
-  double? minutes;
+  int? minutes;
   int? reportedMinutes;
   int? userId;
   DateTime? endDate;
 
-  // DateTime get endDateVariable =>
-  //     endDate!.add(Duration(minutes: reportedMinutes!));
-
   DateTime get endDateVariable {
-    endDate!.add(Duration(minutes: reportedMinutes!));
+   // for (var tb in TimeBlocksViewModel().appointmentData)
+   //  {
+      endDate = endDate!.add(Duration(minutes: reportedMinutes!));
+   // }
+    print(endDate);
+    print(reportedMinutes);
     return endDate!;
   }
 

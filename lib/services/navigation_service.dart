@@ -1,8 +1,11 @@
-
 import 'package:flutter/widgets.dart';
+
+import '../navigation/navigator_observer.dart';
 
 class NavigationService {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  final List<Route> currentRouteStack = routeStack.toList();
+
   Future<dynamic> navigateTo(String routeName) {
     var curr = ModalRoute.of(navigatorKey.currentContext!);
     if (curr != null) {
@@ -15,7 +18,8 @@ class NavigationService {
     navigatorKey.currentState!.pop();
   }
 
-  // popUntil(){
-  //   navigatorKey.currentState!.popUntil(Route<dynamic> route);
-  // }
+  void goTothisScreen(int index) {
+    navigatorKey.currentState!
+        .popUntil((route) => route == currentRouteStack[index]);
+  }
 }

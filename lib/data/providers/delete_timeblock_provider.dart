@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:timey_web/schemas/timeblocks_schema.dart';
 import '../../locator.dart';
-import '../../schemas/endpoint_url.dart';
+import '../../endpoint_url.dart';
 import '../../services/timeblocks_api_service.dart';
 import '../../viewmodels/timeblocks_viewmodels.dart';
 

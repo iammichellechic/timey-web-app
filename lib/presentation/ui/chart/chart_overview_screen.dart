@@ -34,7 +34,7 @@ class DashBoardScreen extends StatelessWidget {
                     AnimatedIconWidget(),
                   ],
                 ),
-                //extendBodyBehindAppBar: true,
+                extendBodyBehindAppBar: true,
                 endDrawer: TimeblockPage(),
                 drawer: sizingInformation.isMobile
                     ? const MenuDrawer(
@@ -59,7 +59,7 @@ class DashBoardScreen extends StatelessWidget {
               child: Text('Time Reports',
                   style: Theme.of(context).textTheme.headline1),
             ),
-          SizedBox(height: AppSize.s10),
+          SizedBox(height: AppSize.s20),
            SizedBox(
             height: 600,
              child: TabBarWidget(
