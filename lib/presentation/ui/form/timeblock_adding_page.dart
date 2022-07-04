@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
 import 'package:responsive_builder/responsive_builder.dart';
+
 import 'package:timey_web/presentation/utils/constant_duration_values.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
+import 'package:timey_web/viewmodels/timeblocks_viewmodels.dart';
+
 import '/presentation/resources/values_manager.dart';
 import '../../../model/tag.dart';
 import '../../../data/providers/tags.dart';
-import '../../../data/providers/timeblocks.dart';
-import '../../../data/providers/timeblock.dart';
+import '../../../model/timeblock.dart';
 import '../../resources/formats_manager.dart';
 
 class TimeblockPage extends StatefulWidget {
@@ -23,36 +25,36 @@ class TimeblockPage extends StatefulWidget {
 }
 
 class _TimeblockPageState extends State<TimeblockPage> {
+  // final NavigationService _navigationService = locator<NavigationService>();
   final _form = GlobalKey<FormState>();
 
-  List<int> itemList = constantValues.hoursItem;
+  List<int> itemHours = constantValues.hoursItem;
   List<int> itemMinutes = constantValues.minutesItem;
-
   List<Tag> availableTags = Tags().tags;
-  Tag? selectedTag;
 
+  Tag? selectedTag;
   late DateTime startDate;
-  late DateTime endDate;
-  int? reportedHours;
-  int? remainingMinutes;
+  //late DateTime endDate;
+  int? hours;
+  int? minutes;
+  int? userId;
 
   @override
   void initState() {
     if (widget.timeBlock == null) {
       startDate = DateTime.now();
-      endDate = DateTime.now().add(Duration(hours: 2));
+      //endDate = DateTime.now().add(Duration(hours: 2));
       selectedTag = Tags().tags.first;
-      reportedHours = 0;
-      remainingMinutes = 0;
+      hours = itemHours.first;
+      minutes = itemMinutes.first;
     } else {
       final timeBlock = widget.timeBlock!;
 
       startDate = timeBlock.startDate;
-      endDate = timeBlock.endDate;
-      reportedHours = timeBlock.reportHours!;
-      remainingMinutes = timeBlock.remainingMinutes!;
-      selectedTag = timeBlock.tag; //doesnt auto populate during edit
-
+      //endDate = timeBlock.endDate!;
+      hours = timeBlock.hours;
+      minutes = timeBlock.minutes;
+      selectedTag = timeBlock.tag;
     }
 
     if (availableTags.isNotEmpty) {
@@ -66,65 +68,67 @@ class _TimeblockPageState extends State<TimeblockPage> {
     final isValid = _form.currentState!.validate();
 
     if (isValid) {
-      final timeBlock =
-          TimeBlock(tag: selectedTag, startDate: startDate, endDate: endDate);
+      final timeBlock = TimeBlock(
+          startDate: startDate,
+          userId: userId = 1,
+          hours: hours,
+          minutes: minutes,
+          reportedMinutes: (hours! * 60) + minutes!);
 
       if (widget.timeBlock != null) {
-        Provider.of<TimeBlocks>(context, listen: false)
-            .updateTimeBlock(timeBlock, widget.timeBlock!);
+        //TODO: edit
+
       } else {
-        Provider.of<TimeBlocks>(context, listen: false).addTimeBlock(timeBlock);
+        // Provider.of<AddTimeBlockProvider>(context, listen: false)
+        //     .addTimeBlock(timeblock: timeBlock);
+        TimeBlocksViewModel().getCreateTimeBlockFxn(timeBlock);
       }
-      //Scaffold.of(context).closeEndDrawer();
-      Navigator.of(context).pop();
+      Scaffold.of(context).closeEndDrawer();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final safeArea =
-        EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
-
     return ResponsiveBuilder(
-      builder: (context, sizingInformation) => 
-        Container(
-            padding: safeArea,
-            width: sizingInformation.isDesktop
-                ? MediaQuery.of(context).size.width * 0.23
-                : MediaQuery.of(context).size.width,
-            child: Drawer(
-              child:  Padding(
-                  padding: const EdgeInsets.all(AppPadding.p30),
-                    child: Form(
-                      key: _form,
-                      child: Column(
-                        children: <Widget>[
-                          buildTagField(),
-                          SizedBox(
-                            height: AppSize.s12,
-                          ),
-                          buildDateTimePickers(),
-                          SizedBox(
-                            height: AppSize.s20,
-                          ),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                ButtonWidget(
-                                    color: Theme.of(context).colorScheme.primary,
-                                    text: 'Report',
-                                    style: Theme.of(context).textTheme.headline6,
-                                    onClicked: _saveForm)
-                              ]),
-                          Spacer(),
-                          buildCloseButton(context),
-                        ],
+      builder: (context, sizingInformation) => SizedBox(
+        width: sizingInformation.isDesktop
+            ? MediaQuery.of(context).size.width * 0.23
+            : MediaQuery.of(context).size.width,
+        child: Flexible(
+          child: Drawer(
+            child: Padding(
+              padding: const EdgeInsets.all(AppPadding.p30),
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _form,
+                  child: Column(
+                    children: <Widget>[
+                      buildDateTimePickers(),
+
+                      SizedBox(
+                        height: AppSize.s20,
                       ),
-                    ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            ButtonWidget(
+                                color: Theme.of(context).colorScheme.primary,
+                                text: 'Report',
+                                style: Theme.of(context).textTheme.headline6,
+                                onClicked: () {
+                                  _saveForm();
+                                }),
+                          ]),
+                      //Spacer(),
+                      buildCloseButton(context),
+                    ],
                   ),
+                ),
               ),
-              ),
-            
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -140,7 +144,8 @@ class _TimeblockPageState extends State<TimeblockPage> {
                     Icons.close,
                   ),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    //_navigationService.goBack();
+                    Scaffold.of(context).closeEndDrawer();
                   })))
     ]));
   }
@@ -231,10 +236,10 @@ class _TimeblockPageState extends State<TimeblockPage> {
     );
     if (date == null) return;
 
-    if (date.isAfter(endDate)) {
-      endDate = DateTime(
-          date.year, date.month, date.day, endDate.hour, endDate.minute);
-    }
+    // if (date.isAfter(endDate)) {
+    //   endDate = DateTime(
+    //       date.year, date.month, date.day, endDate.hour, endDate.minute);
+    // }
 
     setState(() {
       startDate = date;
@@ -242,11 +247,9 @@ class _TimeblockPageState extends State<TimeblockPage> {
   }
 
   Widget buildHeader(
-          {required String header,
-          required Widget child,
-          required IconData icon}) =>
+          {required String header, required Widget child, IconData? icon}) =>
       Container(
-        padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -265,8 +268,14 @@ class _TimeblockPageState extends State<TimeblockPage> {
   Widget buildDropdownField({
     required String text,
     required VoidCallback onClicked,
+    Widget? leadingIcon,
   }) =>
       ListTile(
+        leading: leadingIcon,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: Colors.black, width: 1),
+          borderRadius: BorderRadius.circular(5),
+        ),
         title: Text(
           text,
           style: Theme.of(context).textTheme.subtitle1,
@@ -275,28 +284,46 @@ class _TimeblockPageState extends State<TimeblockPage> {
         onTap: onClicked,
       );
 
-  //Duration
-  Widget buildDropDownFormField(
-          {required int? value,
-          required List<int> list,
-          required String? label}) =>
-      SizedBox(
-          width: 100,
+  //Refactor
+  //Hours
+  Widget buildHoursDropDown() => SizedBox(
           child: DropdownButtonFormField<int>(
-            decoration: InputDecoration(
-              labelText: label,
-              enabledBorder: OutlineInputBorder(),
-            ),
-            value: value,
-            items: list
-                .map<DropdownMenuItem<int>>((item) => DropdownMenuItem<int>(
-                      value: item,
-                      child:
-                          Text(item.toString(), style: TextStyle(fontSize: 16)),
-                    ))
-                .toList(),
-            onChanged: (item) => setState(() => value = item),
-          ));
+        decoration: InputDecoration(
+          prefixIcon: Icon(Icons.av_timer_outlined),
+          enabledBorder: OutlineInputBorder(),
+        ),
+        value: hours,
+        items: itemHours
+            .map<DropdownMenuItem<int>>((item) => DropdownMenuItem<int>(
+                  value: item,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: AppPadding.p18),
+                    child: Text(item.toString(), style: TextStyle(fontSize: 16)),
+                  ),
+                ))
+            .toList(),
+        onChanged: (item) => setState(() => hours = item),
+      ));
+
+  //Minutes
+  Widget buildMinutesDropDown() => SizedBox(
+        child: DropdownButtonFormField<int>(
+        decoration: InputDecoration(
+          prefixIcon: Icon(Icons.av_timer_outlined),
+          enabledBorder: OutlineInputBorder(),
+        ),
+        value: minutes,
+        items: itemMinutes
+            .map<DropdownMenuItem<int>>((item) => DropdownMenuItem<int>(
+                  value: item,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: AppPadding.p18),
+                    child: Text(item.toString(), style: TextStyle(fontSize: 16)),
+                  ),
+                ))
+            .toList(),
+        onChanged: (item) => setState(() => minutes = item),
+      ));
 
   Widget buildTag() => SizedBox(
         child: DropdownButtonFormField<Tag>(
@@ -318,53 +345,40 @@ class _TimeblockPageState extends State<TimeblockPage> {
                 .toList()),
       );
 
-  Widget buildStartDate() => buildHeader(
-        header: 'Date and time',
-        icon: Icons.calendar_month_outlined,
-        child: Row(
-          children: [
-            Expanded(
-              // flex: 2,
-              child: buildDropdownField(
-                text: Utils.toDate(startDate),
-                onClicked: () => pickFromDateTime(pickDate: true),
-              ),
-            ),
-            Expanded(
-              child: buildDropdownField(
-                text: Utils.toTime(startDate),
-                onClicked: () => pickFromDateTime(pickDate: false),
-              ),
-            ),
-          ],
+  Widget buildDay() => buildHeader(
+        header: 'Date',
+        child: buildDropdownField(
+          leadingIcon: Icon(Icons.calendar_month_outlined),
+          text: Utils.toDate(startDate),
+          onClicked: () => pickFromDateTime(pickDate: true),
         ),
       );
-  Widget dropDownHoursItems() {
-    return buildDropDownFormField(
-        value: reportedHours, list: itemList, label: "Hours");
-  }
 
-  Widget dropDownMinutesItems() {
-    return buildDropDownFormField(
-        value: remainingMinutes, list: itemMinutes, label: "Minutes");
-  }
-
-  Widget buildDuration() => buildHeader(
-        header: 'Duration',
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(child: dropDownHoursItems()),
-            Expanded(child: dropDownMinutesItems()),
-          ],
+  Widget buildTime() => buildHeader(
+        header: 'Time',
+        child: buildDropdownField(
+          leadingIcon: Icon(Icons.timer_10_outlined),
+          text: Utils.toTime(startDate),
+          onClicked: () => pickFromDateTime(pickDate: false),
         ),
-        icon: Icons.calendar_month_outlined,
       );
+
+  Widget dropDownHoursItems() =>
+      buildHeader(header: 'Hours', child: buildHoursDropDown());
+
+  Widget dropDownMinutesItems() =>
+      buildHeader(header: 'Minutes', child: buildMinutesDropDown());
 
   Widget buildTagField() => buildHeader(
       header: 'Tag', icon: Icons.assignment_outlined, child: buildTag());
 
   Widget buildDateTimePickers() => Column(
-        children: [buildStartDate(), buildDuration()],
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          buildDay(),
+          buildTime(),
+          dropDownHoursItems(),
+          dropDownMinutesItems()
+        ],
       );
 }

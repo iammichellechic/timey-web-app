@@ -1,5 +1,5 @@
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import '../data/providers/timeblock.dart';
+import 'timeblock.dart';
 
 class EventDataSource extends CalendarDataSource {
   EventDataSource(List<TimeBlock> appointments) {
@@ -12,7 +12,8 @@ class EventDataSource extends CalendarDataSource {
   DateTime getStartTime(int index) => getEvent(index).startDate;
 
   @override
-  DateTime getEndTime(int index) => getEvent(index).endDate;
+  // DateTime getEndTime(int index) => getEvent(index).startDate.add(Duration(minutes:getEvent(index).reportedMinutes!));
+  DateTime getEndTime(int index) => getEvent(index).endDate!;
 
   @override
   String getSubject(int index) => getEvent(index).id.toString();

@@ -44,7 +44,7 @@ ThemeData getlightAppTheme() {
       textTheme: TextTheme(
         //menu drawer
         headline1: getBoldStyle(
-            color: ColorManager.onPrimaryContainer, fontSize: FontSize.s24),
+            color: ColorManager.onPrimaryContainer, fontSize: FontSize.s24,letterSpacing: 1.3),
 
         headline2: getBoldStyle(
             color: ColorManager.onPrimaryContainer, fontSize: FontSize.s20),

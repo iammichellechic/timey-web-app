@@ -1,5 +1,5 @@
-
-import '/data/providers/timeblock.dart';
+import '../resources/formats_manager.dart';
+import '../../model/timeblock.dart';
 import 'day_helpers.dart';
 
 class EntryTotal {
@@ -31,7 +31,8 @@ Iterable<EntryTotal> _entryTotalsByDay(
     for (var entry in list) {
       //make variable that adds reporthours and minutes
       //use that variable to store value
-      entryTotal.value += entry.reportHours!;
+      var minsInDecimal = entry.reportedMinutes! / 60;
+      entryTotal.value += minsInDecimal;
     }
 
     yield entryTotal;
@@ -83,10 +84,8 @@ Iterable<EntryTotal> _entryTotalsByMonth(
     var entryTotal = EntryTotal(start.add(Duration(days: i)), 0);
 
     for (var entry in list) {
-      var minsInDecimal = entry.remainingMinutes! / 60;
-      var totalReportedTime = entry.reportHours! + minsInDecimal;
-
-      entryTotal.value += totalReportedTime;
+      var minsInDecimal = entry.reportedMinutes! / 60;
+      entryTotal.value += Utils.roundADecimalValue(minsInDecimal,2);
     }
     yield entryTotal;
   }
@@ -95,9 +94,9 @@ Iterable<EntryTotal> _entryTotalsByMonth(
 double getMonthTotalReportedHours(List<TimeBlock>? entries) {
   var sum = 0.0;
   var list = entryTotalsByMonth(entries);
-  
-    sum += list.fold(0, (previous, current) => previous + current.value);
-  
+
+  sum += list.fold(0, (previous, current) => previous + current.value);
+
   return sum;
 }
 
@@ -125,15 +124,14 @@ Iterable<EntryTotal> _entryTotalsByWeek(
     var entryTotal = EntryTotal(start.add(Duration(days: i)), 0);
 
     for (var entry in list) {
-      var minsInDecimal = entry.remainingMinutes! / 60;
-      var totalReportedTime = entry.reportHours! + minsInDecimal;
-
-      entryTotal.value += totalReportedTime;
+      var minsInDecimal = entry.reportedMinutes! / 60;
+      entryTotal.value += Utils.roundADecimalValue(minsInDecimal, 2);
     }
 
     yield entryTotal;
   }
 }
+
 double getWeekTotalReportedHours(List<TimeBlock>? entries) {
   var sum = 0.0;
   var list = entryTotalsByWeek(entries);
@@ -142,6 +140,7 @@ double getWeekTotalReportedHours(List<TimeBlock>? entries) {
 
   return sum;
 }
+
 /// Groups entries by day between start and end. The result is a list of
 /// lists. The outer list represents the number of days since start, and the
 /// inner list is the group of entries on that day.

@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:timey_web/presentation/ui/login/login.dart';
 import 'package:timey_web/presentation/ui/payment/payment_screen.dart';
 import 'package:timey_web/presentation/ui/signup/signup.dart';
-import '../ui/chart/chart_overview_screen.dart';
-import '../ui/form/timeblock_adding_page.dart';
-import '../ui/calendar/calendar_screen.dart';
-import '../ui/settings/settings_screen.dart';
-import '../ui/table/table_timeblock_screen.dart';
+import '../presentation/ui/chart/chart_overview_screen.dart';
+import '../presentation/ui/form/timeblock_adding_page.dart';
+import '../presentation/ui/calendar/calendar_screen.dart';
+import '../presentation/ui/settings/settings_screen.dart';
+import '../presentation/ui/table/table_timeblock_screen.dart';
 
 class Routes {
   //temporary names
-  static const String overviewRoute = "dashboard";
-  static const String calendarRoute = "timereports";
-  static const String tableRoute = "timereports-list";
-  static const String formRoute = "edit-timereport";
-  static const String loginRoute = "login";
-  static const String signupRoute = "signup";
-  static const String paymentRoute = "payment";
-  static const String settingsRoute = "settings";
+  static const String overviewRoute = "Dashboard";
+  static const String calendarRoute = "Calendar";
+  static const String tableRoute = "Table";
+  static const String formRoute = "Edit-Timereport";
+  static const String loginRoute = "Login";
+  static const String signupRoute = "Signup";
+  static const String paymentRoute = "Payment";
+  static const String settingsRoute = "Settings";
 }
 
 class RouteGenerator {
