@@ -1,14 +1,17 @@
-
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:stacked/stacked.dart';
 
-import 'package:timey_web/presentation/resources/values_manager.dart';
-import 'package:timey_web/presentation/widgets/switch_theme_button_widget.dart';
-
 import '../viewmodels/timeblocks_viewmodels.dart';
+import 'resources/values_manager.dart';
+import 'shared/menu_drawer.dart';
+import 'ui/form/timeblock_adding_page.dart';
+import 'widgets/animatedicon_widget.dart';
+import 'widgets/switch_theme_button_widget.dart';
 
-//TODO: Fix appBar 
+//TODO: Fix appBar
+// nested appbar
+
 class BaseLayout extends StatelessWidget {
   final Widget child;
   const BaseLayout({Key? key, required this.child}) : super(key: key);
@@ -16,38 +19,64 @@ class BaseLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<TimeBlocksViewModel>.reactive(
-      viewModelBuilder: () => TimeBlocksViewModel(),
-      onModelReady: (viewModel) => viewModel.getTimeBlocks(),
-      builder: (context, viewModel, _) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 5,
-          leadingWidth: 200,
-          leading: Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                  AppPadding.p40, AppPadding.p12, 0, AppPadding.p12),
-              child: Text('TIMEY', style: Theme.of(context).textTheme.headline1),
-            ),
-          ),
-          actions: [
-           // buildSearchField(context),
-             SwitchThemeButtonWidget()],
-        ),
-        body: CenteredView(
-          child: Expanded(
-            child: Column(
-              children: [
-                // NavigationBar(),
-                Expanded(child: child),
+        viewModelBuilder: () => TimeBlocksViewModel(),
+        onModelReady: (viewModel) => viewModel.getTimeBlocks(),
+        builder: (context, viewModel, _) => Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 5,
+              leadingWidth: 200,
+              leading: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                      AppPadding.p40, AppPadding.p12, 0, AppPadding.p12),
+                  child: Text('TIMEY',
+                      style: Theme.of(context).textTheme.headline1),
+                ),
+              ),
+              actions: [
+                // buildSearchField(context),
+                SwitchThemeButtonWidget()
               ],
             ),
+            extendBodyBehindAppBar: false,
+            body: buildScaffoldWithNavigator(context, child)));
+  }
+}
+
+Widget buildScaffoldWithNavigator(BuildContext context, Widget child) {
+  return ResponsiveBuilder(
+    builder: (context, sizingInformation) => Row(children: <Widget>[
+      if (sizingInformation.isDesktop)
+        const MenuDrawer(
+          permanentlyDisplay: true,
+        ),
+      Expanded(
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            iconTheme: Theme.of(context).iconTheme,
+            elevation: 0,
+            automaticallyImplyLeading: sizingInformation.isMobile,
+            actions: const [
+              AnimatedIconWidget(),
+            ],
+          ),
+          extendBodyBehindAppBar: false,
+          endDrawer: TimeblockPage(),
+          drawer: sizingInformation.isMobile
+              ? const MenuDrawer(
+                  permanentlyDisplay: false,
+                )
+              : null,
+          body: CenteredView(
+            child: child,
           ),
         ),
-      ),
-    );
-  }
+      )
+    ]),
+  );
 }
 
 class CenteredView extends StatelessWidget {

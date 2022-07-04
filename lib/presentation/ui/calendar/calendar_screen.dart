@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+
 import 'package:stacked/stacked.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import '/viewmodels/timeblocks_viewmodels.dart';
@@ -7,12 +7,11 @@ import 'package:timey_web/presentation/resources/styles_manager.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 
 import 'package:timey_web/presentation/widgets/actionbuttons_widget.dart';
-import 'package:timey_web/presentation/widgets/animatedicon_widget.dart';
+
 import 'package:timey_web/presentation/ui/calendar/calendar_page.dart';
 import '../../resources/font_manager.dart';
 import '../../resources/formats_manager.dart';
-import '../../shared/menu_drawer.dart';
-import '../form/timeblock_adding_page.dart';
+
 import '../../../model/calendar_data_model.dart';
 
 class CalendarScreen extends ViewModelWidget<TimeBlocksViewModel> {
@@ -20,33 +19,7 @@ class CalendarScreen extends ViewModelWidget<TimeBlocksViewModel> {
 
   @override
   Widget build(BuildContext context, TimeBlocksViewModel viewModel) {
-    return ResponsiveBuilder(
-        builder: (context, sizingInformation) => Row(children: <Widget>[
-              if (sizingInformation.isDesktop)
-                const MenuDrawer(
-                  permanentlyDisplay: true,
-                ),
-              Expanded(
-                  child: Scaffold(
-                      appBar: AppBar(
-                        backgroundColor: Colors.transparent,
-                        iconTheme: Theme.of(context).iconTheme,
-                        elevation: 0,
-                        automaticallyImplyLeading: sizingInformation.isMobile,
-                        actions: const [
-                          AnimatedIconWidget(),
-                        ],
-                      ),
-                     
-                      extendBodyBehindAppBar: false,
-                      endDrawer: TimeblockPage(),
-                      drawer: sizingInformation.isMobile
-                          ? const MenuDrawer(
-                              permanentlyDisplay: false,
-                            )
-                          : null,
-                      body: buildCalendarWidget(context, viewModel)))
-            ]));
+    return buildCalendarWidget(context, viewModel);
   }
 
   Widget buildCalendarWidget(
@@ -56,8 +29,7 @@ class CalendarScreen extends ViewModelWidget<TimeBlocksViewModel> {
         child: (viewModel.appointmentData.isNotEmpty)
             ? CalendarPage(
                 appointment: appointmentBuilder,
-                dataSource: EventDataSource(viewModel.appointmentData)
-                )
+                dataSource: EventDataSource(viewModel.appointmentData))
             : Center(
                 child: CircularProgressIndicator(
                   valueColor:
