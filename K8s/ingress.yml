@@ -5,7 +5,12 @@ metadata:
   namespace: timey
   annotations:
     kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt
 spec:
+  tls:
+  - hosts:
+    - timey.zero8.io
+    secretName: tls-secret
   rules:
   - host: timey.zero8.io
     http:
