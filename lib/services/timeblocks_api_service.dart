@@ -1,89 +1,61 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:timey_web/api_call.dart';
 import 'package:timey_web/model/timeblock.dart';
 
-import '../endpoint_url.dart';
+import '../locator.dart';
 import '../schemas/timeblocks_schema.dart';
 
-class TimeBlocksApi {
-  String _response = '';
-  String get getResponse => _response;
-  List<TimeBlock> timeblocksList = [];
-  final EndPoint _point = EndPoint();
+abstract class ITimeBlockDatasource {
+  ObservableQuery<Object?> getTimeBlocks();
+  Future<TimeBlock> createTimeBlocks(TimeBlock timeBlock);
+  Future<TimeBlock> deleteTimeBlock(String? timeBlockId);
+}
 
-  //TODO: Use streamcontroller/ observablequery to listen to data changes
+class TimeBlockDataSource implements ITimeBlockDatasource {
+  final _api = locator<SafeApiCall>();
 
-  //final StreamController<List<TimeBlock>> _tbController =
-  //    StreamController<List<TimeBlock>>.broadcast();
+  @override
+  Future<TimeBlock> createTimeBlocks(TimeBlock timeBlock) async {
+    final result = await _api.safeMutation(
+      documentMutation: TimeBlocksSchema.createTimeblocks,
+      documentQuery: TimeBlocksSchema.getTimeblocks,
+      variables: {
+        'userId': timeBlock.userId,
+        'startTime': timeBlock.startDate.toIso8601String(),
+        'reportedMinutes': timeBlock.reportedMinutes
+      },
+      oldData: 'timeblocks',
+      newData: 'createTimeBlock',
+    );
+     print(result.data);
+    final TimeBlock model =
+        TimeBlock.fromJson(result.data!['createTimeBlock']);
+   
 
-  // Stream getTimeblocks() async* {
-  //   ValueNotifier<GraphQLClient> _client = _point.getClient();
-
-  //   QueryResult result =  await _client.value.query(QueryOptions(
-  //       document: gql(TimeBlocksSchema.getTimeblocks),
-  //       fetchPolicy: FetchPolicy.cacheAndNetwork));
-
-  //   if (result.hasException) {
-  //     if (result.exception!.graphqlErrors.isEmpty) {
-  //       _response = "No connectivity found";
-  //     } else {
-  //       _response = result.exception!.graphqlErrors[0].message.toString();
-  //     }
-  //   } else {
-  //     var timeblocksList = (result.data!['timeblocks'] as List <dynamic>)
-  //         .map((tb) => TimeBlock.fromJson(tb))
-  //         .toList();
-  //     //yield timeblocksList;
-  //     _tbController.add(timeblocksList);
-  //   }
-  //   yield _tbController.stream;
-  // }
-
-   Future<dynamic> getTimeblocks() async {
-    ValueNotifier<GraphQLClient> _client = _point.getClient();
-
-    QueryResult result = await _client.value.query(QueryOptions(
-        document: gql(TimeBlocksSchema.getTimeblocks),
-        fetchPolicy: FetchPolicy.cacheAndNetwork));
-
-    if (result.hasException) {
-      if (result.exception!.graphqlErrors.isEmpty) {
-        _response = "No connectivity found";
-      } else {
-        _response = result.exception!.graphqlErrors[0].message.toString();
-      }
-    } else {
-      timeblocksList = (result.data!['timeblocks'] as List<dynamic>)
-          .map((tb) => TimeBlock.fromJson(tb))
-          .toList();
-      return timeblocksList;
-    }
+    return model;
   }
 
-  // void getTimeblocks()  {
-  //   ValueNotifier<GraphQLClient> _client = _point.getClient();
+  @override
+  ObservableQuery<Object?> getTimeBlocks() {
+    return _api.safeWatchQuery(TimeBlocksSchema.getTimeblocks);
+  }
 
-  //   final observableQuery = _client.value.watchQuery(WatchQueryOptions(
-  //       fetchResults: true,
-  //       document: gql(TimeBlocksSchema.getTimeblocks),
-  //       fetchPolicy: FetchPolicy.cacheAndNetwork));
+  @override
+  Future<TimeBlock> deleteTimeBlock(String? timeBlockId) async {
+    final result = await _api.safeMutation(
+      documentMutation: TimeBlocksSchema.deleteTimeBlock,
+      documentQuery: TimeBlocksSchema.getTimeblocks,
+      variables: {
+        'timeBlockGuid': timeBlockId,
+      },
+      oldData: 'timeblocks',
+      newData: 'createTimeBlock',
+    );
+     print(result.data);
+    final TimeBlock model = TimeBlock.fromJson(result.data!['deleteTimeBlock']);
 
-  //   observableQuery.stream.listen((QueryResult result) {
-  //     if (result.hasException) {
-  //       if (result.exception!.graphqlErrors.isEmpty) {
-  //         _response = "No connectivity found";
-  //       } else {
-  //         _response = result.exception!.graphqlErrors[0].message.toString();
-  //       }
-  //     } else {
-  //       timeblocksList = (result.data!['timeblocks'] )
-  //           .map((tb) => TimeBlock.fromJson(tb))
-  //           .toList();
-  //      // return timeblocksList;
-  //     }
-  //   });
-  //   observableQuery.close();
-  // }
+    return model;
+  }
 }

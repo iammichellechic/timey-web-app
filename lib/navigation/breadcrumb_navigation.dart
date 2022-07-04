@@ -1,12 +1,12 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/material.dart';
-import '../locator.dart';
+
 import '../navigation/navigator_observer.dart';
-import '../services/navigation_service.dart';
+
 
 class BreadCrumbNavigator extends StatelessWidget {
   final List<Route> currentRouteStack;
-  final NavigationService _navigationService = locator<NavigationService>();
+ 
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 

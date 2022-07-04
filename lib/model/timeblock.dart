@@ -1,4 +1,3 @@
-import 'package:timey_web/viewmodels/timeblocks_viewmodels.dart';
 
 import 'tag.dart';
 import '../presentation/resources/formats_manager.dart';
@@ -26,13 +25,8 @@ class TimeBlock {
 
   TimeBlock.fromJson(Map<String, dynamic> data)
       : startDate = Utils.convertStringtoDate(data['datetimeStart']),
-        endDate = Utils.convertStringtoDate(data['datetimeEnd']),
+        // endDate = Utils.convertStringtoDate(data['datetimeEnd']),
         id = data['timeBlockGuid'],
         reportedMinutes = data['reportedMinutes'];
 
-  Map<String, dynamic> toJson() => {
-        'userIdCreated': userId,
-        'reportedMinutes': reportedMinutes,
-        'datetimeStart': startDate,
-      };
 }

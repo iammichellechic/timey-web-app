@@ -1,13 +1,14 @@
-import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
+
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:stacked/stacked.dart';
-import 'package:timey_web/navigation/breadcrumb_navigation.dart';
+
 import 'package:timey_web/presentation/resources/values_manager.dart';
 import 'package:timey_web/presentation/widgets/switch_theme_button_widget.dart';
 
 import '../viewmodels/timeblocks_viewmodels.dart';
 
+//TODO: Fix appBar 
 class BaseLayout extends StatelessWidget {
   final Widget child;
   const BaseLayout({Key? key, required this.child}) : super(key: key);
@@ -16,7 +17,7 @@ class BaseLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<TimeBlocksViewModel>.reactive(
       viewModelBuilder: () => TimeBlocksViewModel(),
-      onModelReady: (viewModel) => viewModel.getTimeblocksList(),
+      onModelReady: (viewModel) => viewModel.getTimeBlocks(),
       builder: (context, viewModel, _) => Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -31,7 +32,7 @@ class BaseLayout extends StatelessWidget {
             ),
           ),
           actions: [
-            buildSearchField(context),
+           // buildSearchField(context),
              SwitchThemeButtonWidget()],
         ),
         body: CenteredView(
@@ -72,7 +73,7 @@ class NavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenTypeLayout(
-      mobile: NavigationBarTabletDesktop(),
+      mobile: NavigationBarMobile(),
       tablet: NavigationBarTabletDesktop(),
       desktop: NavigationBarTabletDesktop(),
     );
@@ -113,17 +114,6 @@ class NavigationBarTabletDesktop extends StatelessWidget {
       height: 80,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-        child: RowSuper(mainAxisSize: MainAxisSize.max,
-            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text('TIMEY', style: Theme.of(context).textTheme.headline1),
-              SizedBox(
-                  height: 50,
-                  // width: 500,
-                  child: BreadCrumbNavigator()),
-              buildSearchField(context),
-              SwitchThemeButtonWidget()
-            ]),
       ),
     );
   }

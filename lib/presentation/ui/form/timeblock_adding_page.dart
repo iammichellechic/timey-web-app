@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
 import 'package:responsive_builder/responsive_builder.dart';
 
 import 'package:timey_web/presentation/utils/constant_duration_values.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
-import '../../../data/providers/add_timeblock_provider.dart';
+import 'package:timey_web/viewmodels/timeblocks_viewmodels.dart';
+
 import '../../../locator.dart';
 import '../../../services/navigation_service.dart';
 import '/presentation/resources/values_manager.dart';
@@ -80,8 +81,9 @@ class _TimeblockPageState extends State<TimeblockPage> {
         //TODO: edit
 
       } else {
-        Provider.of<AddTimeBlockProvider>(context, listen: false)
-            .addTimeBlock(timeblock: timeBlock);
+        // Provider.of<AddTimeBlockProvider>(context, listen: false)
+        //     .addTimeBlock(timeblock: timeBlock);
+        TimeBlocksViewModel().getCreateTimeBlockFxn(timeBlock);
       }
 
       _navigationService.goBack();
@@ -268,8 +270,10 @@ class _TimeblockPageState extends State<TimeblockPage> {
   Widget buildDropdownField({
     required String text,
     required VoidCallback onClicked,
+    Widget? leadingIcon,
   }) =>
       ListTile(
+        leading: leadingIcon,
         shape: RoundedRectangleBorder(
           side: BorderSide(color: Colors.black, width: 1),
           borderRadius: BorderRadius.circular(5),
@@ -284,8 +288,9 @@ class _TimeblockPageState extends State<TimeblockPage> {
 
   //Hours
   Widget buildHoursDropDown() => SizedBox(
-          child: DropdownButtonFormField<int>(
+        child: DropdownButtonFormField<int>(
         decoration: InputDecoration(
+          //icon: Icon(Icons.timer_10_rounded),
           enabledBorder: OutlineInputBorder(),
         ),
         value: hours,
@@ -302,6 +307,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
   Widget buildMinutesDropDown() => SizedBox(
           child: DropdownButtonFormField<int>(
         decoration: InputDecoration(
+          //icon: Icon(Icons.av_timer_outlined),
           enabledBorder: OutlineInputBorder(),
         ),
         value: minutes,
@@ -337,6 +343,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
   Widget buildDay() => buildHeader(
         header: 'Date',
         child: buildDropdownField(
+          //leadingIcon: Icon(Icons.punch_clock_outlined),
           text: Utils.toDate(startDate),
           onClicked: () => pickFromDateTime(pickDate: true),
         ),
@@ -345,6 +352,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
   Widget buildTime() => buildHeader(
         header: 'Time',
         child: buildDropdownField(
+          //leadingIcon: Icon(Icons.timer_10_outlined),
           text: Utils.toTime(startDate),
           onClicked: () => pickFromDateTime(pickDate: false),
         ),

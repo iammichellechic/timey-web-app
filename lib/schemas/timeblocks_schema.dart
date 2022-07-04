@@ -3,7 +3,6 @@ class TimeBlocksSchema {
   query {
   timeblocks{
     datetimeStart
-    datetimeEnd
     reportedMinutes
     userIdCreated
     timeBlockGuid

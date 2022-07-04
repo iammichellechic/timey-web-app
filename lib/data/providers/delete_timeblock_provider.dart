@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:timey_web/schemas/timeblocks_schema.dart';
-import '../../locator.dart';
-import '../../endpoint_url.dart';
-import '../../services/timeblocks_api_service.dart';
-import '../../viewmodels/timeblocks_viewmodels.dart';
 
+import '../../endpoint_url.dart';
+
+//No longer needed
 class DeleteTimeBlockProvider extends ChangeNotifier {
   bool _status = false;
 
@@ -17,7 +16,7 @@ class DeleteTimeBlockProvider extends ChangeNotifier {
 
   final EndPoint _point = EndPoint();
 
-  final _api = locator<TimeBlocksApi>();
+  //final _api = locator<TimeBlocksApi>();
 
   Future<void> deleteTimeBlock({
     String? timeBlockId,
@@ -47,8 +46,6 @@ class DeleteTimeBlockProvider extends ChangeNotifier {
       print(result.data);
       _status = false;
       _response = "Task was successfully Deleted";
-
-      await _api.getTimeblocks();
 
       notifyListeners();
     }
