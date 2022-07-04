@@ -1,24 +1,27 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: timey-web-ingress
-  namespace: timey
+  name: zero8-web-ingress
+  namespace: zero8
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      rewrite /([^.]+)$ / break;
 spec:
   tls:
   - hosts:
-    - timey.zero8.io
+    - zero8.io
     secretName: tls-secret
   rules:
-  - host: timey.zero8.io
+  - host: zero8.io
     http:
       paths:
       - backend:
           service:
-            name: timey-web
+            name: zero8-web
             port:
               number: 80
-        path: /
+        path: /(.*)
         pathType: Prefix
