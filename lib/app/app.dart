@@ -29,10 +29,10 @@ class MyApp extends StatelessWidget {
             create: (_) => DeleteTimeBlockProvider(),
           ),
           ChangeNotifierProvider(
-            create: (_) => NavigationProvider(), //create
+            create: (_) => NavigationProvider(),
           ),
           ChangeNotifierProvider(
-            create: (_) => ThemeProvider(),   //crete
+            create: (_) => ThemeProvider(), 
           ),
         ],
         child: Builder(builder: (context) {
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
             builder: (context, child) => Overlay(
               initialEntries: [
                 OverlayEntry(
-                  builder: (context) => BaseLayout(child: child!),
+                  builder: (context) => BaseLayout(child: child!),//child has navigastor
                 ),
               ],
             ),

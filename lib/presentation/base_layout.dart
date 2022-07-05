@@ -1,82 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:stacked/stacked.dart';
-
 import '../viewmodels/timeblocks_viewmodels.dart';
 import 'resources/values_manager.dart';
 import 'shared/menu_drawer.dart';
 import 'ui/form/timeblock_adding_page.dart';
 import 'widgets/animatedicon_widget.dart';
-import 'widgets/switch_theme_button_widget.dart';
 
 //TODO: Fix appBar
 // nested appbar
 
 class BaseLayout extends StatelessWidget {
+  const BaseLayout({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
   final Widget child;
-  const BaseLayout({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<TimeBlocksViewModel>.reactive(
         viewModelBuilder: () => TimeBlocksViewModel(),
         onModelReady: (viewModel) => viewModel.getTimeBlocks(),
-        builder: (context, viewModel, _) => Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 5,
-              leadingWidth: 200,
-              leading: Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                      AppPadding.p40, AppPadding.p12, 0, AppPadding.p12),
-                  child: Text('TIMEY',
-                      style: Theme.of(context).textTheme.headline1),
-                ),
-              ),
-              actions: [
-                // buildSearchField(context),
-                SwitchThemeButtonWidget()
-              ],
-            ),
-            extendBodyBehindAppBar: false,
-            body: buildScaffoldWithNavigator(context, child)));
-  }
-}
+        builder: (context, viewModel, _) => ResponsiveBuilder(
+            builder: (context, sizingInformation) =>  
+                    Scaffold(
+                        appBar: AppBar(
+                          backgroundColor: Colors.transparent,
+                          elevation: 5,
 
-Widget buildScaffoldWithNavigator(BuildContext context, Widget child) {
-  return ResponsiveBuilder(
-    builder: (context, sizingInformation) => Row(children: <Widget>[
-      if (sizingInformation.isDesktop)
-        const MenuDrawer(
-          permanentlyDisplay: true,
-        ),
-      Expanded(
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            iconTheme: Theme.of(context).iconTheme,
-            elevation: 0,
-            automaticallyImplyLeading: sizingInformation.isMobile,
-            actions: const [
-              AnimatedIconWidget(),
-            ],
-          ),
-          extendBodyBehindAppBar: false,
-          endDrawer: TimeblockPage(),
-          drawer: sizingInformation.isMobile
-              ? const MenuDrawer(
-                  permanentlyDisplay: false,
-                )
-              : null,
-          body: CenteredView(
-            child: child,
-          ),
-        ),
-      )
-    ]),
-  );
+                          title: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(AppPadding.p40,
+                                  AppPadding.p12, 0, AppPadding.p12),
+                              child: Text('TIMEY',
+                                  style: Theme.of(context).textTheme.headline1),
+                            ),
+                          ),
+                          actions: const [
+                            // buildSearchField(context),
+                            AnimatedIconWidget(), 
+                          ],                       
+                        ),
+                        
+                        extendBodyBehindAppBar: false,
+                        endDrawer: TimeblockPage(), // has no navigator
+                        drawer: sizingInformation.isMobile
+                            ? const MenuDrawer(
+                                permanentlyDisplay: false,
+                              )
+                            : null,
+                        body: CenteredView(
+                          child: Row(
+                            children: [
+                               if (sizingInformation.isDesktop)
+                                const MenuDrawer(
+                                  permanentlyDisplay: true,
+                                ),
+                              Expanded(
+                                  child: child), // the navigator is here , here goes all the views/screens
+                            ],
+                          ), 
+                        )),
+                  )
+                );
+  }
 }
 
 class CenteredView extends StatelessWidget {

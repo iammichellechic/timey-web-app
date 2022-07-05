@@ -357,7 +357,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
   Widget buildTime() => buildHeader(
         header: 'Time',
         child: buildDropdownField(
-          leadingIcon: Icon(Icons.timer_10_outlined),
+          leadingIcon: Icon(Icons.av_timer_outlined),
           text: Utils.toTime(startDate),
           onClicked: () => pickFromDateTime(pickDate: false),
         ),

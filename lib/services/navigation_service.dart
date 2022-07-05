@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../navigation/navigator_observer.dart';
@@ -10,7 +11,9 @@ class NavigationService {
     var curr = ModalRoute.of(navigatorKey.currentContext!);
     if (curr != null) {
       print(ModalRoute.of(navigatorKey.currentContext!)!.settings.name);
+    
     }
+    
     return navigatorKey.currentState!.pushNamed(routeName);
   }
 

@@ -151,17 +151,35 @@ class MenuDrawer extends StatelessWidget {
     final safeArea =
         EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
 
-    return Container(
-        padding: safeArea,
-        height: 100,
-        child: DrawerHeader(
-          child: Container(
-          padding: EdgeInsets.only(left: AppPadding.p30),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text('ZERO8', style: Theme.of(context).textTheme.headline1),
-          ),
-        )));
+    return ResponsiveBuilder(
+      builder: (BuildContext context, SizingInformation sizingInformation) => 
+    Container(
+          padding: safeArea,
+          height: 100,
+          child: DrawerHeader(
+            child: Container(
+            padding: EdgeInsets.only(left: AppPadding.p30),
+            child: Column(
+              children: [
+                if (sizingInformation.isMobile)
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(icon: Icon(
+                        Icons.arrow_back
+                      ),
+                      onPressed: () {
+                        //_navigationService.goBack();
+                        Scaffold.of(context).closeDrawer();
+                      }),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text('ZERO8 AB', style: Theme.of(context).textTheme.headline1),
+                ),
+              ],
+            ),
+          ))),
+    );
   }
 
   Widget buildUserProfile(BuildContext context) => Material(
