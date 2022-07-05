@@ -8,20 +8,15 @@ import '../../resources/values_manager.dart';
 class ChartPage extends StatelessWidget {
   final List<charts.Series<EntryTotal, String>> seriesData;
 
-
-  const ChartPage(
-      {Key? key, required this.seriesData})
-      : super(key: key);
+  const ChartPage({Key? key, required this.seriesData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Scaffold(
           body: Container(
-        //height: 100,
         padding: EdgeInsets.all(AppPadding.p12),
         child: Center(
           child: Column(
             children: <Widget>[
-             
               Expanded(
                   child: charts.BarChart(
                 seriesData,
@@ -44,14 +39,13 @@ class ChartPage extends StatelessWidget {
                 defaultRenderer: charts.BarRendererConfig(
                     cornerStrategy: charts.ConstCornerStrategy(10),
                     barRendererDecorator: charts.BarLabelDecorator<String>(
-                      labelPadding: 10,
+                        labelPadding: 10,
                         insideLabelStyleSpec: charts.TextStyleSpec(
                             fontFamily: FontConstants.fontFamily,
                             fontSize: 10,
-                            lineHeight: 2 ,
+                            lineHeight: 2,
                             color: charts.ColorUtil.fromDartColor(
-                                Theme.of(context).colorScheme.onPrimary)
-                                ),
+                                Theme.of(context).colorScheme.onPrimary)),
                         outsideLabelStyleSpec: charts.TextStyleSpec(
                             fontFamily: FontConstants.fontFamily,
                             fontSize: 10,

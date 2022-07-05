@@ -39,7 +39,7 @@ class MenuDrawer extends StatelessWidget {
                       endIndent: AppMargin.m12,
                     ),
                     buildUserProfile(context),
-                    //SwitchThemeButtonWidget(),
+                
                     const SizedBox(height: 12),
                     if (permanentlyDisplay)
                       VerticalDivider(
@@ -157,8 +157,8 @@ class MenuDrawer extends StatelessWidget {
           padding: safeArea,
           height: 100,
           child: DrawerHeader(
-            child: Container(
-            padding: EdgeInsets.only(left: AppPadding.p30),
+            child: SizedBox(
+           
             child: Column(
               children: [
                 if (sizingInformation.isMobile)
@@ -174,7 +174,10 @@ class MenuDrawer extends StatelessWidget {
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text('ZERO8 AB', style: Theme.of(context).textTheme.headline1),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left:AppPadding.p12),
+                    child: Text('ZERO8 AB', style: Theme.of(context).textTheme.headline1),
+                  ),
                 ),
               ],
             ),

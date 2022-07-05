@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:stacked/stacked.dart';
+
+import 'package:timey_web/presentation/widgets/switch_theme_button_widget.dart';
+import '../locator.dart';
+import '../navigation/routes_manager.dart';
+import '../services/navigation_service.dart';
 import '../viewmodels/timeblocks_viewmodels.dart';
 import 'resources/values_manager.dart';
 import 'shared/menu_drawer.dart';
@@ -8,15 +13,16 @@ import 'ui/form/timeblock_adding_page.dart';
 import 'widgets/animatedicon_widget.dart';
 
 //TODO: Fix appBar
-// nested appbar
+//Find a solution to pass the navigator key to the endrawer(form)
+//this is currently fixed but the routes are not shown in the url
 
 class BaseLayout extends StatelessWidget {
   const BaseLayout({
     Key? key,
-    required this.child,
+    this.child,
   }) : super(key: key);
 
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -24,48 +30,52 @@ class BaseLayout extends StatelessWidget {
         viewModelBuilder: () => TimeBlocksViewModel(),
         onModelReady: (viewModel) => viewModel.getTimeBlocks(),
         builder: (context, viewModel, _) => ResponsiveBuilder(
-            builder: (context, sizingInformation) =>  
-                    Scaffold(
-                        appBar: AppBar(
-                          backgroundColor: Colors.transparent,
-                          elevation: 5,
-
-                          title: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(AppPadding.p40,
-                                  AppPadding.p12, 0, AppPadding.p12),
-                              child: Text('TIMEY',
-                                  style: Theme.of(context).textTheme.headline1),
-                            ),
+              builder: (context, sizingInformation) => Scaffold(
+                  appBar: AppBar(
+                    backgroundColor: Colors.transparent,
+                    elevation: 5,
+                    title: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                            0, AppPadding.p12, 0, AppPadding.p12),
+                        child: Text('TIMEY',
+                            style: Theme.of(context).textTheme.headline1),
+                      ),
+                    ),
+                    actions: <Widget>[
+                      IconButton(
+                          icon: const Icon(Icons.person),
+                          onPressed: () {
+                            // Insert Theming here
+                          }),
+                      AnimatedIconWidget(),
+                    ],
+                  ),
+                  extendBodyBehindAppBar: false,
+                  endDrawer: TimeblockPage(),
+                  drawer: sizingInformation.isMobile
+                      ? const MenuDrawer(
+                          permanentlyDisplay: false,
+                        )
+                      : null,
+                  body: CenteredView(
+                    child: Row(
+                      children: [
+                        if (sizingInformation.isDesktop)
+                          const MenuDrawer(
+                            permanentlyDisplay: true,
                           ),
-                          actions: const [
-                            // buildSearchField(context),
-                            AnimatedIconWidget(), 
-                          ],                       
-                        ),
-                        
-                        extendBodyBehindAppBar: false,
-                        endDrawer: TimeblockPage(), // has no navigator
-                        drawer: sizingInformation.isMobile
-                            ? const MenuDrawer(
-                                permanentlyDisplay: false,
-                              )
-                            : null,
-                        body: CenteredView(
-                          child: Row(
-                            children: [
-                               if (sizingInformation.isDesktop)
-                                const MenuDrawer(
-                                  permanentlyDisplay: true,
-                                ),
-                              Expanded(
-                                  child: child), // the navigator is here , here goes all the views/screens
-                            ],
-                          ), 
+                        Expanded(
+                            child: Navigator(
+                          key: locator<NavigationService>().navigatorKey,
+                          onGenerateRoute: RouteGenerator.getRoute,
+                          initialRoute: Routes.overviewRoute,
                         )),
-                  )
-                );
+                      ],
+                    ),
+                  )),
+            ));
   }
 }
 
