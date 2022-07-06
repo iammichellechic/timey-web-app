@@ -4,7 +4,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 class EndPoint {
   ValueNotifier<GraphQLClient> getClient() {
     ValueNotifier<GraphQLClient> _client = ValueNotifier(GraphQLClient(
-      link: HttpLink('http://api.zero8.io/ui/playground'),
+      link: HttpLink('https://api.zero8.io/graphql'),
  
       cache: GraphQLCache(store: HiveStore()),
     ));

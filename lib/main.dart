@@ -5,7 +5,7 @@ import 'package:timey_web/app/app.dart';
 import 'package:timey_web/locator.dart';
 
 
-//NOTE: the orientation this app is set to displayed in is indicated below
+//NOTE: the orientation this app is set to display is indicated below
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();

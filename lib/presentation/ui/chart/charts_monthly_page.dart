@@ -37,7 +37,7 @@ class MonthlyChart extends ViewModelWidget<TimeBlocksViewModel> {
   }
 
   Widget buildChartWidget(BuildContext context, TimeBlocksViewModel viewModel) {
-    //DO: id:tags.name
+    //TODO: id:tags.name
     final ScrollController controller = ScrollController();
 
     List<charts.Series<utils.EntryTotal, String>> seriesData = [

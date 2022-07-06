@@ -22,13 +22,16 @@ class TabBarWidget extends StatelessWidget {
                 preferredSize: Size.fromHeight(AppSize.s50),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: TabBar(
-                    isScrollable: true,
-                    tabs: tabs,
-                    indicator: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            AppSize.s50), // Creates border
-                        color: Theme.of(context).colorScheme.primaryContainer),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left:AppPadding.p12),
+                    child: TabBar(
+                      isScrollable: true,
+                      tabs: tabs,
+                      indicator: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                              AppSize.s50), // Creates border
+                          color: Theme.of(context).colorScheme.primaryContainer),
+                    ),
                   ),
                 )),
             elevation: 0,

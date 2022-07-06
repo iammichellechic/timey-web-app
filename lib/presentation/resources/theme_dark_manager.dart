@@ -48,7 +48,7 @@ ThemeData getdarkAppTheme() {
           subtitle2:
               getBoldStyle(color: ColorManager.grey, fontSize: FontSize.s16),
           caption: getRegularStyle(color: ColorManager.darkPrimary),
-          bodyText1: getBoldStyle(
+          bodyText1: getRegularStyle(
               color: ColorManager.darkOnPrimaryContainer,
               fontSize: FontSize.s14),
           bodyText2:

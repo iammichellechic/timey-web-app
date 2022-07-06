@@ -1,5 +1,6 @@
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:stacked/stacked.dart';
 
 import 'package:timey_web/model/timeblock.dart';
 
@@ -9,12 +10,12 @@ import '../resources/values_manager.dart';
 import '../utils/snackbar_utils.dart';
 import 'dialogs_widget.dart';
 
-class ActionButtonsWidget extends StatelessWidget {
+class ActionButtonsWidget extends ViewModelWidget<TimeBlocksViewModel> {
   final TimeBlock? entry;
   const ActionButtonsWidget({Key? key, this.entry}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => SizedBox(
+  Widget build(BuildContext context, TimeBlocksViewModel viewModel) => SizedBox(
         width: 20,
         child: PopupMenuButton(
           padding: EdgeInsets.all(0),
@@ -37,7 +38,9 @@ class ActionButtonsWidget extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     shape: CircleBorder(),
                     padding: EdgeInsets.all(AppPadding.p6),
-                    primary: Theme.of(context).colorScheme.primary, // <-- Button color
+                    primary: Theme.of(context)
+                        .colorScheme
+                        .primary, // <-- Button color
                   ),
                 ),
                 Text(
@@ -57,7 +60,9 @@ class ActionButtonsWidget extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       shape: CircleBorder(),
                       padding: EdgeInsets.all(AppPadding.p6),
-                      primary: Theme.of(context).colorScheme.error, // <-- Button color
+                      primary: Theme.of(context)
+                          .colorScheme
+                          .error, // <-- Button color
                     ),
                   ),
                   Text(
@@ -66,17 +71,21 @@ class ActionButtonsWidget extends StatelessWidget {
                   ),
                 ])),
           ],
-          onSelected: (item) => selectedItem(context, item, entry),
+          onSelected: (item) => selectedItem(context, item, entry, viewModel),
         ),
       );
 }
 
-void selectedItem(BuildContext context, item, TimeBlock? entry) {
+void selectedItem(BuildContext context, item, TimeBlock? entry,
+    TimeBlocksViewModel viewModel) {
   switch (item) {
     case 0:
-      showGlobalDrawer<EntryEditDialog>(
+      showAlignedDialog<EntryEditDialog>(
+        avoidOverflow: true,
         context: context,
-        direction: AxisDirection.right,
+        followerAnchor: Alignment.topRight,
+        targetAnchor: Alignment.bottomRight,
+        barrierColor: Colors.transparent,
         duration: Duration(seconds: 1),
         builder: (context) {
           return EntryEditDialog(
@@ -106,12 +115,8 @@ void selectedItem(BuildContext context, item, TimeBlock? entry) {
                 style: Theme.of(context).textTheme.headline5,
               ),
               onPressed: () {
-               
-                // Provider.of<DeleteTimeBlockProvider>(context, listen: false).
-                // deleteTimeBlock(timeBlockId: entry!.id);
+                viewModel.getDeleteTimeBlockFxn(entry!.id);
 
-                 TimeBlocksViewModel().getDeleteTimeBlockFxn(entry!.id);
-                  
                 Navigator.of(context).pop();
 
                 SnackBarUtils.showSnackBar(

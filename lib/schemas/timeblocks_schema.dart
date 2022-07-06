@@ -19,7 +19,6 @@ mutation(\$userId:Int, \$startTime: DateTime, \$reportedMinutes: Int){
     userIdCreated
     }
 }
-
  """;
 
   static String deleteTimeBlock = """

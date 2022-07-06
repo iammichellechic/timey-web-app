@@ -8,6 +8,8 @@ import '../../resources/formats_manager.dart';
 import '../../resources/styles_manager.dart';
 import '/presentation/resources/color_manager.dart';
 
+//DO: Paginated datatable and sort dates
+
 class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
   const MyDataTable({Key? key}) : super(key: key);
 
@@ -17,7 +19,7 @@ class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
         ? Container(
             padding: EdgeInsets.only(top: AppPadding.p40),
             child: Column(children: [
-              buildSearchField(context),
+              
               const SizedBox(height: AppSize.s30),
               Container(
                   decoration: BoxDecoration(
@@ -113,6 +115,7 @@ class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
             ),
           );
   }
+ 
 }
 
 DataColumn buildDataColumn(

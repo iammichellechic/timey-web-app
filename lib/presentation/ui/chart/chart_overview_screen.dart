@@ -32,9 +32,7 @@ class DashBoardScreen extends StatelessWidget {
               child: TabBarWidget(
                 tabs: [
                   Tab(
-                      icon: Padding(
-                    padding: const EdgeInsets.only(left: AppPadding.p12),
-                    child: Row(
+                      icon: Row(
                       children: [
                         Icon(
                           Icons.calendar_month,
@@ -46,7 +44,7 @@ class DashBoardScreen extends StatelessWidget {
                             style: Theme.of(context).textTheme.subtitle1)
                       ],
                     ),
-                  )),
+                  ),
                   Tab(
                     icon: Row(
                       children: [

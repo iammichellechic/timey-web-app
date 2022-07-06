@@ -9,7 +9,7 @@ import '../services/navigation_service.dart';
 import '../viewmodels/timeblocks_viewmodels.dart';
 import 'resources/values_manager.dart';
 import 'shared/menu_drawer.dart';
-import 'ui/form/timeblock_adding_page.dart';
+import 'ui/form/timeblock_form_page.dart';
 import 'widgets/animatedicon_widget.dart';
 
 //TODO: Fix appBar
