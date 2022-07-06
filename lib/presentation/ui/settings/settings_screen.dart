@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:timey_web/presentation/resources/values_manager.dart';
+import 'package:timey_web/presentation/widgets/switch_theme_button_widget.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -12,5 +13,14 @@ class SettingsScreen extends StatelessWidget {
 
 @override
 Widget buildSettingsWidget(BuildContext context) {
-  return SizedBox(child: Center(child: Text('This is the settings section')));
+  return SizedBox(
+      child: Align(
+        alignment: Alignment.center,
+      child: Row(
+    children: [
+      Text('Theme'),
+      const SizedBox(width: AppSize.s30),
+      SwitchThemeButtonWidget(),
+    ],
+  )));
 }

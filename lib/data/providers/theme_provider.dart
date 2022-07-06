@@ -4,7 +4,7 @@ import 'package:flutter/scheduler.dart';
 class ThemeProvider extends ChangeNotifier {
   // use ThemeMode.system to set the thememode system on mobile
   //as default
-  ThemeMode themeMode = ThemeMode.dark;
+  ThemeMode themeMode = ThemeMode.light;
 
   bool get isDarkMode {
     if (themeMode == ThemeMode.system) {

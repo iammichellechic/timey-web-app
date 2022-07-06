@@ -7,7 +7,6 @@ import 'package:timey_web/presentation/resources/color_manager.dart';
 
 import '../../widgets/tabbar_widget.dart';
 
-
 class DashBoardScreen extends StatelessWidget {
   const DashBoardScreen({Key? key}) : super(key: key);
 
@@ -21,7 +20,9 @@ class DashBoardScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                  AppPadding.p12, AppPadding.p24, 0, AppPadding.p12),
               child: Text('Time Reports',
                   style: Theme.of(context).textTheme.headline1),
             ),
@@ -32,27 +33,31 @@ class DashBoardScreen extends StatelessWidget {
                 tabs: [
                   Tab(
                       icon: Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_month,
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      ),
-                      SizedBox(width: AppSize.s12),
-                      Text('Month',
-                          style: Theme.of(context).textTheme.subtitle1)
-                    ],
-                  )),
+                      children: [
+                        Icon(
+                          Icons.calendar_month,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
+                        ),
+                        SizedBox(width: AppSize.s12),
+                        Text('Month',
+                            style: Theme.of(context).textTheme.subtitle1)
+                      ],
+                    ),
+                  ),
                   Tab(
-                      icon: Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_view_week,
-                        color: ColorManager.onPrimaryContainer,
-                      ),
-                      SizedBox(width: AppSize.s12),
-                      Text('Week', style: Theme.of(context).textTheme.subtitle1)
-                    ],
-                  )),
+                    icon: Row(
+                      children: [
+                        Icon(
+                          Icons.calendar_view_week,
+                          color: ColorManager.onPrimaryContainer,
+                        ),
+                        SizedBox(width: AppSize.s12),
+                        Text('Week',
+                            style: Theme.of(context).textTheme.subtitle1)
+                      ],
+                    ),
+                  ),
                 ],
                 children: const [
                   MonthlyChart(),

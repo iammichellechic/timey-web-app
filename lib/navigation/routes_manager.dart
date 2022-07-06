@@ -3,7 +3,7 @@ import 'package:timey_web/presentation/ui/login/login.dart';
 import 'package:timey_web/presentation/ui/payment/payment_screen.dart';
 import 'package:timey_web/presentation/ui/signup/signup.dart';
 import '../presentation/ui/chart/chart_overview_screen.dart';
-import '../presentation/ui/form/timeblock_adding_page.dart';
+import '../presentation/ui/form/timeblock_form_page.dart';
 import '../presentation/ui/calendar/calendar_screen.dart';
 import '../presentation/ui/settings/settings_screen.dart';
 import '../presentation/ui/table/table_timeblock_screen.dart';

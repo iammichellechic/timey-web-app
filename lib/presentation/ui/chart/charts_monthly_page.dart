@@ -1,6 +1,8 @@
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:responsive_builder/responsive_builder.dart';
 
 import 'package:stacked/stacked.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
@@ -17,26 +19,26 @@ class MonthlyChart extends ViewModelWidget<TimeBlocksViewModel> {
   @override
   Widget build(BuildContext context, TimeBlocksViewModel viewModel) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(
+      padding: const EdgeInsets.fromLTRB(
           AppPadding.p12, AppPadding.p24, AppPadding.p12, AppPadding.p12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
         children: [
-          
           TotalReportedTimeWidget(
             label: 'Total Reported Time',
             text:
                 '${utils.getMonthTotalReportedHours(viewModel.appointmentData)}hrs',
           ),
-          buildChartWidget(context, viewModel),
+          buildChartWidget(context, viewModel)
         ],
       ),
     );
   }
 
   Widget buildChartWidget(BuildContext context, TimeBlocksViewModel viewModel) {
-    //DO: id:tags.name
+    //TODO: id:tags.name
+    final ScrollController controller = ScrollController();
 
     List<charts.Series<utils.EntryTotal, String>> seriesData = [
       charts.Series(
@@ -54,12 +56,29 @@ class MonthlyChart extends ViewModelWidget<TimeBlocksViewModel> {
           labelAccessorFn: (total, _) => total.value.toString()),
     ];
 
-    return Expanded(
-        child: SizedBox(
-            width: double.infinity,
-            child: ChartPage(
-              seriesData: seriesData,
-            )));
+    return ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+          PointerDeviceKind.touch,
+          PointerDeviceKind.mouse,
+        }),
+        child: ResponsiveBuilder(
+        builder: (context, sizingInformation) => SingleChildScrollView(
+          controller: controller,
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SizedBox(
+                width: sizingInformation.isDesktop
+                ?
+                MediaQuery.of(context).size.width
+                : 1000,
+                  height: 450,
+                  child: ChartPage(
+                    seriesData: seriesData,
+                  )),
+            ],
+          ),
+        )));
   }
 
 }

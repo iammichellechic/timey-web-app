@@ -25,11 +25,11 @@ class MenuDrawer extends StatelessWidget {
         builder: (context, sizingInformation) => Container(
               color: ColorManager.background,
               width: sizingInformation.isDesktop
-                  ? MediaQuery.of(context).size.width * 0.18
+                  ? MediaQuery.of(context).size.width * 0.15
                   : MediaQuery.of(context).size.width,
               child: Drawer(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     buildHeader(context),
                     buildNavItems(context),
@@ -39,7 +39,6 @@ class MenuDrawer extends StatelessWidget {
                       endIndent: AppMargin.m12,
                     ),
                     buildUserProfile(context),
-                    //SwitchThemeButtonWidget(),
                     const SizedBox(height: 12),
                     if (permanentlyDisplay)
                       VerticalDivider(
@@ -117,9 +116,10 @@ class MenuDrawer extends StatelessWidget {
         shape: shape,
         selected: isSelected,
         selectedTileColor: Colors.white24,
-        leading: Icon(icon, color: color),
+        leading: Icon(icon, color: color, size: FontSize.s16),
         title: Text(text,
-            style: makeYourOwnBoldStyle(fontSize: FontSize.s16, color: color)),
+            style:
+                makeYourOwnRegularStyle(fontSize: FontSize.s16, color: color)),
         onTap: () => selectItem(context, item),
       ),
     );
@@ -151,48 +151,59 @@ class MenuDrawer extends StatelessWidget {
     final safeArea =
         EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
 
-    return Container(
-        padding: safeArea,
-        height: 100,
-        child: DrawerHeader(
-          child: Container(
-          padding: EdgeInsets.only(left: AppPadding.p30),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text('ZERO8', style: Theme.of(context).textTheme.headline1),
-          ),
-        )));
+    return ResponsiveBuilder(
+      builder: (BuildContext context, SizingInformation sizingInformation) =>
+          Container(
+              padding: safeArea,
+              height: 100,
+              child: DrawerHeader(
+                  child: SizedBox(
+                child: Column(
+                  children: [
+                    if (sizingInformation.isMobile)
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                            icon: Icon(Icons.arrow_back),
+                            onPressed: () {
+                              //_navigationService.goBack();
+                              Scaffold.of(context).closeDrawer();
+                            }),
+                      ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: AppPadding.p12),
+                        child: Text('ZERO8 AB',
+                            style: Theme.of(context).textTheme.headline1),
+                      ),
+                    ),
+                  ],
+                ),
+              ))),
+    );
   }
 
   Widget buildUserProfile(BuildContext context) => Material(
         child: Center(
           child: Container(
-            padding: EdgeInsets.all(AppPadding.p18),
-            child: Row(
-              children: [
-                Flexible(
-                  child: CircleAvatar(
+              padding: EdgeInsets.all(AppPadding.p18),
+              child: Column(
+                children: [
+                  CircleAvatar(
                     radius: 30,
                   ),
-                ),
-                SizedBox(width: AppSize.s12),
-                Flexible(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    SelectableText(
-                      'Dev. Obi-Wan',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    SelectableText(
-                      'Full-Stack',
-                      style: Theme.of(context).textTheme.bodyText2,
-                    ),
-                  ],
-                )),
-              ],
-            ),
-          ),
+                  SizedBox(height: AppSize.s8),
+                  Text(
+                    'Dev. Obi-Wan',
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                  Text(
+                    'Full-Stack',
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),
+                ],
+              )),
         ),
       );
 }

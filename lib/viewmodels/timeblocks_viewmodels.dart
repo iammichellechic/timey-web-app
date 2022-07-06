@@ -18,8 +18,6 @@ class TimeBlocksViewModel extends ChangeNotifier
   final _api = locator<TimeBlockDataSource>();
   final _controller = StreamController<List<TimeBlock>>();
 
-  //This did not work
-  //final _controller = StreamController<List<TimeBlock>>.broadcast();
 
   List<TimeBlock> _appointmentData = [];
   List<TimeBlock> get appointmentData => _appointmentData;
@@ -57,7 +55,7 @@ class TimeBlocksViewModel extends ChangeNotifier
           tb.minutes = ((hours - tb.hours!) * 60).floor();
           tb.endDate = tb.startDate.add(Duration(minutes: tb.reportedMinutes!));
         }
-
+        
         _controller.add(_appointmentData);
         notifyListeners();
       }
@@ -83,4 +81,6 @@ class TimeBlocksViewModel extends ChangeNotifier
     await deleteTimeBlock(timeBlockId);
     notifyListeners();
   }
+
+    
 }

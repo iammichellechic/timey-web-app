@@ -19,7 +19,6 @@ class SafeApiCall implements ISafeApiCall {
 
   final EndPoint _point = EndPoint();
 
-
   @override
   ObservableQuery<Object?> safeWatchQuery(String document) {
     ValueNotifier<GraphQLClient> _client = _point.getClient();
@@ -27,6 +26,7 @@ class SafeApiCall implements ISafeApiCall {
       WatchQueryOptions(
         document: gql(document),
         fetchResults: true,
+        
       ),
     );
 
@@ -50,6 +50,7 @@ class SafeApiCall implements ISafeApiCall {
         variables: variables,
         fetchPolicy: FetchPolicy.cacheAndNetwork,
         optimisticResult: PartialDataCachePolicy.accept,
+        
 
         //Does not update query after adding/deleting :(
         update: (cache, result) {

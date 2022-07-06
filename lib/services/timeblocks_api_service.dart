@@ -17,6 +17,11 @@ class TimeBlockDataSource implements ITimeBlockDatasource {
   final _api = locator<SafeApiCall>();
 
   @override
+  ObservableQuery<Object?> getTimeBlocks() {
+    return _api.safeWatchQuery(TimeBlocksSchema.getTimeblocks);
+  }
+  
+  @override
   Future<TimeBlock> createTimeBlocks(TimeBlock timeBlock) async {
     final result = await _api.safeMutation(
       documentMutation: TimeBlocksSchema.createTimeblocks,
@@ -33,14 +38,10 @@ class TimeBlockDataSource implements ITimeBlockDatasource {
     final TimeBlock model =
         TimeBlock.fromJson(result.data!['createTimeBlock']);
    
-
     return model;
   }
 
-  @override
-  ObservableQuery<Object?> getTimeBlocks() {
-    return _api.safeWatchQuery(TimeBlocksSchema.getTimeblocks);
-  }
+ 
 
   @override
   Future<TimeBlock> deleteTimeBlock(String? timeBlockId) async {
