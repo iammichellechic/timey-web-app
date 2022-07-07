@@ -1,11 +1,12 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:stacked/stacked.dart';
 import '../model/timeblock.dart';
 import '../../locator.dart';
 import '../../services/timeblocks_api_service.dart';
+import '../services/dialog_services.dart';
 
 abstract class ITimeBlocksViewModel {
   // Stream<List<TimeBlock>> get timeBlockData;
@@ -18,6 +19,8 @@ class TimeBlocksViewModel extends StreamViewModel<List<TimeBlock>>
     implements ITimeBlocksViewModel {
   final _api = locator<TimeBlockDataSource>();
   final _controller = StreamController<List<TimeBlock>>();
+ 
+  //final _dialogService= locator<DialogService>();
 
   List<TimeBlock> _appointmentData = [];
   List<TimeBlock> get appointmentData => _appointmentData;
@@ -70,11 +73,15 @@ class TimeBlocksViewModel extends StreamViewModel<List<TimeBlock>>
 
   Future<void> getCreateTimeBlockFxn(TimeBlock timeBlock) async {
     await createTimeBlocks(timeBlock);
+    // await _dialogService.showDialog(
+    //     title: 'Entry successfully Added',
+    //     description: 'Time report has been created');
     notifyListeners();
   }
 
   Future<void> getDeleteTimeBlockFxn(String? timeBlockId) async {
     await deleteTimeBlock(timeBlockId);
+        //await _dialogService.showConfirmationDialog();
     notifyListeners();
   }
 

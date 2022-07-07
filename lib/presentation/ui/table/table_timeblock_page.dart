@@ -16,98 +16,100 @@ class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
   @override
   Widget build(BuildContext context, TimeBlocksViewModel viewModel) {
     return (viewModel.appointmentData.isNotEmpty)
-        ? Container(
-            padding: EdgeInsets.only(top: AppPadding.p40),
-            child: Column(children: [
-              
-              const SizedBox(height: AppSize.s30),
-              Container(
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.background,
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black12,
-                          offset: Offset(0, 2),
-                          blurRadius: 6.0,
-                        ),
-                      ]),
-                  child: FittedBox(
-                      fit: BoxFit.fitWidth,
-                      clipBehavior: Clip.hardEdge,
-                      child: DataTable(
-                          //settings//
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  left: BorderSide(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      width: 2))),
-                          dataRowHeight: 40,
-                          showCheckboxColumn: false,
-                          dividerThickness: 0,
-                          columnSpacing: 80,
-                          //headingRowColor: MaterialStateColor.resolveWith((states) {return ColorManager.primaryContainer;}),
-
-                          columns: [
-                            buildDataColumn(
-                                text: 'Title',
+        ? SingleChildScrollView(
+          child: Container(
+              padding: EdgeInsets.only(top: AppPadding.p40),
+              child: Column(children: [
+                
+                const SizedBox(height: AppSize.s30),
+                Container(
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.background,
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(0, 2),
+                            blurRadius: 6.0,
+                          ),
+                        ]),
+                    child: FittedBox(
+                        fit: BoxFit.fitWidth,
+                        clipBehavior: Clip.hardEdge,
+                        child: DataTable(
+                            //settings//
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    left: BorderSide(
+                                        color:
+                                            Theme.of(context).colorScheme.primary,
+                                        width: 2))),
+                            dataRowHeight: 40,
+                            showCheckboxColumn: false,
+                            dividerThickness: 0,
+                            columnSpacing: 80,
+                            //headingRowColor: MaterialStateColor.resolveWith((states) {return ColorManager.primaryContainer;}),
+        
+                            columns: [
+                              buildDataColumn(
+                                  text: 'Title',
+                                  context: context,
+                                  isNumeric: false),
+                              buildDataColumn(
+                                text: 'Date',
                                 context: context,
-                                isNumeric: false),
-                            buildDataColumn(
-                              text: 'Date',
-                              context: context,
-                              isNumeric: false,
-                            ),
-                            buildDataColumn(
-                                text: 'Hours',
-                                context: context,
-                                isNumeric: true),
-                            buildDataColumn(
-                                text: 'Minutes',
-                                context: context,
-                                isNumeric: true),
-                            buildDataColumn(
-                                text: 'Actions',
-                                context: context,
-                                isNumeric: true,
-                                tooltipText: 'edit or remove an entry'),
-                          ],
-                          rows: List.generate(viewModel.appointmentData.length,
-                              (index) {
-                            final tb = viewModel.appointmentData;
-                            return DataRow(
-                              cells: <DataCell>[
-                                DataCell(Text('Timereport Entry',
-                                    style: makeYourOwnRegularStyle(
-                                        fontSize: FontSize.s12,
-                                        color: ColorManager.grey))),
-                                DataCell(Text(
-                                    Utils.toDateTime(tb[index].startDate),
-                                    style: makeYourOwnRegularStyle(
-                                        fontSize: FontSize.s12,
-                                        color: ColorManager.grey))),
-                                DataCell(Text(
-                                    Utils.convertInttoString(tb[index].hours!),
-                                    style: makeYourOwnRegularStyle(
-                                        fontSize: FontSize.s12,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary))),
-                                DataCell(Text(
-                                    Utils.convertInttoString(
-                                        tb[index].minutes!),
-                                    style: makeYourOwnRegularStyle(
-                                        fontSize: FontSize.s12,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary))),
-                                DataCell(ActionButtonsWidget(entry: tb[index])),
-                              ],
-                            );
-                          }))))
-            ]),
-          )
+                                isNumeric: false,
+                              ),
+                              buildDataColumn(
+                                  text: 'Hours',
+                                  context: context,
+                                  isNumeric: true),
+                              buildDataColumn(
+                                  text: 'Minutes',
+                                  context: context,
+                                  isNumeric: true),
+                              buildDataColumn(
+                                  text: 'Actions',
+                                  context: context,
+                                  isNumeric: true,
+                                  tooltipText: 'edit or remove an entry'),
+                            ],
+                            rows: List.generate(viewModel.appointmentData.length,
+                                (index) {
+                              final tb = viewModel.appointmentData;
+                              return DataRow(
+                                cells: <DataCell>[
+                                  DataCell(Text('Timereport Entry',
+                                      style: makeYourOwnRegularStyle(
+                                          fontSize: FontSize.s12,
+                                          color: ColorManager.grey))),
+                                  DataCell(Text(
+                                      Utils.toDateTime(tb[index].startDate),
+                                      style: makeYourOwnRegularStyle(
+                                          fontSize: FontSize.s12,
+                                          color: ColorManager.grey))),
+                                  DataCell(Text(
+                                      Utils.convertInttoString(tb[index].hours!),
+                                      style: makeYourOwnRegularStyle(
+                                          fontSize: FontSize.s12,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary))),
+                                  DataCell(Text(
+                                      Utils.convertInttoString(
+                                          tb[index].minutes!),
+                                      style: makeYourOwnRegularStyle(
+                                          fontSize: FontSize.s12,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary))),
+                                  DataCell(ActionButtonsWidget(entry: tb[index])),
+                                ],
+                              );
+                            }))))
+              ]),
+            ),
+        )
         : Center(
             child: CircularProgressIndicator(
               valueColor:

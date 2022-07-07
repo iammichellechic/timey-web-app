@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+
 
 class DialogRequest {
   final String? title;
@@ -7,9 +7,9 @@ class DialogRequest {
   final String? cancelTitle;
 
   DialogRequest(
-      {@required this.title,
-      @required this.description,
-      @required this.buttonTitle,
+      {required this.title,
+      required this.description,
+       this.buttonTitle,
       this.cancelTitle});
 }
 

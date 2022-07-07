@@ -8,7 +8,7 @@ import 'package:timey_web/locator.dart';
 //NOTE: the orientation this app is set to display is indicated below
 
 Future main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+ WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,

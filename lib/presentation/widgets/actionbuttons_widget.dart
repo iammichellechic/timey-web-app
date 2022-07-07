@@ -123,7 +123,9 @@ void selectedItem(BuildContext context, item, TimeBlock? entry,
                   context: context,
                   text: 'Entry removed',
                   color: Theme.of(context).colorScheme.errorContainer,
+                  style: Theme.of(context).textTheme.headline5,
                   icons: Icons.delete,
+                  iconColor: ColorManager.error,
                 );
               },
             )

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../navigation/navigator_observer.dart';
 
+//TODO: fix so this does not become  a history trail 
 
 class BreadCrumbNavigator extends StatelessWidget {
   final List<Route> currentRouteStack;

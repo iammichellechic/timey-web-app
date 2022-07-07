@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:timey_web/presentation/resources/styles_manager.dart';
 
 import 'package:timey_web/presentation/utils/constant_duration_values.dart';
+import 'package:timey_web/presentation/utils/snackbar_utils.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
 import 'package:timey_web/viewmodels/timeblocks_viewmodels.dart';
 
+import '../../resources/font_manager.dart';
 import '/presentation/resources/values_manager.dart';
 import '../../../model/tag.dart';
 import '../../../data/providers/tags.dart';
@@ -79,6 +82,13 @@ class _TimeblockPageState extends State<TimeblockPage> {
 
       } else {
         TimeBlocksViewModel().getCreateTimeBlockFxn(timeBlock);
+        SnackBarUtils.showSnackBar(
+            text: 'Your time report has been added',
+            color: Theme.of(context).colorScheme.secondary,
+            context: context,
+            icons: Icons.check,
+            iconColor: Theme.of(context).colorScheme.onSecondary,
+            style: makeYourOwnRegularStyle(fontSize: FontSize.s14, color: Theme.of(context).colorScheme.onSecondary));
       }
       Navigator.of(context).pop();
     }
@@ -87,47 +97,44 @@ class _TimeblockPageState extends State<TimeblockPage> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
-      builder: (context, sizingInformation) =>  SizedBox(
-          width: sizingInformation.isDesktop
-              ? MediaQuery.of(context).size.width * 0.23
-              : MediaQuery.of(context).size.width,
-   
-            child: Drawer(
-              child: Padding(
-                padding: const EdgeInsets.all(AppPadding.p30),
-                child: SingleChildScrollView(
-                  child: Form(
-                    key: _form,
-                    child: Column(
-                      children: <Widget>[
-                        buildDateTimePickers(),
-                        SizedBox(
-                          height: AppSize.s20,
-                        ),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              ButtonWidget(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  text: 'Report',
-                                  style: Theme.of(context).textTheme.headline6,
-                                  onClicked: () {
-                                    _saveForm();
-                                  }),
-                            ]),
-                        SizedBox(
-                          height: AppSize.s50,
-                        ),
-                        buildCloseButton(context),
-                      ],
+      builder: (context, sizingInformation) => SizedBox(
+        width: sizingInformation.isDesktop
+            ? MediaQuery.of(context).size.width * 0.23
+            : MediaQuery.of(context).size.width,
+        child: Drawer(
+          child: Padding(
+            padding: const EdgeInsets.all(AppPadding.p30),
+            child: SingleChildScrollView(
+              child: Form(
+                key: _form,
+                child: Column(
+                  children: <Widget>[
+                    buildDateTimePickers(),
+                    SizedBox(
+                      height: AppSize.s20,
                     ),
-                  ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          ButtonWidget(
+                              color: Theme.of(context).colorScheme.primary,
+                              text: 'Report',
+                              style: Theme.of(context).textTheme.headline6,
+                              onClicked: () {
+                                _saveForm();
+                              }),
+                        ]),
+                    SizedBox(
+                      height: AppSize.s50,
+                    ),
+                    buildCloseButton(context),
+                  ],
                 ),
               ),
             ),
           ),
- 
-      
+        ),
+      ),
     );
   }
 
@@ -289,7 +296,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.av_timer_outlined),
           enabledBorder: OutlineInputBorder(),
-           focusedBorder: OutlineInputBorder(),
+          focusedBorder: OutlineInputBorder(),
         ),
         value: hours,
         items: itemHours
@@ -311,7 +318,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.av_timer_outlined),
           enabledBorder: OutlineInputBorder(),
-           focusedBorder: OutlineInputBorder(),
+          focusedBorder: OutlineInputBorder(),
         ),
         value: minutes,
         items: itemMinutes

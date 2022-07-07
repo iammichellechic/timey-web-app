@@ -3,6 +3,7 @@ import 'package:gql/language.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:timey_web/endpoint_url.dart';
 
+
 abstract class ISafeApiCall {
   ObservableQuery<Object?> safeWatchQuery(String document);
   Future<QueryResult> safeMutation({
@@ -19,6 +20,8 @@ class SafeApiCall implements ISafeApiCall {
 
   final EndPoint _point = EndPoint();
 
+ // final _dialogService = locator<DialogService>();
+
   @override
   ObservableQuery<Object?> safeWatchQuery(String document) {
     ValueNotifier<GraphQLClient> _client = _point.getClient();
@@ -26,7 +29,6 @@ class SafeApiCall implements ISafeApiCall {
       WatchQueryOptions(
         document: gql(document),
         fetchResults: true,
-        
       ),
     );
 
@@ -50,7 +52,6 @@ class SafeApiCall implements ISafeApiCall {
         variables: variables,
         fetchPolicy: FetchPolicy.cacheAndNetwork,
         optimisticResult: PartialDataCachePolicy.accept,
-        
 
         //Does not update query after adding/deleting :(
         update: (cache, result) {
@@ -76,9 +77,20 @@ class SafeApiCall implements ISafeApiCall {
     );
 
     if (result.hasException) {
+
+      // await _dialogService.showDialog(
+      //     title: 'Something went wrong', description: result.exception.toString());
+
       print(' Exception ${result.exception}');
       throw Exception();
+      
     }
+    // else{
+    //    await _dialogService.showDialog(
+    //     title: 'Entry successfully added',
+    //     description: 'Your time report has been created',
+    //   );
+    // }
 
     return result;
   }

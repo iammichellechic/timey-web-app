@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import '../navigation/navigator_observer.dart';
 
 class NavigationService {
+  
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final List<Route> currentRouteStack = routeStack.toList();
 
