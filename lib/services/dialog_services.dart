@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../model/dialog_model.dart';
 
 class DialogService {
-  GlobalKey<NavigatorState> _dialogNavigationKey = GlobalKey<NavigatorState>();
-  late Function(DialogRequest) _showDialogListener;
-  late Completer<DialogResponse> _dialogCompleter;
+ final GlobalKey<NavigatorState> _dialogNavigationKey = GlobalKey<NavigatorState>();
+  Function(DialogRequest)? _showDialogListener;
+ Completer<DialogResponse>? _dialogCompleter;
 
   GlobalKey<NavigatorState> get dialogNavigationKey => _dialogNavigationKey;
 
@@ -21,12 +21,12 @@ class DialogService {
     String buttonTitle = 'Ok',
   }) {
     _dialogCompleter = Completer<DialogResponse>();
-    _showDialogListener(DialogRequest(
+    _showDialogListener!(DialogRequest(
       title: title,
       description: description,
       buttonTitle: buttonTitle,
     ));
-    return _dialogCompleter.future;
+    return _dialogCompleter!.future;
   }
 
   /// Shows a confirmation dialog
@@ -36,18 +36,18 @@ class DialogService {
       String confirmationTitle = 'Ok',
       String cancelTitle = 'Cancel'}) {
     _dialogCompleter = Completer<DialogResponse>();
-    _showDialogListener(DialogRequest(
+    _showDialogListener!(DialogRequest(
         title: title,
         description: description,
         buttonTitle: confirmationTitle,
         cancelTitle: cancelTitle));
-    return _dialogCompleter.future;
+    return _dialogCompleter!.future;
   }
 
   /// Completes the _dialogCompleter to resume the Future's execution call
   void dialogComplete(DialogResponse response) {
     _dialogNavigationKey.currentState!.pop();
-    _dialogCompleter.complete(response);
-    //_dialogCompleter = null;
+    _dialogCompleter!.complete(response);
+    _dialogCompleter = null;
   }
 }

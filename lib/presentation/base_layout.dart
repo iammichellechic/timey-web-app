@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:stacked/stacked.dart';
 
-import 'package:timey_web/presentation/widgets/switch_theme_button_widget.dart';
 import '../locator.dart';
 import '../navigation/routes_manager.dart';
 import '../services/navigation_service.dart';
@@ -47,7 +46,8 @@ class BaseLayout extends StatelessWidget {
                       IconButton(
                           icon: const Icon(Icons.person),
                           onPressed: () {
-                            // Insert Theming here
+                            locator<NavigationService>()
+                                .navigateTo(Routes.settingsRoute);
                           }),
                       AnimatedIconWidget(),
                     ],
