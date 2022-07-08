@@ -3,7 +3,6 @@ import 'package:gql/language.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:timey_web/endpoint_url.dart';
 
-
 abstract class ISafeApiCall {
   ObservableQuery<Object?> safeWatchQuery(String document);
   Future<QueryResult> safeMutation({
@@ -20,16 +19,14 @@ class SafeApiCall implements ISafeApiCall {
 
   final EndPoint _point = EndPoint();
 
- // final _dialogService = locator<DialogService>();
-
   @override
   ObservableQuery<Object?> safeWatchQuery(String document) {
     ValueNotifier<GraphQLClient> _client = _point.getClient();
     final observableQuery = _client.value.watchQuery(
       WatchQueryOptions(
-        document: gql(document),
-        fetchResults: true,
-      ),
+          document: gql(document),
+          fetchResults: true,
+          fetchPolicy: FetchPolicy.cacheAndNetwork),
     );
 
     return observableQuery;
@@ -46,6 +43,7 @@ class SafeApiCall implements ISafeApiCall {
     required String newData,
   }) async {
     ValueNotifier<GraphQLClient> _client = _point.getClient();
+
     final result = await _client.value.mutate(
       MutationOptions(
         document: gql(documentMutation),
@@ -53,9 +51,9 @@ class SafeApiCall implements ISafeApiCall {
         fetchPolicy: FetchPolicy.cacheAndNetwork,
         optimisticResult: PartialDataCachePolicy.accept,
 
-        //Does not update query after adding/deleting :(
+        // ERROR://Does not update query after adding/deleting :(
+
         update: (cache, result) {
-          // We don't wanna update cache nor handle error throwing here
           if (result != null && result.hasException) {
             return;
           }
@@ -77,20 +75,12 @@ class SafeApiCall implements ISafeApiCall {
     );
 
     if (result.hasException) {
-
       // await _dialogService.showDialog(
       //     title: 'Something went wrong', description: result.exception.toString());
 
       print(' Exception ${result.exception}');
       throw Exception();
-      
     }
-    // else{
-    //    await _dialogService.showDialog(
-    //     title: 'Entry successfully added',
-    //     description: 'Your time report has been created',
-    //   );
-    // }
 
     return result;
   }

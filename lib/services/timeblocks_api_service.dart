@@ -8,7 +8,6 @@ import 'package:timey_web/model/timeblock.dart';
 import '../locator.dart';
 import '../schemas/timeblocks_schema.dart';
 
-
 abstract class ITimeBlockDatasource {
   ObservableQuery<Object?> getTimeBlocks();
   Future<TimeBlock> createTimeBlocks(TimeBlock timeBlock);
@@ -17,7 +16,6 @@ abstract class ITimeBlockDatasource {
 
 class TimeBlockDataSource implements ITimeBlockDatasource {
   final _api = locator<SafeApiCall>();
- 
 
   @override
   ObservableQuery<Object?> getTimeBlocks() {
@@ -26,24 +24,26 @@ class TimeBlockDataSource implements ITimeBlockDatasource {
 
   @override
   Future<TimeBlock> createTimeBlocks(TimeBlock timeBlock) async {
-    final result = await _api.safeMutation(
-      documentMutation: TimeBlocksSchema.createTimeblocks,
-      documentQuery: TimeBlocksSchema.getTimeblocks,
-      variables: {
-        'userId': timeBlock.userId,
-        'startTime': timeBlock.startDate.toIso8601String(),
-        'reportedMinutes': timeBlock.reportedMinutes
-      },
-      oldData: 'timeblocks',
-      newData: 'createTimeBlock',
-    );
-   
+    final result = await _api
+        .safeMutation(
+          documentMutation: TimeBlocksSchema.createTimeblocks,
+          documentQuery: TimeBlocksSchema.getTimeblocks,
+          variables: {
+            'userId': timeBlock.userId,
+            'startTime': timeBlock.startDate.toIso8601String(),
+            'reportedMinutes': timeBlock.reportedMinutes
+          },
+          oldData: 'timeblocks',
+          newData: 'createTimeBlock',
+        )
+        .whenComplete(() => getTimeBlocks());
 
     print(result.data);
 
     final TimeBlock model = TimeBlock.fromJson(result.data!['createTimeBlock']);
 
-
+    print(model);
+    
     return model;
   }
 
@@ -58,7 +58,9 @@ class TimeBlockDataSource implements ITimeBlockDatasource {
       oldData: 'timeblocks',
       newData: 'createTimeBlock',
     );
+
     print(result.data);
+
     final TimeBlock model = TimeBlock.fromJson(result.data!['deleteTimeBlock']);
 
     return model;

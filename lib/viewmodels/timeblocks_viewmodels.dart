@@ -1,16 +1,13 @@
 import 'dart:async';
 
-
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:stacked/stacked.dart';
 import '../model/timeblock.dart';
 import '../../locator.dart';
 import '../../services/timeblocks_api_service.dart';
-import '../services/dialog_services.dart';
 
 abstract class ITimeBlocksViewModel {
-  // Stream<List<TimeBlock>> get timeBlockData;
-  void getTimeBlocks();
+  Stream<List<TimeBlock>> getTimeBlocks();
   Future<TimeBlock> createTimeBlocks(TimeBlock timeBlock);
   Future<TimeBlock> deleteTimeBlock(String? timeBlockId);
 }
@@ -19,25 +16,12 @@ class TimeBlocksViewModel extends StreamViewModel<List<TimeBlock>>
     implements ITimeBlocksViewModel {
   final _api = locator<TimeBlockDataSource>();
   final _controller = StreamController<List<TimeBlock>>();
- 
-  //final _dialogService= locator<DialogService>();
 
   List<TimeBlock> _appointmentData = [];
   List<TimeBlock> get appointmentData => _appointmentData;
 
-  // @override
-  // Stream<List<TimeBlock>> get timeBlockData async* {
-  //   yield* _controller.stream;
-  // }
-
   @override
-  Future<TimeBlock> createTimeBlocks(TimeBlock timeBlock) {
-    final result = _api.createTimeBlocks(timeBlock);
-    return result;
-  }
-
-  @override
-  void getTimeBlocks() async {
+  Stream<List<TimeBlock>> getTimeBlocks() {
     final query = _api.getTimeBlocks();
 
     query.stream.listen((QueryResult result) {
@@ -63,6 +47,13 @@ class TimeBlocksViewModel extends StreamViewModel<List<TimeBlock>>
         notifyListeners();
       }
     });
+    return _controller.stream;
+  }
+
+  @override
+  Future<TimeBlock> createTimeBlocks(TimeBlock timeBlock) {
+    final result = _api.createTimeBlocks(timeBlock);
+    return result;
   }
 
   @override
@@ -81,13 +72,11 @@ class TimeBlocksViewModel extends StreamViewModel<List<TimeBlock>>
 
   Future<void> getDeleteTimeBlockFxn(String? timeBlockId) async {
     await deleteTimeBlock(timeBlockId);
-        //await _dialogService.showConfirmationDialog();
+    //await _dialogService.showConfirmationDialog();
     notifyListeners();
   }
 
+  // StreamViewModel
   @override
-  // TODO: implement stream
-  Stream<List<TimeBlock>> get stream async* {
-    yield* _controller.stream;
-  }
+  Stream<List<TimeBlock>> get stream => getTimeBlocks();
 }

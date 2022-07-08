@@ -25,7 +25,7 @@ class MenuDrawer extends StatelessWidget {
         builder: (context, sizingInformation) => Container(
               color: ColorManager.background,
               width: sizingInformation.isDesktop
-                  ? MediaQuery.of(context).size.width * 0.15
+                  ? MediaQuery.of(context).size.width * 0.18
                   : MediaQuery.of(context).size.width,
               child: Drawer(
                 child: Column(

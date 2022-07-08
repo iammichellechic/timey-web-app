@@ -12,6 +12,7 @@ import 'ui/form/timeblock_form_page.dart';
 import 'widgets/animatedicon_widget.dart';
 
 //TODO: Fix appBar
+
 //Find a solution to pass the navigator key to the endrawer(form)
 //this is currently fixed but the routes are not shown in the url
 
@@ -28,6 +29,7 @@ class BaseLayout extends StatelessWidget {
     return ViewModelBuilder<TimeBlocksViewModel>.reactive(
         viewModelBuilder: () => TimeBlocksViewModel(),
         onModelReady: (viewModel) => viewModel.getTimeBlocks(),
+      
         builder: (context, viewModel, _) => ResponsiveBuilder(
               builder: (context, sizingInformation) => Scaffold(
                   appBar: AppBar(
@@ -96,15 +98,17 @@ class CenteredView extends StatelessWidget {
   }
 }
 
+//TODO: Different layouts mobile, tablet, desktop
+
 class NavigationBar extends StatelessWidget {
   const NavigationBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ScreenTypeLayout(
-      mobile: NavigationBarMobile(),
-      tablet: NavigationBarTabletDesktop(),
-      desktop: NavigationBarTabletDesktop(),
+      mobile: NavigationBarMobile(), //hamburger
+      tablet: NavigationBarTabletDesktop(), //navigation rail
+      desktop: NavigationBarTabletDesktop(), 
     );
   }
 }
@@ -148,40 +152,3 @@ class NavigationBarTabletDesktop extends StatelessWidget {
   }
 }
 
-Widget buildSearchField(BuildContext context) {
-  final controller = TextEditingController();
-  final style = controller.text.isEmpty
-      ? const TextStyle(color: Colors.black54)
-      : const TextStyle(color: Colors.black);
-  return ResponsiveBuilder(
-      builder: (context, sizingInformation) => Container(
-            width: sizingInformation.isDesktop
-                ? MediaQuery.of(context).size.width * 0.20
-                : MediaQuery.of(context).size.width * 0.30,
-            height: 50,
-            margin: const EdgeInsets.fromLTRB(100, 16, 100, 16),
-            child: TextField(
-              controller: controller,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: controller.text.isNotEmpty
-                    ? GestureDetector(
-                        child: Icon(Icons.close, color: style.color),
-                        onTap: () {
-                          controller.clear();
-                          FocusScope.of(context).requestFocus(FocusNode());
-
-                          // searchBook('');
-                        },
-                      )
-                    : null,
-                hintText: 'Search',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.zero,
-                  borderSide: const BorderSide(color: Colors.black26),
-                ),
-              ),
-              //onChanged: searchBook,
-            ),
-          ));
-}

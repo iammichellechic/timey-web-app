@@ -20,7 +20,7 @@ class WeeklyChart extends ViewModelWidget<TimeBlocksViewModel> {
       padding: EdgeInsets.fromLTRB(
           AppPadding.p12, AppPadding.p24, AppPadding.p12, AppPadding.p12),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
         children: [
          

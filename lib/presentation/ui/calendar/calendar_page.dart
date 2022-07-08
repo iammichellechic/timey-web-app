@@ -15,7 +15,7 @@ class CalendarPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
       builder: (context, sizingInformation) => SfCalendar(
-        view: CalendarView.month,
+        view: CalendarView.week,
         allowedViews: const <CalendarView>[
           CalendarView.week,
           CalendarView.month,

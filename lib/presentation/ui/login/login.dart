@@ -5,7 +5,7 @@ import 'package:timey_web/presentation/resources/assets_manager.dart';
 import 'package:timey_web/presentation/resources/font_manager.dart';
 import 'package:timey_web/presentation/resources/styles_manager.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
-import 'package:timey_web/presentation/widgets/clip_path_widget.dart';
+import 'package:timey_web/presentation/utils/clip_path_utils.dart';
 import 'package:timey_web/presentation/widgets/textfield_container.dart';
 import 'package:timey_web/presentation/widgets/textformfield_container.dart';
 import '../../../locator.dart';

@@ -139,46 +139,4 @@ DataColumn buildDataColumn(
       onSort: onSort,
     );
 
-Widget buildSearchField(BuildContext context) {
-  final controller = TextEditingController();
-  final style = controller.text.isEmpty
-      ? const TextStyle(color: Colors.black54)
-      : const TextStyle(color: Colors.black);
-  return Container(
-    margin: const EdgeInsets.fromLTRB(100, 16, 100, 16),
-    child: TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.search),
-        suffixIcon: controller.text.isNotEmpty
-            ? GestureDetector(
-                child: Icon(Icons.close, color: style.color),
-                onTap: () {
-                  controller.clear();
-                  FocusScope.of(context).requestFocus(FocusNode());
 
-                  // searchBook('');
-                },
-              )
-            : null,
-        hintText: 'Search',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(color: Colors.black26),
-        ),
-      ),
-      //onChanged: searchBook,
-    ),
-  );
-}
-
-// void searchBook(String query) {
-//   final suggestions = allBooks.where((book) {
-//     final bookTitle = book.title.toLowerCase();
-//     final input = query.toLowerCase();
-
-//     return bookTitle.contains(input);
-//   }).toList();
-
-//   setState(() => books = suggestions);
-// }

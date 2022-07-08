@@ -22,7 +22,7 @@ class MonthlyChart extends ViewModelWidget<TimeBlocksViewModel> {
       padding: const EdgeInsets.fromLTRB(
           AppPadding.p12, AppPadding.p24, AppPadding.p12, AppPadding.p12),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisSize: MainAxisSize.max,
         children: [
           TotalReportedTimeWidget(

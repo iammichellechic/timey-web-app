@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 import 'package:timey_web/model/timeblock.dart';
+import 'package:timey_web/presentation/ui/form/timeblock_form_page.dart';
 
 import '../../viewmodels/timeblocks_viewmodels.dart';
 import '../resources/color_manager.dart';
 import '../resources/values_manager.dart';
 import '../utils/snackbar_utils.dart';
-import 'dialogs_widget.dart';
+
 
 class ActionButtonsWidget extends ViewModelWidget<TimeBlocksViewModel> {
   final TimeBlock? entry;
@@ -80,22 +81,21 @@ void selectedItem(BuildContext context, item, TimeBlock? entry,
     TimeBlocksViewModel viewModel) {
   switch (item) {
     case 0:
-      showAlignedDialog<EntryEditDialog>(
-        avoidOverflow: true,
+
+     showGlobalDrawer<TimeblockPage>(
         context: context,
-        followerAnchor: Alignment.topRight,
-        targetAnchor: Alignment.bottomRight,
-        barrierColor: Colors.transparent,
+        direction: AxisDirection.right,
         duration: Duration(seconds: 1),
         builder: (context) {
-          return EntryEditDialog(
-            entry: entry,
+          return TimeblockPage(
+            timeBlock: entry,
           );
         },
       );
 
       break;
     case 1:
+
       showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(

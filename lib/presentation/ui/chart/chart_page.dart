@@ -53,7 +53,12 @@ class ChartPage extends StatelessWidget {
                                 Theme.of(context).colorScheme.primary)))),
                 primaryMeasureAxis: charts.NumericAxisSpec(
                   tickFormatterSpec: charts.BasicNumericTickFormatterSpec(
-                      (num? value) => "$value \u{1F551}"),
+                      (num? value) => value.toString()),
+
+                      // Code for the value plus a clock icon next to it, problem was it was causing a debugneedslayout issue
+                      //because the icon needs time to load
+                      // (num? value) => "$value \u{1F551}")),
+
                   renderSpec: charts.GridlineRendererSpec(
                     labelStyle: charts.TextStyleSpec(
                       fontSize: 12,
