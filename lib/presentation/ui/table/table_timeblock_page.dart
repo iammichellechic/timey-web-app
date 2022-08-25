@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
+import 'package:timey_web/presentation/shared/page/table_page.dart';
 import 'package:timey_web/presentation/widgets/actionbuttons_widget.dart';
 import '/viewmodels/timeblocks_viewmodels.dart';
 import '../../resources/font_manager.dart';
@@ -16,41 +17,10 @@ class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
   @override
   Widget build(BuildContext context, TimeBlocksViewModel viewModel) {
     return (viewModel.appointmentData.isNotEmpty)
-        ? SingleChildScrollView(
-          child: Container(
-              padding: EdgeInsets.only(top: AppPadding.p40),
-              child: Column(children: [
-                
-                const SizedBox(height: AppSize.s30),
-                Container(
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.background,
-                        borderRadius: BorderRadius.circular(10.0),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(0, 2),
-                            blurRadius: 6.0,
-                          ),
-                        ]),
-                    child: FittedBox(
-                        fit: BoxFit.fitWidth,
-                        clipBehavior: Clip.hardEdge,
-                        child: DataTable(
-                            //settings//
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    left: BorderSide(
-                                        color:
-                                            Theme.of(context).colorScheme.primary,
-                                        width: 2))),
+        ? TablePage(
                             dataRowHeight: 40,
-                            showCheckboxColumn: false,
-                            dividerThickness: 0,
-                            columnSpacing: 80,
-                            //headingRowColor: MaterialStateColor.resolveWith((states) {return ColorManager.primaryContainer;}),
-        
-                            columns: [
+            
+                            tableColumns: [
                               buildDataColumn(
                                   text: 'Title',
                                   context: context,
@@ -74,7 +44,8 @@ class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
                                   isNumeric: true,
                                   tooltipText: 'edit or remove an entry'),
                             ],
-                            rows: List.generate(viewModel.appointmentData.length,
+
+                            tableRows: List.generate(viewModel.appointmentData.length,
                                 (index) {
                               final tb = viewModel.appointmentData;
                               return DataRow(
@@ -106,10 +77,7 @@ class MyDataTable extends ViewModelWidget<TimeBlocksViewModel> {
                                   DataCell(ActionButtonsWidget(entry: tb[index])),
                                 ],
                               );
-                            }))))
-              ]),
-            ),
-        )
+                            }))
         : Center(
             child: CircularProgressIndicator(
               valueColor:

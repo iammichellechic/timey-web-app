@@ -4,14 +4,14 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:timey_web/presentation/resources/font_manager.dart';
 import 'package:timey_web/presentation/resources/styles_manager.dart';
 
-import '../../data/providers/navigation_items.dart';
-import '../../locator.dart';
-import '../../model/nav_items.dart';
-import '../../services/navigation_service.dart';
-import '../../navigation/routes_manager.dart';
+import '../../../data/providers/navigation_items.dart';
+import '../../../locator.dart';
+import '../../../model/nav_items.dart';
+import '../../../services/navigation_service.dart';
+import '../../../navigation/routes_manager.dart';
 import '/presentation/resources/color_manager.dart';
 
-import '../resources/values_manager.dart';
+import '../../resources/values_manager.dart';
 
 class MenuDrawer extends StatelessWidget {
   const MenuDrawer({required this.permanentlyDisplay, Key? key})
@@ -192,6 +192,8 @@ class MenuDrawer extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 30,
+                    backgroundImage: NetworkImage(
+                        'https://images.unsplash.com/photo-1554151228-14d9def656e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80'),
                   ),
                   SizedBox(height: AppSize.s8),
                   Text(

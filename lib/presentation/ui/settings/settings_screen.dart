@@ -3,6 +3,7 @@ import 'package:timey_web/presentation/resources/values_manager.dart';
 import 'package:timey_web/presentation/widgets/switch_theme_button_widget.dart';
 
 import '../../widgets/icon_widget.dart';
+import '../../widgets/profile_widget.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -38,21 +39,27 @@ class SettingsScreen extends StatelessWidget {
               padding: EdgeInsets.all(AppPadding.p18),
               child: Column(
                 children: [
-                  CircleAvatar(
-                    radius: 30,
+                  // CircleAvatar(
+                  //   radius: 30,
+                  // ),
+                  ProfileWidget(
+                    imagePath:
+                        'https://images.unsplash.com/photo-1554151228-14d9def656e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80',
+                    onClicked: () async {},
                   ),
-                  SizedBox(height: AppSize.s8),
+                  SizedBox(height: AppSize.s16),
                   Text(
                     'Dev. Obi-Wan',
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
+                  SizedBox(height: AppSize.s8),
                   Text(
                     'Full-Stack',
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                   Align(
-                    alignment:Alignment.centerRight,
-                    child: Icon(Icons.chevron_right_sharp)),
+                      alignment: Alignment.centerRight,
+                      child: Icon(Icons.chevron_right_sharp)),
                 ],
               )),
         ),

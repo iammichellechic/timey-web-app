@@ -7,7 +7,7 @@ import '../navigation/routes_manager.dart';
 import '../services/navigation_service.dart';
 import '../viewmodels/timeblocks_viewmodels.dart';
 import 'resources/values_manager.dart';
-import 'shared/menu_drawer.dart';
+import 'shared/appbar/menu_drawer.dart';
 import 'ui/form/timeblock_form_page.dart';
 import 'widgets/animatedicon_widget.dart';
 
@@ -29,7 +29,6 @@ class BaseLayout extends StatelessWidget {
     return ViewModelBuilder<TimeBlocksViewModel>.reactive(
         viewModelBuilder: () => TimeBlocksViewModel(),
         onModelReady: (viewModel) => viewModel.getTimeBlocks(),
-      
         builder: (context, viewModel, _) => ResponsiveBuilder(
               builder: (context, sizingInformation) => Scaffold(
                   appBar: AppBar(
@@ -69,10 +68,10 @@ class BaseLayout extends StatelessWidget {
                             permanentlyDisplay: true,
                           ),
                         Expanded(
-                            child: Navigator(
+                          child: Navigator(
                           key: locator<NavigationService>().navigatorKey,
                           onGenerateRoute: RouteGenerator.getRoute,
-                          initialRoute: Routes.overviewRoute,
+                          initialRoute: Routes.onboardingRoute,
                         )),
                       ],
                     ),
@@ -108,7 +107,7 @@ class NavigationBar extends StatelessWidget {
     return ScreenTypeLayout(
       mobile: NavigationBarMobile(), //hamburger
       tablet: NavigationBarTabletDesktop(), //navigation rail
-      desktop: NavigationBarTabletDesktop(), 
+      desktop: NavigationBarTabletDesktop(),
     );
   }
 }
@@ -151,4 +150,3 @@ class NavigationBarTabletDesktop extends StatelessWidget {
     );
   }
 }
-

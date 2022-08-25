@@ -22,11 +22,8 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipPath(
         clipper: CustomClipPath(),
-       child: Container(
-      child: buildLoginForm(context)));
+        child: Container(child: buildLoginForm(context)));
   }
-
- 
 
   Widget buildLoginForm(BuildContext context) {
     return Scaffold(
@@ -40,7 +37,6 @@ class LoginScreen extends StatelessWidget {
                         padding: EdgeInsets.fromLTRB(
                             AppPadding.p12, 0, AppPadding.p12, 0),
                         color: ColorManager.blue,
-                       
                         child: Form(
                           key: _formKey,
                           child: Column(
