@@ -1,5 +1,12 @@
+import 'dart:convert';
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
+import 'package:timey_web/model/timeblock.dart';
+import 'package:timey_web/pdf/pdf_invoice.dart';
+import 'package:timey_web/pdf/save_pdf.dart';
 import 'package:timey_web/presentation/shared/page/table_page.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
 
@@ -38,6 +45,7 @@ Widget buildPaymentWidget(BuildContext context, TimeBlocksViewModel viewModel) {
           ],
           tableRows: List.generate(viewModel.appointmentData.length, (index) {
             final tb = viewModel.appointmentData;
+
             return DataRow(
               cells: <DataCell>[
                 DataCell(Text(tb[index].id!,
@@ -61,10 +69,17 @@ Widget buildPaymentWidget(BuildContext context, TimeBlocksViewModel viewModel) {
                     style: makeYourOwnRegularStyle(
                         fontSize: FontSize.s12, color: ColorManager.grey))),
                 DataCell(ButtonWidget(
-                    color: Theme.of(context).colorScheme.primary,
-                    text: 'Open Invoice',
-                    style: Theme.of(context).textTheme.headline6,
-                    onClicked: () {}))
+                  color: Theme.of(context).colorScheme.primary,
+                  text: 'Open Invoice',
+                  style: Theme.of(context).textTheme.headline6,
+                  // onClicked:
+                  //
+                  onClicked: () async {
+                    //   final pdfFile = await PdfInvoiceApi.generate(invoice);
+
+                    // PdfApi.openFile(pdfFile);
+                  },
+                ))
               ],
             );
           }))
@@ -74,6 +89,26 @@ Widget buildPaymentWidget(BuildContext context, TimeBlocksViewModel viewModel) {
           ),
         );
 }
+
+// Future<void> _createPDF() async {
+//   //Create a PDF document
+//   PdfDocument document = PdfDocument();
+//   //Add a page and draw text
+//   document.pages.add().graphics.drawString(
+//       'Hello World!', PdfStandardFont(PdfFontFamily.helvetica, 20),
+//       brush: PdfSolidBrush(PdfColor(0, 0, 0)),
+//       bounds: Rect.fromLTWH(20, 60, 150, 30));
+//   //Save the document
+//   List<int> bytes = document.save();
+//   //Dispose the document
+//   document.dispose();
+//   //Download the output file
+//   AnchorElement(
+//       href:
+//           "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
+//     ..setAttribute("download", "output.pdf")
+//     ..click();
+// }
 
 DataColumn buildDataColumn(
         {required String text,

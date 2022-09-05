@@ -71,7 +71,7 @@ class BaseLayout extends StatelessWidget {
                           child: Navigator(
                           key: locator<NavigationService>().navigatorKey,
                           onGenerateRoute: RouteGenerator.getRoute,
-                          initialRoute: Routes.onboardingRoute,
+                          initialRoute: Routes.overviewRoute,
                         )),
                       ],
                     ),
