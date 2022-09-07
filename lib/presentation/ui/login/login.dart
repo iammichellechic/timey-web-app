@@ -1,15 +1,19 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 import 'package:timey_web/presentation/resources/assets_manager.dart';
 import 'package:timey_web/presentation/resources/font_manager.dart';
 import 'package:timey_web/presentation/resources/styles_manager.dart';
+import 'package:timey_web/presentation/ui/signup/signup.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
 import 'package:timey_web/presentation/utils/clip_path_utils.dart';
 import 'package:timey_web/presentation/widgets/textfield_container.dart';
 import 'package:timey_web/presentation/widgets/textformfield_container.dart';
 import '../../../locator.dart';
+import '../../../services/authentication_service.dart';
 import '../../../services/navigation_service.dart';
+import '../../base_layout.dart';
 import '../../resources/color_manager.dart';
 import '../../../navigation/routes_manager.dart';
 import '../../resources/values_manager.dart';
@@ -74,24 +78,13 @@ class LoginScreen extends StatelessWidget {
                                     text: 'LOGIN',
                                     style:
                                         Theme.of(context).textTheme.headline6,
-                                    onClicked: () {},
-                                    color: ColorManager.orange,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(AppSize.s30),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: AppSize.s10),
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: ButtonWidget(
-                                    text: 'SIGNUP',
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
                                     onClicked: () {
-                                      locator<NavigationService>()
-                                          .navigateTo(Routes.signupRoute);
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => BaseLayout()),
+                                        (Route<dynamic> route) => false,
+                                      );
                                     },
                                     color: ColorManager.orange,
                                     shape: RoundedRectangleBorder(
@@ -100,6 +93,51 @@ class LoginScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
+                                SizedBox(height: AppSize.s10),
+                                Center(
+                                  child: RichText(
+                                      text: TextSpan(
+                                          text: 'Dont have an account? ',
+                                          children: [
+                                        TextSpan(
+                                          text: 'Click here',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            decoration: TextDecoration.underline,
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          SignupScreen())
+                                                          );
+                                            },
+                                        )
+                                      ])),
+                                ),
+                                // SizedBox(
+                                //   width: double.infinity,
+                                //   child: ButtonWidget(
+                                //     text: 'SIGNUP',
+                                //     style:
+                                //         Theme.of(context).textTheme.headline6,
+                                //     onClicked: () {
+                                //      Navigator.push(
+                                //         context,
+                                //         MaterialPageRoute(
+                                //             builder: (context) => SignupScreen()),
+
+                                //       );
+                                //     },
+                                //     color: ColorManager.orange,
+                                //     shape: RoundedRectangleBorder(
+                                //       borderRadius:
+                                //           BorderRadius.circular(AppSize.s30),
+                                //     ),
+                                //   ),
+                                // ),
                               ]),
                         ),
                       )),

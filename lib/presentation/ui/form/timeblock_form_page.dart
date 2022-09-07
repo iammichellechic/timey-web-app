@@ -11,17 +11,16 @@ import 'package:timey_web/viewmodels/timeblocks_viewmodels.dart';
 import '../../resources/font_manager.dart';
 import '/presentation/resources/values_manager.dart';
 import '../../../model/tag.dart';
-import '../../../data/providers/tags.dart';
+import '../../../data/providers/tags.dart' as companies;
 import '../../../model/timeblock.dart';
 import '../../resources/formats_manager.dart';
+
+import 'package:flutter_tags/flutter_tags.dart';
 
 class TimeblockPage extends StatefulWidget {
   final TimeBlock? timeBlock;
 
-  const TimeblockPage({
-    Key? key,
-    this.timeBlock,
-  }) : super(key: key);
+  const TimeblockPage({Key? key, this.timeBlock}) : super(key: key);
 
   @override
   State<TimeblockPage> createState() => _TimeblockPageState();
@@ -30,9 +29,13 @@ class TimeblockPage extends StatefulWidget {
 class _TimeblockPageState extends State<TimeblockPage> {
   final _form = GlobalKey<FormState>();
 
+  final GlobalKey<TagsState> _globalKey = GlobalKey<TagsState>();
+
+  late List tags;
+
   List<int> itemHours = constantValues.hoursItem;
   List<int> itemMinutes = constantValues.minutesItem;
-  List<Tag> availableTags = Tags().tags;
+  List<Tag> availableTags = companies.Tags().tags;
 
   Tag? selectedTag;
   late DateTime startDate;
@@ -46,7 +49,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
     if (widget.timeBlock == null) {
       startDate = DateTime.now();
       //endDate = DateTime.now().add(Duration(hours: 2));
-      selectedTag = Tags().tags.first;
+      selectedTag = companies.Tags().tags.first;
       hours = itemHours.first;
       minutes = itemMinutes.first;
     } else {
@@ -61,6 +64,10 @@ class _TimeblockPageState extends State<TimeblockPage> {
 
     if (availableTags.isNotEmpty) {
       selectedTag = availableTags.first;
+    }
+
+    for (var t in companies.Tags().tags) {
+      tags = t as List<dynamic>;
     }
 
     super.initState();
@@ -88,7 +95,9 @@ class _TimeblockPageState extends State<TimeblockPage> {
             context: context,
             icons: Icons.check,
             iconColor: Theme.of(context).colorScheme.onSecondary,
-            style: makeYourOwnRegularStyle(fontSize: FontSize.s14, color: Theme.of(context).colorScheme.onSecondary));
+            style: makeYourOwnRegularStyle(
+                fontSize: FontSize.s14,
+                color: Theme.of(context).colorScheme.onSecondary));
       }
       Navigator.of(context).pop();
     }
@@ -388,7 +397,39 @@ class _TimeblockPageState extends State<TimeblockPage> {
           buildDay(),
           buildTime(),
           dropDownHoursItems(),
-          dropDownMinutesItems()
+          dropDownMinutesItems(),
+          buildTags(),
         ],
+      );
+
+  //Tags
+  Widget buildTags() => Tags(
+        key: _globalKey,
+        itemCount: tags.length,
+        columns: 3,
+        textField: TagsTextField(
+            textStyle: TextStyle(fontSize: 14),
+            onSubmitted: (t) {
+              setState(() {         
+                // print('added!');
+                tags.add(Item(title: t));
+              });
+            }),
+        itemBuilder: (index) {
+          final Item currentItem = tags[index];
+
+          return ItemTags(
+            index: index,
+            title: currentItem.title!,
+            combine: ItemTagsCombine.withTextBefore,
+            onPressed: ((i) => print(i)),
+            removeButton: ItemTagsRemoveButton(onRemoved: () {
+              setState(() {
+                tags.removeAt(index);
+              });
+              return true;
+            }),
+          );
+        },
       );
 }

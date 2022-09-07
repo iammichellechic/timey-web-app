@@ -1,14 +1,18 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:timey_web/presentation/base_layout.dart';
 import 'package:timey_web/presentation/utils/clip_path_utils.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
 import 'package:timey_web/presentation/widgets/textfield_container.dart';
 import 'package:timey_web/presentation/widgets/textformfield_container.dart';
+
 import '../../resources/assets_manager.dart';
 import '../../resources/color_manager.dart';
 import '../../resources/font_manager.dart';
 import '../../resources/styles_manager.dart';
 import '../../resources/values_manager.dart';
+import '../login/login.dart';
 
 class SignupScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -89,13 +93,44 @@ class SignupScreen extends StatelessWidget {
                                     text: 'SIGNUP',
                                     style:
                                         Theme.of(context).textTheme.headline6,
-                                    onClicked: () {},
+                                    onClicked: () {
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => BaseLayout()),
+                                        (Route<dynamic> route) => false,
+                                      );
+                                    },
                                     color: ColorManager.orange,
                                     shape: RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.circular(AppSize.s30),
                                     ),
                                   ),
+                                ),
+                                SizedBox(height: AppSize.s10),
+                                Center(
+                                  child: RichText(
+                                      text: TextSpan(
+                                          text: 'Already have an account? ',
+                                          children: [
+                                        TextSpan(
+                                          text: 'Click here',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          LoginScreen()));
+                                            },
+                                        )
+                                      ])),
                                 ),
                               ]),
                         ),

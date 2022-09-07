@@ -17,12 +17,12 @@ import 'widgets/animatedicon_widget.dart';
 //this is currently fixed but the routes are not shown in the url
 
 class BaseLayout extends StatelessWidget {
+  //final Widget? child;
+
   const BaseLayout({
     Key? key,
-    this.child,
   }) : super(key: key);
 
-  final Widget? child;
 
   @override
   Widget build(BuildContext context) {

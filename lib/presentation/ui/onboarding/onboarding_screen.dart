@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:timey_web/presentation/ui/login/login.dart';
 
-import '../../../locator.dart';
 import '../../../model/sliderobject.dart';
-import '../../../navigation/routes_manager.dart';
-import '../../../services/navigation_service.dart';
+
 import '../../../viewmodels/onboarding_viewmodels.dart';
 import '../../resources/assets_manager.dart';
 import '../../resources/color_manager.dart';
@@ -20,7 +19,6 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingViewState extends State<OnBoardingScreen> {
- 
   PageController _pageController = PageController(initialPage: 0);
   OnBoardingViewModel _viewModel = OnBoardingViewModel();
 
@@ -42,24 +40,24 @@ class _OnBoardingViewState extends State<OnBoardingScreen> {
           return _getContentWidget(snapShot.data);
         });
   }
- 
-Widget _getContentWidget(SliderViewObject? sliderViewObject) {
+
+  Widget _getContentWidget(SliderViewObject? sliderViewObject) {
     if (sliderViewObject == null) {
       return Container();
-    } else 
+    } else
       // ignore: curly_braces_in_flow_control_structures
       return Scaffold(
-      backgroundColor: ColorManager.primaryWhite,
-      appBar: AppBar(
         backgroundColor: ColorManager.primaryWhite,
-        elevation: 0,
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: ColorManager.primaryWhite,
-          statusBarBrightness: Brightness.dark,
-          statusBarIconBrightness: Brightness.dark,
+        appBar: AppBar(
+          backgroundColor: ColorManager.primaryWhite,
+          elevation: 0,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: ColorManager.primaryWhite,
+            statusBarBrightness: Brightness.dark,
+            statusBarIconBrightness: Brightness.dark,
+          ),
         ),
-      ),
-   body: PageView.builder(
+        body: PageView.builder(
             controller: _pageController,
             itemCount: sliderViewObject.numOfSlides,
             onPageChanged: (index) {
@@ -68,32 +66,34 @@ Widget _getContentWidget(SliderViewObject? sliderViewObject) {
             itemBuilder: (context, index) {
               return OnBoardingPage(sliderViewObject.sliderObject);
             }),
-      bottomSheet: Container(
-        color: ColorManager.primaryWhite,
-        height: AppSize.s80,
-        child: Column(
-          children: [
-            Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {
-                    locator<NavigationService>()
-                          .navigateTo(Routes.loginRoute);
-                  },
-                  child: Text(
-                    "Get Started",
-                    style: Theme.of(context).textTheme.subtitle2,
-                    textAlign: TextAlign.end,
-                  ),
-                )),
-            // add layout for indicator and arrows
-            _getBottomSheetWidget(sliderViewObject)
-          ],
+        bottomSheet: Container(
+          color: ColorManager.primaryWhite,
+          height: AppSize.s80,
+          child: Column(
+            children: [
+              Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                    child: Text(
+                      "Get Started",
+                      style: Theme.of(context).textTheme.subtitle2,
+                      textAlign: TextAlign.end,
+                    ),
+                  )),
+              // add layout for indicator and arrows
+              _getBottomSheetWidget(sliderViewObject)
+            ],
+          ),
         ),
-      ),
-    );
-    }
-  
+      );
+  }
 
   Widget _getBottomSheetWidget(SliderViewObject sliderViewObject) {
     return Container(
@@ -203,5 +203,3 @@ class OnBoardingPage extends StatelessWidget {
     );
   }
 }
-
-

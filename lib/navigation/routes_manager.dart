@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../presentation/base_onboarding_layout.dart';
 import '../presentation/ui/login/login.dart';
 import '../presentation/ui/payment/payment_screen.dart';
 import '../presentation/ui/signup/signup.dart';
@@ -20,6 +21,7 @@ class Routes {
   static const String paymentRoute = "Payment";
   static const String settingsRoute = "Settings";
   static const String onboardingRoute = "Onboarding";
+  static const String baseLayoutRoute = "Dashboards";
 }
 
 class RouteGenerator {
@@ -68,6 +70,11 @@ class RouteGenerator {
       case Routes.onboardingRoute:
         return _GeneratePageRoute(
           widget: OnBoardingScreen(),
+          routeName: routeSettings.name!,
+        );
+      case Routes.baseLayoutRoute:
+        return _GeneratePageRoute(
+          widget: OnboardingBaseLayout(),
           routeName: routeSettings.name!,
         );
       default:
