@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/flutter_tags.dart';
+import 'package:provider/provider.dart';
 
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:timey_web/presentation/resources/styles_manager.dart';
@@ -7,16 +8,14 @@ import 'package:timey_web/presentation/resources/styles_manager.dart';
 import 'package:timey_web/presentation/utils/constant_duration_values.dart';
 import 'package:timey_web/presentation/utils/snackbar_utils.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
-import 'package:timey_web/viewmodels/timeblocks_viewmodels.dart';
 
+import '../../../data/timeblocks.dart';
 import '../../resources/font_manager.dart';
 import '/presentation/resources/values_manager.dart';
 import '../../../model/tag.dart';
 import '../../../data/providers/tags.dart' as companies;
 import '../../../model/timeblock.dart';
 import '../../resources/formats_manager.dart';
-
-
 
 class TimeblockPage extends StatefulWidget {
   final TimeBlock? timeBlock;
@@ -32,7 +31,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
 
   final GlobalKey<TagsState> _globalKey = GlobalKey<TagsState>();
 
-  late List tags;
+  List tags = [];
 
   List<int> itemHours = constantValues.hoursItem;
   List<int> itemMinutes = constantValues.minutesItem;
@@ -44,6 +43,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
   int? hours;
   int? minutes;
   int? userId;
+  int? id;
 
   @override
   void initState() {
@@ -54,13 +54,18 @@ class _TimeblockPageState extends State<TimeblockPage> {
       hours = itemHours.first;
       minutes = itemMinutes.first;
     } else {
-      final timeBlock = widget.timeBlock!;
+      var timeEntry = widget.timeBlock!;
 
-      startDate = timeBlock.startDate;
+       timeEntry = Provider.of<TimeBlocks>(context, listen: false)
+          .findById(timeEntry.id.toString());
+
+      startDate = timeEntry.startDate;
       //endDate = timeBlock.endDate!;
-      hours = timeBlock.hours;
-      minutes = timeBlock.minutes;
-      selectedTag = timeBlock.tag;
+      hours = timeEntry.hours;
+      minutes = timeEntry.minutes;
+      selectedTag = timeEntry.tag;
+      //timeEntry = Provider.of<TimeBlocks>(context, listen: false)
+      //     .findById(timeBlock.toString());
     }
 
     if (availableTags.isNotEmpty) {
@@ -74,22 +79,57 @@ class _TimeblockPageState extends State<TimeblockPage> {
     super.initState();
   }
 
+  // void _saveForm() {
+  //   final isValid = _form.currentState!.validate();
+
+  //   if (isValid) {
+  //     final timeBlock = TimeBlock(
+  //         startDate: startDate,
+  //         userId: userId = 1,
+  //         hours: hours,
+  //         minutes: minutes,
+  //         reportedMinutes: (hours! * 60) + minutes!);
+
+  //     if (widget.timeBlock != null) {
+  //       //TODO: edit
+
+  //     } else {
+  //       TimeBlocksViewModel().getCreateTimeBlockFxn(timeBlock);
+  //       SnackBarUtils.showSnackBar(
+  //           text: 'Your time report has been added',
+  //           color: Theme.of(context).colorScheme.secondary,
+  //           context: context,
+  //           icons: Icons.check,
+  //           iconColor: Theme.of(context).colorScheme.onSecondary,
+  //           style: makeYourOwnRegularStyle(
+  //               fontSize: FontSize.s14,
+  //               color: Theme.of(context).colorScheme.onSecondary));
+  //     }
+  //     Navigator.of(context).pop();
+  //   }
+  // }
+
   void _saveForm() {
     final isValid = _form.currentState!.validate();
-
     if (isValid) {
-      final timeBlock = TimeBlock(
+      var timeBlockEntry = widget.timeBlock;
+
+      timeBlockEntry = TimeBlock(
           startDate: startDate,
           userId: userId = 1,
           hours: hours,
           minutes: minutes,
           reportedMinutes: (hours! * 60) + minutes!);
-
-      if (widget.timeBlock != null) {
-        //TODO: edit
-
+      if (!isValid) {
+        return;
+      }
+      _form.currentState!.save();
+      if (timeBlockEntry.id != null) {
+       
+        Provider.of<TimeBlocks>(context, listen: false)
+            .updateTimeBlock(timeBlockEntry, timeBlockEntry);
       } else {
-        TimeBlocksViewModel().getCreateTimeBlockFxn(timeBlock);
+        Provider.of<TimeBlocks>(context, listen: false).addTimeBlock(timeBlockEntry);
         SnackBarUtils.showSnackBar(
             text: 'Your time report has been added',
             color: Theme.of(context).colorScheme.secondary,
@@ -404,6 +444,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
       );
 
   //Tags
+  // NOTE consider using chips instead
   Widget buildTags() => Tags(
         key: _globalKey,
         itemCount: tags.length,
@@ -411,9 +452,9 @@ class _TimeblockPageState extends State<TimeblockPage> {
         textField: TagsTextField(
             textStyle: TextStyle(fontSize: 14),
             onSubmitted: (t) {
-              //setState(() {         
-                 print('added!');
-               // tags.add(Item(title: t));
+              //setState(() {
+              print('added!');
+              // tags.add(Item(title: t));
               //});
             }),
         itemBuilder: (index) {

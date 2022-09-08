@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:timey_web/presentation/base_layout.dart';
 import 'package:timey_web/presentation/ui/onboarding/onboarding_screen.dart';
 
 
 import '../data/providers/navigation_items.dart';
 import '../data/providers/theme_provider.dart';
 
+import '../data/timeblocks.dart';
 import '../presentation/resources/theme_dark_manager.dart';
 import '../navigation/navigator_observer.dart';
 
@@ -29,6 +31,9 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(
             create: (_) => ThemeProvider(),
           ),
+          ChangeNotifierProvider.value(
+            value: TimeBlocks(),
+          ),
         ],
         child: Builder(builder: (context) {
           final themeProvider = Provider.of<ThemeProvider>(context);
@@ -39,7 +44,7 @@ class MyApp extends StatelessWidget {
             // onGenerateRoute: RouteGenerator.getRoute,
             // initialRoute: Routes.onboardingRoute,
 
-            home: OnBoardingScreen(),
+            home: BaseLayout(),
             title: 'Timey',
             theme: getlightAppTheme(),
             themeMode: themeProvider.themeMode,

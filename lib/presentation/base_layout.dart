@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:stacked/stacked.dart';
+
 
 import '../locator.dart';
 import '../navigation/routes_manager.dart';
 import '../services/navigation_service.dart';
-import '../viewmodels/timeblocks_viewmodels.dart';
+
 import 'resources/values_manager.dart';
 import 'shared/appbar/menu_drawer.dart';
 import 'ui/form/timeblock_form_page.dart';
@@ -26,10 +26,13 @@ class BaseLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<TimeBlocksViewModel>.reactive(
-        viewModelBuilder: () => TimeBlocksViewModel(),
-        onModelReady: (viewModel) => viewModel.getTimeBlocks(),
-        builder: (context, viewModel, _) => ResponsiveBuilder(
+    return 
+    // ViewModelBuilder<TimeBlocksViewModel>.reactive(
+    //     viewModelBuilder: () => TimeBlocksViewModel(),
+    //     onModelReady: (viewModel) => viewModel.getTimeBlocks(),
+    //     builder: (context, viewModel, _) => 
+        
+        ResponsiveBuilder(
               builder: (context, sizingInformation) => Scaffold(
                   appBar: AppBar(
                     backgroundColor: Colors.transparent,
@@ -76,7 +79,7 @@ class BaseLayout extends StatelessWidget {
                       ],
                     ),
                   )),
-            ));
+            );
   }
 }
 

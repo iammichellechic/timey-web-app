@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'package:stacked/stacked.dart';
+
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import '/viewmodels/timeblocks_viewmodels.dart';
+import '../../../data/timeblocks.dart';
+
 import 'package:timey_web/presentation/resources/styles_manager.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 
@@ -14,22 +16,23 @@ import '../../resources/formats_manager.dart';
 
 import '../../../model/calendar_data_model.dart';
 
-class CalendarScreen extends ViewModelWidget<TimeBlocksViewModel> {
+class CalendarScreen extends StatelessWidget {
   const CalendarScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, TimeBlocksViewModel viewModel) {
-    return buildCalendarWidget(context, viewModel);
+  Widget build(BuildContext context) {
+    return buildCalendarWidget(context);
   }
 
   Widget buildCalendarWidget(
-      BuildContext context, TimeBlocksViewModel viewModel) {
+      BuildContext context) {
+         final entries = Provider.of<TimeBlocks>(context).userTimeBlock;
     return Container(
         padding: EdgeInsets.only(top: AppPadding.p40),
-        child: (viewModel.appointmentData.isNotEmpty)
+        child: (entries.isNotEmpty)
             ? CalendarPage(
                 appointment: appointmentBuilder,
-                dataSource: EventDataSource(viewModel.appointmentData))
+                dataSource: EventDataSource(entries))
             : Center(
                 child: CircularProgressIndicator(
                   valueColor:

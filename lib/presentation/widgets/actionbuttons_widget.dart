@@ -1,22 +1,22 @@
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
+import 'package:provider/provider.dart';
 
 import 'package:timey_web/model/timeblock.dart';
 import 'package:timey_web/presentation/ui/form/timeblock_form_page.dart';
 
-import '../../viewmodels/timeblocks_viewmodels.dart';
+import '../../data/timeblocks.dart';
+
 import '../resources/color_manager.dart';
 import '../resources/values_manager.dart';
 import '../utils/snackbar_utils.dart';
 
-
-class ActionButtonsWidget extends ViewModelWidget<TimeBlocksViewModel> {
+class ActionButtonsWidget extends StatelessWidget {
   final TimeBlock? entry;
   const ActionButtonsWidget({Key? key, this.entry}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, TimeBlocksViewModel viewModel) => SizedBox(
+  Widget build(BuildContext context) => SizedBox(
         width: 20,
         child: PopupMenuButton(
           padding: EdgeInsets.all(0),
@@ -38,10 +38,8 @@ class ActionButtonsWidget extends ViewModelWidget<TimeBlocksViewModel> {
                   ),
                   style: ElevatedButton.styleFrom(
                     shape: CircleBorder(),
-                    padding: EdgeInsets.all(AppPadding.p6),
-                    primary: Theme.of(context)
-                        .colorScheme
-                        .primary, // <-- Button color
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    padding: EdgeInsets.all(AppPadding.p6), // <-- Button color
                   ),
                 ),
                 Text(
@@ -60,10 +58,9 @@ class ActionButtonsWidget extends ViewModelWidget<TimeBlocksViewModel> {
                         color: ColorManager.primaryWhite, size: AppSize.s10),
                     style: ElevatedButton.styleFrom(
                       shape: CircleBorder(),
-                      padding: EdgeInsets.all(AppPadding.p6),
-                      primary: Theme.of(context)
-                          .colorScheme
-                          .error, // <-- Button color
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                      padding:
+                          EdgeInsets.all(AppPadding.p6), // <-- Button color
                     ),
                   ),
                   Text(
@@ -72,17 +69,15 @@ class ActionButtonsWidget extends ViewModelWidget<TimeBlocksViewModel> {
                   ),
                 ])),
           ],
-          onSelected: (item) => selectedItem(context, item, entry, viewModel),
+          onSelected: (item) => selectedItem(context, item, entry),
         ),
       );
 }
 
-void selectedItem(BuildContext context, item, TimeBlock? entry,
-    TimeBlocksViewModel viewModel) {
+void selectedItem(BuildContext context, item, TimeBlock? entry) {
   switch (item) {
     case 0:
-
-     showGlobalDrawer<TimeblockPage>(
+      showGlobalDrawer<TimeblockPage>(
         context: context,
         direction: AxisDirection.right,
         duration: Duration(seconds: 1),
@@ -95,7 +90,6 @@ void selectedItem(BuildContext context, item, TimeBlock? entry,
 
       break;
     case 1:
-
       showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
@@ -115,7 +109,10 @@ void selectedItem(BuildContext context, item, TimeBlock? entry,
                 style: Theme.of(context).textTheme.headline5,
               ),
               onPressed: () {
-                viewModel.getDeleteTimeBlockFxn(entry!.id);
+                // viewModel.getDeleteTimeBlockFxn(entry!.id);
+
+                 Provider.of<TimeBlocks>(context, listen: false)
+                    .deleteTimeBlock(entry!.id);
 
                 Navigator.of(context).pop();
 

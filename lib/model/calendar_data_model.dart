@@ -21,3 +21,4 @@ class EventDataSource extends CalendarDataSource {
   @override
   String getSubject(int index) => getEvent(index).id.toString();
 }
+

@@ -1,15 +1,12 @@
-import 'dart:convert';
-import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
-import 'package:timey_web/model/timeblock.dart';
-import 'package:timey_web/pdf/pdf_invoice.dart';
-import 'package:timey_web/pdf/save_pdf.dart';
+
 import 'package:timey_web/presentation/shared/page/table_page.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
 
+import '../../../data/timeblocks.dart';
 import '../../../viewmodels/timeblocks_viewmodels.dart';
 import '../../resources/color_manager.dart';
 import '../../resources/font_manager.dart';
@@ -17,17 +14,18 @@ import '../../resources/formats_manager.dart';
 import '../../resources/styles_manager.dart';
 import '../../resources/values_manager.dart';
 
-class PaymentScreen extends ViewModelWidget<TimeBlocksViewModel> {
+class PaymentScreen extends StatelessWidget {
   const PaymentScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, TimeBlocksViewModel viewModel) {
-    return buildPaymentWidget(context, viewModel);
+  Widget build(BuildContext context) {
+    return buildPaymentWidget(context);
   }
 }
 
-Widget buildPaymentWidget(BuildContext context, TimeBlocksViewModel viewModel) {
-  return (viewModel.appointmentData.isNotEmpty)
+Widget buildPaymentWidget(BuildContext context, ) {
+  final entries = Provider.of<TimeBlocks>(context).userTimeBlock;
+  return (entries.isNotEmpty)
       ? TablePage(
           dataRowHeight: 80,
           tableColumns: [
@@ -43,8 +41,8 @@ Widget buildPaymentWidget(BuildContext context, TimeBlocksViewModel viewModel) {
             buildDataColumn(text: 'Status', context: context, isNumeric: false),
             buildDataColumn(text: 'View', context: context, isNumeric: false),
           ],
-          tableRows: List.generate(viewModel.appointmentData.length, (index) {
-            final tb = viewModel.appointmentData;
+          tableRows: List.generate(entries.length, (index) {
+            final tb = entries;
 
             return DataRow(
               cells: <DataCell>[
