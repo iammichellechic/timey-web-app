@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tags/flutter_tags.dart';
 
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:timey_web/presentation/resources/styles_manager.dart';
@@ -15,7 +16,7 @@ import '../../../data/providers/tags.dart' as companies;
 import '../../../model/timeblock.dart';
 import '../../resources/formats_manager.dart';
 
-import 'package:flutter_tags/flutter_tags.dart';
+
 
 class TimeblockPage extends StatefulWidget {
   final TimeBlock? timeBlock;
@@ -66,9 +67,9 @@ class _TimeblockPageState extends State<TimeblockPage> {
       selectedTag = availableTags.first;
     }
 
-    for (var t in companies.Tags().tags) {
-      tags = t as List<dynamic>;
-    }
+    // for (var t in companies.Tags().tags) {
+    //   tags = t as List<dynamic>;
+    // }
 
     super.initState();
   }
@@ -410,10 +411,10 @@ class _TimeblockPageState extends State<TimeblockPage> {
         textField: TagsTextField(
             textStyle: TextStyle(fontSize: 14),
             onSubmitted: (t) {
-              setState(() {         
-                // print('added!');
-                tags.add(Item(title: t));
-              });
+              //setState(() {         
+                 print('added!');
+               // tags.add(Item(title: t));
+              //});
             }),
         itemBuilder: (index) {
           final Item currentItem = tags[index];
