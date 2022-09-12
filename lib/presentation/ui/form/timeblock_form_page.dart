@@ -3,6 +3,8 @@ import 'package:flutter_tags/flutter_tags.dart';
 import 'package:provider/provider.dart';
 
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:timey_web/data/providers/filter_tags.dart';
+import 'package:timey_web/model/filterTag.dart';
 import 'package:timey_web/presentation/resources/styles_manager.dart';
 
 import 'package:timey_web/presentation/utils/constant_duration_values.dart';
@@ -36,10 +38,12 @@ class _TimeblockPageState extends State<TimeblockPage> {
   List<int> itemHours = constantValues.hoursItem;
   List<int> itemMinutes = constantValues.minutesItem;
   List<Tag> availableTags = companies.Tags().tags;
+  List<FilterTag> filterChips = FilterTags().all;
 
   Tag? selectedTag;
   late DateTime startDate;
   //late DateTime endDate;
+  late List<FilterTag> selectedFilterTags;
   int? hours;
   int? minutes;
   int? userId;
@@ -53,19 +57,16 @@ class _TimeblockPageState extends State<TimeblockPage> {
       selectedTag = companies.Tags().tags.first;
       hours = itemHours.first;
       minutes = itemMinutes.first;
+      selectedFilterTags = filterChips;
     } else {
-      var timeEntry = widget.timeBlock!;
-
-       timeEntry = Provider.of<TimeBlocks>(context, listen: false)
-          .findById(timeEntry.id.toString());
+      final timeEntry = widget.timeBlock!;
 
       startDate = timeEntry.startDate;
       //endDate = timeBlock.endDate!;
       hours = timeEntry.hours;
       minutes = timeEntry.minutes;
       selectedTag = timeEntry.tag;
-      //timeEntry = Provider.of<TimeBlocks>(context, listen: false)
-      //     .findById(timeBlock.toString());
+      selectedFilterTags = timeEntry.filterTags!;
     }
 
     if (availableTags.isNotEmpty) {
@@ -112,24 +113,27 @@ class _TimeblockPageState extends State<TimeblockPage> {
   void _saveForm() {
     final isValid = _form.currentState!.validate();
     if (isValid) {
-      var timeBlockEntry = widget.timeBlock;
-
-      timeBlockEntry = TimeBlock(
+      final timeBlockEntry = TimeBlock(
           startDate: startDate,
           userId: userId = 1,
           hours: hours,
           minutes: minutes,
-          reportedMinutes: (hours! * 60) + minutes!);
+          reportedMinutes: (hours! * 60) + minutes!,
+          filterTags: selectedFilterTags);
       if (!isValid) {
         return;
       }
       _form.currentState!.save();
-      if (timeBlockEntry.id != null) {
-       
+
+      if (widget.timeBlock != null) {
         Provider.of<TimeBlocks>(context, listen: false)
-            .updateTimeBlock(timeBlockEntry, timeBlockEntry);
+            .updateTimeBlock(timeBlockEntry, widget.timeBlock!);
       } else {
-        Provider.of<TimeBlocks>(context, listen: false).addTimeBlock(timeBlockEntry);
+        Provider.of<TimeBlocks>(context, listen: false)
+            .addTimeBlock(timeBlockEntry);
+
+        print(selectedFilterTags);
+
         SnackBarUtils.showSnackBar(
             text: 'Your time report has been added',
             color: Theme.of(context).colorScheme.secondary,
@@ -304,7 +308,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
   Widget buildHeader(
           {required String header, required Widget child, IconData? icon}) =>
       Container(
-        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -439,7 +443,9 @@ class _TimeblockPageState extends State<TimeblockPage> {
           buildTime(),
           dropDownHoursItems(),
           dropDownMinutesItems(),
-          buildTags(),
+          //buildTags(),
+
+          buildFilterChips()
         ],
       );
 
@@ -473,5 +479,36 @@ class _TimeblockPageState extends State<TimeblockPage> {
             }),
           );
         },
+      );
+
+  //FilterTags/Chips
+  Widget buildFilterChips() => Padding(
+        padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+        child: Wrap(
+          runSpacing: 5,
+          spacing: 5,
+          children: filterChips
+              .map((filterChip) => FilterChip(
+                    label: Text(filterChip.label!),
+                    labelStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: filterChip.color,
+                    ),
+                    backgroundColor: filterChip.color!.withOpacity(0.1),
+                    onSelected: (isSelected) => setState(() {
+                      filterChips = filterChips.map((otherChip) {
+                        return filterChip == otherChip
+                            ? otherChip.copy(isSelected: isSelected)
+                            : otherChip;
+                      }).toList();
+
+                      selectedFilterTags.add(filterChip);
+                    }),
+                    selected: filterChip.isSelected!,
+                    checkmarkColor: filterChip.color,
+                    selectedColor: filterChip.color!.withOpacity(0.25),
+                  ))
+              .toList(),
+        ),
       );
 }

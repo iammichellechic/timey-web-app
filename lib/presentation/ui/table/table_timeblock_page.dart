@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:timey_web/model/filtertag.dart';
 
 import 'package:timey_web/presentation/resources/values_manager.dart';
 import 'package:timey_web/presentation/shared/page/table_page.dart';
@@ -33,6 +34,7 @@ class MyDataTable extends StatelessWidget {
               buildDataColumn(text: 'Hours', context: context, isNumeric: true),
               buildDataColumn(
                   text: 'Minutes', context: context, isNumeric: true),
+             
               buildDataColumn(
                   text: 'Actions',
                   context: context,
@@ -57,6 +59,7 @@ class MyDataTable extends StatelessWidget {
                       style: makeYourOwnRegularStyle(
                           fontSize: FontSize.s12,
                           color: Theme.of(context).colorScheme.primary))),
+               
                   DataCell(ActionButtonsWidget(entry: tb[index])),
                 ],
               );

@@ -1,8 +1,8 @@
+import 'package:timey_web/model/filterTag.dart';
 
 import 'tag.dart';
 import '../presentation/resources/formats_manager.dart';
 
-//TODO: use json serializer soon
 class TimeBlock {
   String? id;
   Tag? tag;
@@ -12,6 +12,7 @@ class TimeBlock {
   int? reportedMinutes;
   int? userId;
   DateTime? endDate;
+  List<FilterTag>? filterTags;
 
   TimeBlock(
       {this.id,
@@ -21,12 +22,12 @@ class TimeBlock {
       this.reportedMinutes,
       this.hours,
       this.minutes,
-      this.userId});
+      this.userId,
+      this.filterTags});
 
   TimeBlock.fromJson(Map<String, dynamic> data)
       : startDate = Utils.convertStringtoDate(data['datetimeStart']),
         // endDate = Utils.convertStringtoDate(data['datetimeEnd']),
         id = data['timeBlockGuid'],
         reportedMinutes = data['reportedMinutes'];
-
 }

@@ -1,29 +1,36 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stacked/stacked.dart';
 
 import 'package:timey_web/presentation/shared/page/table_page.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
 
 import '../../../data/timeblocks.dart';
-import '../../../viewmodels/timeblocks_viewmodels.dart';
+
+import '../../../pdf/invoice_service.dart';
 import '../../resources/color_manager.dart';
 import '../../resources/font_manager.dart';
 import '../../resources/formats_manager.dart';
 import '../../resources/styles_manager.dart';
 import '../../resources/values_manager.dart';
 
-class PaymentScreen extends StatelessWidget {
+class PaymentScreen extends StatefulWidget {
   const PaymentScreen({Key? key}) : super(key: key);
 
+  @override
+  State<PaymentScreen> createState() => _PaymentScreenState();
+}
+
+class _PaymentScreenState extends State<PaymentScreen> {
   @override
   Widget build(BuildContext context) {
     return buildPaymentWidget(context);
   }
 }
 
-Widget buildPaymentWidget(BuildContext context, ) {
+Widget buildPaymentWidget(
+  BuildContext context,
+) {
   final entries = Provider.of<TimeBlocks>(context).userTimeBlock;
   return (entries.isNotEmpty)
       ? TablePage(
@@ -60,24 +67,21 @@ Widget buildPaymentWidget(BuildContext context, ) {
                     style: makeYourOwnRegularStyle(
                         fontSize: FontSize.s12,
                         color: Theme.of(context).colorScheme.primary))),
-                DataCell(Text('4000SEK',
+                DataCell(Text(Utils.convertInttoString(tb[index].reportedMinutes! * 200),
                     style: makeYourOwnRegularStyle(
                         fontSize: FontSize.s12, color: ColorManager.grey))),
                 DataCell(Text('Unpaid',
                     style: makeYourOwnRegularStyle(
                         fontSize: FontSize.s12, color: ColorManager.grey))),
                 DataCell(ButtonWidget(
-                  color: Theme.of(context).colorScheme.primary,
-                  text: 'Open Invoice',
-                  style: Theme.of(context).textTheme.headline6,
-                  // onClicked:
-                  //
-                  onClicked: () async {
-                    //   final pdfFile = await PdfInvoiceApi.generate(invoice);
+                    color: Theme.of(context).colorScheme.primary,
+                    text: 'Download Invoice',
+                    style: Theme.of(context).textTheme.headline6,
+                    onClicked: () async {
 
-                    // PdfApi.openFile(pdfFile);
-                  },
-                ))
+                      PdfInvoiceService.createPDF(tb[index]);
+                     
+                    }))
               ],
             );
           }))
@@ -88,25 +92,6 @@ Widget buildPaymentWidget(BuildContext context, ) {
         );
 }
 
-// Future<void> _createPDF() async {
-//   //Create a PDF document
-//   PdfDocument document = PdfDocument();
-//   //Add a page and draw text
-//   document.pages.add().graphics.drawString(
-//       'Hello World!', PdfStandardFont(PdfFontFamily.helvetica, 20),
-//       brush: PdfSolidBrush(PdfColor(0, 0, 0)),
-//       bounds: Rect.fromLTWH(20, 60, 150, 30));
-//   //Save the document
-//   List<int> bytes = document.save();
-//   //Dispose the document
-//   document.dispose();
-//   //Download the output file
-//   AnchorElement(
-//       href:
-//           "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
-//     ..setAttribute("download", "output.pdf")
-//     ..click();
-// }
 
 DataColumn buildDataColumn(
         {required String text,

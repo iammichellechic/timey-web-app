@@ -9,49 +9,49 @@ class TimeBlocks with ChangeNotifier {
         id: '1',
         tag: Tags().tags[0],
         startDate: DateTime.now()
-            .subtract(new Duration(days: 1, hours: 8, minutes: 15)),
+            .subtract(Duration(days: 1, hours: 8, minutes: 15)),
         reportedMinutes: 260),
     TimeBlock(
         id: '2',
         tag: Tags().tags[1],
-        startDate: DateTime.now().subtract(new Duration(days: 3, hours: 8)),
+        startDate: DateTime.now().subtract(Duration(days: 3, hours: 8)),
         reportedMinutes: 200),
     TimeBlock(
         id: '3',
         tag: Tags().tags[0],
-        startDate: DateTime.now().subtract(new Duration(days: 2, hours: 8)),
+        startDate: DateTime.now().subtract(Duration(days: 2, hours: 8)),
         reportedMinutes: 180),
     TimeBlock(
         id: '4',
         tag: Tags().tags[0],
-        startDate: DateTime.now().subtract(new Duration(days: 6, hours: 9)),
+        startDate: DateTime.now().subtract(Duration(days: 6, hours: 9)),
         reportedMinutes: 160),
     TimeBlock(
         id: '5',
         tag: Tags().tags[0],
-        startDate: DateTime.now().add(new Duration(days: 4, hours: 0)),
+        startDate: DateTime.now().add(Duration(days: 4, hours: 0)),
         reportedMinutes: 360),
     TimeBlock(
         id: '6',
         tag: Tags().tags[1],
         reportedMinutes: 200,
-        startDate: DateTime.now().subtract(new Duration(days: 7, hours: 6))),
+        startDate: DateTime.now().subtract(Duration(days: 7, hours: 6))),
     TimeBlock(
         id: '7',
         tag: Tags().tags[0],
 
-        startDate: DateTime.now().subtract(new Duration(days: 5, hours: 3)),
+        startDate: DateTime.now().subtract(Duration(days: 5, hours: 3)),
         reportedMinutes: 180),
     TimeBlock(
       id: '8',
       tag: Tags().tags[1],
-      startDate: DateTime.now().add(new Duration(days: 1, hours: 0)),
+      startDate: DateTime.now().add(Duration(days: 1, hours: 0)),
      reportedMinutes: 150
     ),
     TimeBlock(
       id: '9',
       tag: Tags().tags[0],
-      startDate: DateTime.now().add(new Duration(days: 2, hours: 0)),
+      startDate: DateTime.now().add(Duration(days: 2, hours: 0)),
       reportedMinutes: 420
     ),
   ];
@@ -78,21 +78,13 @@ class TimeBlocks with ChangeNotifier {
         startDate: timeBlock.startDate,
         hours: timeBlock.hours,
         minutes: timeBlock.minutes,
+        filterTags: timeBlock.filterTags,
         //endDate: timeBlock.endDate,
         id: DateTime.now().toString());
     _userTimeBlocks.add(newEntry);
     notifyListeners();
   }
 
-  // void updateTimeBlock(id, TimeBlock? newEntry) {
-  //   final entryIndex = _userTimeBlocks.indexWhere((tb) => tb.id == id);
-  //   if (entryIndex >= 0) {
-  //     _userTimeBlocks[entryIndex] = newEntry!;
-  //     notifyListeners();
-  //   } else {
-  //     print('....');
-  //   }
-  // }
 
   void updateTimeBlock(TimeBlock newEntry, TimeBlock oldEntry) {
     final index = _userTimeBlocks.indexOf(oldEntry);
