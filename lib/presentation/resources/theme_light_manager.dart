@@ -36,7 +36,7 @@ ThemeData getlightAppTheme() {
       //form button
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-              primary: ColorManager.primary,
+            backgroundColor: ColorManager.primary,
               textStyle: getBoldStyle(color: ColorManager.onPrimary),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero))),
 

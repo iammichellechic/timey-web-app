@@ -3,7 +3,7 @@ import '../resources/values_manager.dart';
 
 class ButtonWidget extends StatelessWidget {
   final String text;
-  final VoidCallback onClicked;
+  final VoidCallback? onClicked;
   final Color? color;
   final TextStyle? style;
   final OutlinedBorder? shape;
@@ -11,7 +11,7 @@ class ButtonWidget extends StatelessWidget {
 
   const ButtonWidget({
     required this.text,
-    required this.onClicked,
+    this.onClicked,
     required this.color,
     this.style,
     this.shape,
@@ -30,7 +30,7 @@ class ButtonWidget extends StatelessWidget {
           ),
         ),
         style: ElevatedButton.styleFrom(
-            primary: color, shape: shape, shadowColor: shadowColor),
+            backgroundColor: color, shape: shape, shadowColor: shadowColor),
         onPressed: onClicked,
       );
 }

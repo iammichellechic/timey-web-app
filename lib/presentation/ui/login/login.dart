@@ -10,12 +10,10 @@ import 'package:timey_web/presentation/widgets/button_widget.dart';
 import 'package:timey_web/presentation/utils/clip_path_utils.dart';
 import 'package:timey_web/presentation/widgets/textfield_container.dart';
 import 'package:timey_web/presentation/widgets/textformfield_container.dart';
-import '../../../locator.dart';
-import '../../../services/authentication_service.dart';
-import '../../../services/navigation_service.dart';
+
 import '../../base_layout.dart';
 import '../../resources/color_manager.dart';
-import '../../../navigation/routes_manager.dart';
+
 import '../../resources/values_manager.dart';
 
 class LoginScreen extends StatelessWidget {

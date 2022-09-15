@@ -12,7 +12,7 @@ class TimeBlock {
   int? reportedMinutes;
   int? userId;
   DateTime? endDate;
-  List<FilterTag>? filterTags;
+ FilterTag? filterTags;
 
   TimeBlock(
       {this.id,
@@ -24,6 +24,8 @@ class TimeBlock {
       this.minutes,
       this.userId,
       this.filterTags});
+
+    
 
   TimeBlock.fromJson(Map<String, dynamic> data)
       : startDate = Utils.convertStringtoDate(data['datetimeStart']),

@@ -3,14 +3,14 @@ import '../../model/tag.dart';
 
 class Tags with ChangeNotifier {
   final List<Tag> _tags = [
-    Tag('Swedbank', 1, 'AAA-AAA-AAA-AAA-AAA', color: 2),
-    Tag('Global Connect', 2, 'AAA-AAA-AAA-AAA-AAB', color: 1),
+    Tag(name: 'Swedbank', color: Colors.orange),
+    Tag(name: 'Global Connect', color: Colors.blue),
   ];
   List<Tag> get tags {
     return [..._tags];
   }
 
-  Tag findById(int id) {
+  Tag findById(String id) {
     return _tags.firstWhere((tb) => tb.id == id);
   }
 
@@ -19,12 +19,16 @@ class Tags with ChangeNotifier {
   }
 
   void addTag(Tag tag) {
-    final newEntry = Tag(tag.name, tag.id, tag.guid, color: tag.color);
+    final newEntry = Tag(
+        name: tag.name,
+        id: DateTime.now().toString(),
+        guid: DateTime.now().toString(),
+        color: Colors.green);
     _tags.add(newEntry);
     notifyListeners();
   }
 
-  void updateTagWithId(int id, Tag newEntry) {
+  void updateTagWithId(String id, Tag newEntry) {
     final entryIndex = _tags.indexWhere((tb) => tb.id == id);
     _updateTag(entryIndex, newEntry);
   }
@@ -34,7 +38,7 @@ class Tags with ChangeNotifier {
     _updateTag(entryIndex, newEntry);
   }
 
-  void deleteTagWithID(int id) {
+  void deleteTagWithID(String id) {
     _tags.removeWhere((tb) => tb.id == id);
     notifyListeners();
   }
@@ -48,8 +52,6 @@ class Tags with ChangeNotifier {
     if (entryIndex >= 0) {
       _tags[entryIndex] = newEntry;
       notifyListeners();
-    } else {
-    
-    }
+    } else {}
   }
 }

@@ -31,7 +31,7 @@ class TableScreen extends StatelessWidget {
                     width: sizingInformation.isDesktop
                         ? MediaQuery.of(context).size.width* 0.9
                         : 1000,
-                    height: 600,
+                    height: 800,
                     child: MyDataTable())),
           ),
         )));

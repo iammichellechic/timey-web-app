@@ -44,6 +44,9 @@ class ColorManager {
   static Color darkOnErrorContainer = Color(0xFFFFDAD6);
   static Color darkBackground = Color(0xFF1B1B1F);
   static Color darkOnBackground = Color(0xFFE3E2E6);
+
+
+  
 }
 
 extension HexColor on Color {
@@ -55,3 +58,5 @@ extension HexColor on Color {
     return Color(int.parse(hexColorString, radix: 16));
   }
 }
+
+

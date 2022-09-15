@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
 
 class TablePage extends StatelessWidget {
+  
   final List<DataColumn> tableColumns;
   final List<DataRow> tableRows;
   final double? dataRowHeight;
@@ -9,6 +10,7 @@ class TablePage extends StatelessWidget {
 
   const TablePage({
     Key? key,
+    
     required this.tableColumns,
     required this.tableRows,
     required this.dataRowHeight
@@ -36,6 +38,7 @@ class TablePage extends StatelessWidget {
                       fit: BoxFit.fitWidth,
                       clipBehavior: Clip.hardEdge,
                       child: DataTable(
+                       
                         //settings//
                         decoration: BoxDecoration(
                             border: Border(

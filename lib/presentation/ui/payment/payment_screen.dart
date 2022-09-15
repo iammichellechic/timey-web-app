@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -34,7 +33,7 @@ Widget buildPaymentWidget(
   final entries = Provider.of<TimeBlocks>(context).userTimeBlock;
   return (entries.isNotEmpty)
       ? TablePage(
-          dataRowHeight: 80,
+          dataRowHeight: 70,
           tableColumns: [
             buildDataColumn(text: 'Id', context: context, isNumeric: false),
             buildDataColumn(
@@ -42,10 +41,15 @@ Widget buildPaymentWidget(
               context: context,
               isNumeric: false,
             ),
-            buildDataColumn(text: 'Hours', context: context, isNumeric: true),
-            buildDataColumn(text: 'Minutes', context: context, isNumeric: true),
-            buildDataColumn(text: 'Amount', context: context, isNumeric: true),
-            buildDataColumn(text: 'Status', context: context, isNumeric: false),
+            buildDataColumn(
+              text: 'Company',
+              context: context,
+              isNumeric: false,
+            ),
+            buildDataColumn(
+                text: 'Billable', context: context, isNumeric: false),
+            buildDataColumn(text: 'Amount', context: context, isNumeric: false),
+            buildDataColumn(text: 'Status', context: context, isNumeric: true),
             buildDataColumn(text: 'View', context: context, isNumeric: false),
           ],
           tableRows: List.generate(entries.length, (index) {
@@ -59,15 +63,16 @@ Widget buildPaymentWidget(
                 DataCell(Text(Utils.toDateTime(tb[index].startDate),
                     style: makeYourOwnRegularStyle(
                         fontSize: FontSize.s12, color: ColorManager.grey))),
-                DataCell(Text(Utils.convertInttoString(tb[index].hours!),
+                DataCell(Text(tb[index].tag!.name!.toString(),
+                    style: makeYourOwnRegularStyle(
+                        fontSize: FontSize.s12, color: tb[index].tag!.color!))),
+                DataCell(Text(
+                    Utils.convertInttoString(tb[index].reportedMinutes!),
                     style: makeYourOwnRegularStyle(
                         fontSize: FontSize.s12,
                         color: Theme.of(context).colorScheme.primary))),
-                DataCell(Text(Utils.convertInttoString(tb[index].minutes!),
-                    style: makeYourOwnRegularStyle(
-                        fontSize: FontSize.s12,
-                        color: Theme.of(context).colorScheme.primary))),
-                DataCell(Text(Utils.convertInttoString(tb[index].reportedMinutes! * 200),
+                DataCell(Text(
+                    Utils.convertInttoString(tb[index].reportedMinutes! * 200),
                     style: makeYourOwnRegularStyle(
                         fontSize: FontSize.s12, color: ColorManager.grey))),
                 DataCell(Text('Unpaid',
@@ -78,9 +83,7 @@ Widget buildPaymentWidget(
                     text: 'Download Invoice',
                     style: Theme.of(context).textTheme.headline6,
                     onClicked: () async {
-
                       PdfInvoiceService.createPDF(tb[index]);
-                     
                     }))
               ],
             );
@@ -91,7 +94,6 @@ Widget buildPaymentWidget(
           ),
         );
 }
-
 
 DataColumn buildDataColumn(
         {required String text,

@@ -108,26 +108,30 @@ class PdfInvoiceService {
   static void drawGrid(
       TimeBlock invoice, PdfPage page, PdfLayoutResult result) {
     final grid = PdfGrid();
-    grid.columns.add(count: 5);
+    grid.columns.add(count: 7);
 
     final headerRow = grid.headers.add(1)[0];
     headerRow.style.backgroundBrush = PdfSolidBrush(PdfColor(68, 114, 196));
     headerRow.style.textBrush = PdfBrushes.white;
-    headerRow.cells[0].value = 'Date';
-    headerRow.cells[1].value = 'ID';
-    headerRow.cells[2].value = 'Reported Hours';
-    headerRow.cells[3].value = 'Rate';
-    headerRow.cells[4].value = 'Amount';
+    headerRow.cells[0].value = 'ID';
+    headerRow.cells[1].value = 'Date';
+    headerRow.cells[2].value = 'Company';
+    headerRow.cells[3].value = 'Project';
+    headerRow.cells[4].value = 'Billable Minutes';
+    headerRow.cells[5].value = 'Rate';
+    headerRow.cells[6].value = 'Amount';
     headerRow.style.font =
         PdfStandardFont(PdfFontFamily.helvetica, 10, style: PdfFontStyle.bold);
 
     final row = grid.rows.add();
 
-    row.cells[0].value = Utils.toDateTime(invoice.startDate);
-    row.cells[1].value = invoice.id;
-    row.cells[2].value = Utils.convertInttoString(invoice.reportedMinutes!);
-    row.cells[3].value = '200 SEK/hr';
-    row.cells[4].value = (invoice.reportedMinutes! * 200).toStringAsFixed(2);
+    row.cells[0].value = invoice.id;
+    row.cells[1].value = Utils.toDateTime(invoice.startDate);
+    row.cells[2].value = invoice.tag!.name;
+    row.cells[3].value = invoice.filterTags!.label;
+    row.cells[4].value = Utils.convertInttoString(invoice.reportedMinutes!);
+    row.cells[5].value = '200 SEK/hr';
+    row.cells[6].value = (invoice.reportedMinutes! * 200).toStringAsFixed(2);
 
     grid.applyBuiltInStyle(PdfGridBuiltInStyle.listTable4Accent5);
 

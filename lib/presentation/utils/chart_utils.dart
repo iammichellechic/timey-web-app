@@ -94,7 +94,7 @@ Iterable<EntryTotal> _entryTotalsByMonth(
 double getMonthTotalReportedHours(List<TimeBlock>? entries) {
   var sum = 0.0;
   var list = entryTotalsByMonth(entries);
-
+  
   sum += list.fold(0, (previous, current) => previous + current.value);
 
   return sum;

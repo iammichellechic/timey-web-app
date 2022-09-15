@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-
 import '../../model/filterTag.dart';
 
 class FilterTags {
   final List<FilterTag> _allFilterTags = [
     FilterTag(
-      label: '.Net',
+      label: '.Net6',
       isSelected: false,
       color: Colors.green,
     ),
@@ -20,7 +19,7 @@ class FilterTags {
       color: Colors.blue,
     ),
     FilterTag(
-      label: 'Infrastracture',
+      label: 'Kubernetus',
       isSelected: false,
       color: Colors.orange,
     ),

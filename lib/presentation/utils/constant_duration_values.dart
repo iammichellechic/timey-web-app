@@ -1,4 +1,3 @@
-import 'package:flutter_tags/flutter_tags.dart';
 
 class constantValues {
   static List<int> hoursItem = [
@@ -93,5 +92,5 @@ class constantValues {
     60
   ];
 
-  static List<Item> availableTags = [];
+ 
 }

@@ -6,7 +6,6 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-
 import 'package:timey_web/presentation/resources/values_manager.dart';
 import 'package:timey_web/presentation/ui/chart/chart_page.dart';
 import 'package:timey_web/presentation/widgets/total_reported_time_widget.dart';

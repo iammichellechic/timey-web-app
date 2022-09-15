@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timey_web/presentation/base_layout.dart';
-import 'package:timey_web/presentation/ui/onboarding/onboarding_screen.dart';
-
 
 import '../data/providers/navigation_items.dart';
+import '../data/providers/tags.dart';
 import '../data/providers/theme_provider.dart';
 
 import '../data/timeblocks.dart';
@@ -12,7 +11,6 @@ import '../presentation/resources/theme_dark_manager.dart';
 import '../navigation/navigator_observer.dart';
 
 import '../presentation/resources/theme_light_manager.dart';
-
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -34,11 +32,13 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider.value(
             value: TimeBlocks(),
           ),
+          ChangeNotifierProvider.value(
+            value: Tags(),
+          ),
         ],
         child: Builder(builder: (context) {
           final themeProvider = Provider.of<ThemeProvider>(context);
           return MaterialApp(
-            
             // builder: (context, child) => OnboardingBaseLayout(child: child),
             // navigatorKey: locator<AuthenticationService>().navigatorKey,
             // onGenerateRoute: RouteGenerator.getRoute,

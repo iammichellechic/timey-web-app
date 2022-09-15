@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import '../../../data/timeblocks.dart';
-
 import 'package:timey_web/presentation/resources/styles_manager.dart';
 import 'package:timey_web/presentation/resources/values_manager.dart';
-
 import 'package:timey_web/presentation/widgets/actionbuttons_widget.dart';
-
 import 'package:timey_web/presentation/ui/calendar/calendar_page.dart';
+
 import '../../resources/font_manager.dart';
 import '../../resources/formats_manager.dart';
 
@@ -24,9 +20,8 @@ class CalendarScreen extends StatelessWidget {
     return buildCalendarWidget(context);
   }
 
-  Widget buildCalendarWidget(
-      BuildContext context) {
-         final entries = Provider.of<TimeBlocks>(context).userTimeBlock;
+  Widget buildCalendarWidget(BuildContext context) {
+    final entries = Provider.of<TimeBlocks>(context).userTimeBlock;
     return Container(
         padding: EdgeInsets.only(top: AppPadding.p40),
         child: (entries.isNotEmpty)
@@ -70,10 +65,9 @@ Widget appointmentBuilder(
                   Icon(Icons.av_timer_outlined,
                       color: Theme.of(context).colorScheme.primary,
                       size: AppSize.s14),
-                  // Text(
-                  //   event.id,
-                  //   style: Theme.of(context).textTheme.subtitle1,
-                  // )
+                  Text(event.tag.name,
+                      style: makeYourOwnRegularStyle(
+                          fontSize: FontSize.s12, color: event.tag!.color!))
                 ]),
                 subtitle: Column(children: <Widget>[
                   buildDuration(
@@ -84,9 +78,18 @@ Widget appointmentBuilder(
                           event!.minutes.toString() +
                           ' ' +
                           'mins',
-                      context),
+                      context,
+                      Theme.of(context).colorScheme.primary),
                   buildDate('From', event.startDate, context),
-                  // buildDate('To', event.endDate, context),
+                  Row(children: <Widget>[
+                    Icon(Icons.local_offer,
+                        color: event!.filterTags.color!.withOpacity(0.5),
+                        size: AppSize.s14),
+                    Text(event!.filterTags.label.toString(),
+                        style: makeYourOwnRegularStyle(
+                            fontSize: FontSize.s12,
+                            color: event!.filterTags.color!))
+                  ]),
                 ]),
                 trailing: ActionButtonsWidget(entry: event)),
           ],
@@ -112,9 +115,8 @@ Widget buildDate(String title, DateTime date, BuildContext context) {
   );
 }
 
-Widget buildDuration(String text, BuildContext context) {
-  final styleDate = makeYourOwnBoldStyle(
-      fontSize: FontSize.s12, color: Theme.of(context).colorScheme.primary);
+Widget buildDuration(String text, BuildContext context, Color color) {
+  final styleDate = makeYourOwnBoldStyle(fontSize: FontSize.s12, color: color);
 
   return Container(
     padding: EdgeInsets.only(top: AppPadding.p8),

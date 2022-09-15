@@ -19,8 +19,8 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingViewState extends State<OnBoardingScreen> {
-  PageController _pageController = PageController(initialPage: 0);
-  OnBoardingViewModel _viewModel = OnBoardingViewModel();
+  final PageController _pageController = PageController(initialPage: 0);
+  final OnBoardingViewModel _viewModel = OnBoardingViewModel();
 
   _bind() {
     _viewModel.start();
@@ -168,9 +168,9 @@ class _OnBoardingViewState extends State<OnBoardingScreen> {
 }
 
 class OnBoardingPage extends StatelessWidget {
-  SliderObject _sliderObject;
+ final  SliderObject _sliderObject;
 
-  OnBoardingPage(this._sliderObject, {Key? key}) : super(key: key);
+  const OnBoardingPage(this._sliderObject, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

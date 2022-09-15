@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tags/flutter_tags.dart';
 import 'package:provider/provider.dart';
 
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:timey_web/data/providers/filter_tags.dart';
-import 'package:timey_web/model/filterTag.dart';
+
 import 'package:timey_web/presentation/resources/styles_manager.dart';
 
 import 'package:timey_web/presentation/utils/constant_duration_values.dart';
@@ -12,6 +11,7 @@ import 'package:timey_web/presentation/utils/snackbar_utils.dart';
 import 'package:timey_web/presentation/widgets/button_widget.dart';
 
 import '../../../data/timeblocks.dart';
+import '../../../model/filterTag.dart';
 import '../../resources/font_manager.dart';
 import '/presentation/resources/values_manager.dart';
 import '../../../model/tag.dart';
@@ -31,10 +31,6 @@ class TimeblockPage extends StatefulWidget {
 class _TimeblockPageState extends State<TimeblockPage> {
   final _form = GlobalKey<FormState>();
 
-  final GlobalKey<TagsState> _globalKey = GlobalKey<TagsState>();
-
-  List tags = [];
-
   List<int> itemHours = constantValues.hoursItem;
   List<int> itemMinutes = constantValues.minutesItem;
   List<Tag> availableTags = companies.Tags().tags;
@@ -43,7 +39,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
   Tag? selectedTag;
   late DateTime startDate;
   //late DateTime endDate;
-  late List<FilterTag> selectedFilterTags;
+  FilterTag? selectedFilterTags;
   int? hours;
   int? minutes;
   int? userId;
@@ -57,7 +53,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
       selectedTag = companies.Tags().tags.first;
       hours = itemHours.first;
       minutes = itemMinutes.first;
-      selectedFilterTags = filterChips;
+      //selectedFilterTags = filterChips;
     } else {
       final timeEntry = widget.timeBlock!;
 
@@ -66,7 +62,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
       hours = timeEntry.hours;
       minutes = timeEntry.minutes;
       selectedTag = timeEntry.tag;
-      selectedFilterTags = timeEntry.filterTags!;
+      //selectedFilterTags = timeEntry.filterTags!;
     }
 
     if (availableTags.isNotEmpty) {
@@ -114,6 +110,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
     final isValid = _form.currentState!.validate();
     if (isValid) {
       final timeBlockEntry = TimeBlock(
+          tag: selectedTag,
           startDate: startDate,
           userId: userId = 1,
           hours: hours,
@@ -131,8 +128,6 @@ class _TimeblockPageState extends State<TimeblockPage> {
       } else {
         Provider.of<TimeBlocks>(context, listen: false)
             .addTimeBlock(timeBlockEntry);
-
-        print(selectedFilterTags);
 
         SnackBarUtils.showSnackBar(
             text: 'Your time report has been added',
@@ -162,6 +157,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
               child: Form(
                 key: _form,
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     buildDateTimePickers(),
                     SizedBox(
@@ -393,7 +389,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
             decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(),
                 focusedBorder: OutlineInputBorder(),
-                labelText: 'Project',
+                labelText: 'Company',
                 labelStyle: Theme.of(context).textTheme.subtitle2),
             value: selectedTag,
             icon: Icon(Icons.arrow_downward),
@@ -401,11 +397,17 @@ class _TimeblockPageState extends State<TimeblockPage> {
             onChanged: (Tag? newValue) {
               setState(() {
                 selectedTag = newValue!;
+              
               });
             },
             items: availableTags
-                .map<DropdownMenuItem<Tag>>((tag) =>
-                    DropdownMenuItem<Tag>(value: tag, child: Text(tag.name)))
+                .map<DropdownMenuItem<Tag>>((tag) => DropdownMenuItem<Tag>(
+                    value: tag,
+                    child: Text(
+                      tag.name!,
+                      style: makeYourOwnBoldStyle(
+                          fontSize: FontSize.s16, color: tag.color!),
+                    )))
                 .toList()),
       );
 
@@ -439,46 +441,13 @@ class _TimeblockPageState extends State<TimeblockPage> {
   Widget buildDateTimePickers() => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          buildTag(),
           buildDay(),
           buildTime(),
           dropDownHoursItems(),
           dropDownMinutesItems(),
-          //buildTags(),
-
           buildFilterChips()
         ],
-      );
-
-  //Tags
-  // NOTE consider using chips instead
-  Widget buildTags() => Tags(
-        key: _globalKey,
-        itemCount: tags.length,
-        columns: 3,
-        textField: TagsTextField(
-            textStyle: TextStyle(fontSize: 14),
-            onSubmitted: (t) {
-              //setState(() {
-              print('added!');
-              // tags.add(Item(title: t));
-              //});
-            }),
-        itemBuilder: (index) {
-          final Item currentItem = tags[index];
-
-          return ItemTags(
-            index: index,
-            title: currentItem.title!,
-            combine: ItemTagsCombine.withTextBefore,
-            onPressed: ((i) => print(i)),
-            removeButton: ItemTagsRemoveButton(onRemoved: () {
-              setState(() {
-                tags.removeAt(index);
-              });
-              return true;
-            }),
-          );
-        },
       );
 
   //FilterTags/Chips
@@ -488,7 +457,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
           runSpacing: 5,
           spacing: 5,
           children: filterChips
-              .map((filterChip) => FilterChip(
+              .map((filterChip) => ChoiceChip(
                     label: Text(filterChip.label!),
                     labelStyle: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -497,15 +466,16 @@ class _TimeblockPageState extends State<TimeblockPage> {
                     backgroundColor: filterChip.color!.withOpacity(0.1),
                     onSelected: (isSelected) => setState(() {
                       filterChips = filterChips.map((otherChip) {
-                        return filterChip == otherChip
-                            ? otherChip.copy(isSelected: isSelected)
-                            : otherChip;
+                        final newChip = otherChip.copy(isSelected: false);
+
+                        return filterChip == newChip
+                            ? newChip.copy(isSelected: isSelected)
+                            : newChip;
                       }).toList();
 
-                      selectedFilterTags.add(filterChip);
+                      selectedFilterTags = filterChip;
                     }),
                     selected: filterChip.isSelected!,
-                    checkmarkColor: filterChip.color,
                     selectedColor: filterChip.color!.withOpacity(0.25),
                   ))
               .toList(),
