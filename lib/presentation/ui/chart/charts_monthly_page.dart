@@ -39,7 +39,7 @@ import '../../resources/formats_manager.dart';
 //   }
 
 //   Widget buildChartWidget(BuildContext context, TimeBlocksViewModel viewModel) {
-//     //TODO: id:tags.name
+//     
 //     final ScrollController controller = ScrollController();
 
 //     List<charts.Series<utils.EntryTotal, String>> seriesData = [
@@ -111,7 +111,7 @@ class MonthlyChart extends StatelessWidget {
   }
 
   Widget buildChartWidget(BuildContext context) {
-    //TODO: id:tags.name
+    
     final ScrollController controller = ScrollController();
     final timeblocksData = Provider.of<TimeBlocks>(context);
     final timeblocks = timeblocksData.userTimeBlock;

@@ -14,8 +14,6 @@ import '../../resources/styles_manager.dart';
 
 import '/presentation/resources/color_manager.dart';
 
-//DO: Paginated datatable and sort dates
-
 class MyDataTable extends StatefulWidget {
   const MyDataTable({Key? key}) : super(key: key);
 
@@ -45,6 +43,7 @@ class _MyDataTableState extends State<MyDataTable> {
   Widget build(BuildContext context) {
     
     return Column(children: [
+       
       Padding(
         padding: const EdgeInsets.only(top: AppPadding.p20),
         child: SizedBox(
@@ -136,20 +135,7 @@ class _MyDataTableState extends State<MyDataTable> {
     ]);
   }
 
-  // void onSort(int columnIndex, bool ascending) {
-  //   if (columnIndex == 1) {
-  //     entries.sort((user1, user2) =>
-  //         compareString(ascending, user1.startDate, user2.startDate));
-  //   }
 
-  //   setState(() {
-  //     this.sortColumnIndex = columnIndex;
-  //     this.isAscending = ascending;
-  //   });
-  // }
-
-  // int compareString(bool ascending, DateTime? value1, DateTime? value2) =>
-  //     ascending ? value1!.compareTo(value2!) : value2!.compareTo(value1!);
 }
 
 DataColumn buildDataColumn(

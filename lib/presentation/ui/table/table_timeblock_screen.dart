@@ -22,16 +22,16 @@ class TableScreen extends StatelessWidget {
           PointerDeviceKind.mouse,
         }),
         child: Scaffold(
-            body: ResponsiveBuilder(
+          body: ResponsiveBuilder(
           builder: (context, sizingInformation) => SingleChildScrollView(
             controller: controller,
-            scrollDirection: Axis.horizontal,
+            scrollDirection: Axis.vertical,
             child: Center(
                 child: SizedBox(
                     width: sizingInformation.isDesktop
-                        ? MediaQuery.of(context).size.width* 0.9
+                        ? MediaQuery.of(context).size.width* 0.8
                         : 1000,
-                    height: 800,
+                    height: 1300,
                     child: MyDataTable())),
           ),
         )));

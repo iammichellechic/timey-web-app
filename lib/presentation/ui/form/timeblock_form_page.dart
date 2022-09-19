@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:timey_web/data/providers/filter_tags.dart';
+import 'package:timey_web/presentation/resources/color_manager.dart';
 
 import 'package:timey_web/presentation/resources/styles_manager.dart';
 
@@ -175,7 +176,7 @@ class _TimeblockPageState extends State<TimeblockPage> {
                               }),
                         ]),
                     SizedBox(
-                      height: AppSize.s50,
+                      height: AppSize.s20,
                     ),
                     buildCloseButton(context),
                   ],
@@ -311,8 +312,8 @@ class _TimeblockPageState extends State<TimeblockPage> {
             Icon(icon),
             Text(
               header,
-              style: Theme.of(context).textTheme.subtitle2,
-            ),
+              style: makeYourOwnRegularStyle(fontSize: AppSize.s12, color: ColorManager.grey
+            )),
             SizedBox(height: AppSize.s5),
             child,
           ],
@@ -383,17 +384,14 @@ class _TimeblockPageState extends State<TimeblockPage> {
             .toList(),
         onChanged: (item) => setState(() => minutes = item),
       ));
-
+  //Company
   Widget buildTag() => SizedBox(
         child: DropdownButtonFormField<Tag>(
             decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(),
-                focusedBorder: OutlineInputBorder(),
-                labelText: 'Company',
-                labelStyle: Theme.of(context).textTheme.subtitle2),
+          prefixIcon: Icon(Icons.location_city),
+          enabledBorder: OutlineInputBorder(),
+          focusedBorder: OutlineInputBorder()),
             value: selectedTag,
-            icon: Icon(Icons.arrow_downward),
-            elevation: AppSize.s16.toInt(),
             onChanged: (Tag? newValue) {
               setState(() {
                 selectedTag = newValue!;
@@ -410,7 +408,12 @@ class _TimeblockPageState extends State<TimeblockPage> {
                     )))
                 .toList()),
       );
-
+      
+  Widget buildTagDropDown() => buildHeader(
+        header: 'Company',
+        child: buildTag(),
+        
+      );
   Widget buildDay() => buildHeader(
         header: 'Date',
         child: buildDropdownField(
@@ -434,21 +437,6 @@ class _TimeblockPageState extends State<TimeblockPage> {
 
   Widget dropDownMinutesItems() =>
       buildHeader(header: 'Minutes', child: buildMinutesDropDown());
-
-  Widget buildTagField() => buildHeader(
-      header: 'Tag', icon: Icons.assignment_outlined, child: buildTag());
-
-  Widget buildDateTimePickers() => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          buildTag(),
-          buildDay(),
-          buildTime(),
-          dropDownHoursItems(),
-          dropDownMinutesItems(),
-          buildFilterChips()
-        ],
-      );
 
   //FilterTags/Chips
   Widget buildFilterChips() => Padding(
@@ -481,4 +469,18 @@ class _TimeblockPageState extends State<TimeblockPage> {
               .toList(),
         ),
       );
+
+  Widget buildDateTimePickers() => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          buildTagDropDown(),
+          buildDay(),
+          buildTime(),
+          dropDownHoursItems(),
+          dropDownMinutesItems(),
+          buildFilterChips()
+        ],
+      );
+
+  
 }

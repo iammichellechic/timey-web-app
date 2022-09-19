@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:timey_web/presentation/base_layout.dart';
+
+import 'package:timey_web/presentation/ui/onboarding/onboarding_screen.dart';
 
 import '../data/providers/navigation_items.dart';
 import '../data/providers/tags.dart';
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
             // onGenerateRoute: RouteGenerator.getRoute,
             // initialRoute: Routes.onboardingRoute,
 
-            home: BaseLayout(),
+            home: OnBoardingScreen(),
             title: 'Timey',
             theme: getlightAppTheme(),
             themeMode: themeProvider.themeMode,
