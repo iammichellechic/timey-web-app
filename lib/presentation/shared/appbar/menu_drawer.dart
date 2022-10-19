@@ -174,7 +174,7 @@ class MenuDrawer extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Padding(
                         padding: const EdgeInsets.only(left: AppPadding.p12),
-                        child: Text('ZERO8 AB',
+                        child: Text('Dev8 AB',
                             style: Theme.of(context).textTheme.headline1),
                       ),
                     ),
@@ -197,7 +197,7 @@ class MenuDrawer extends StatelessWidget {
                   ),
                   SizedBox(height: AppSize.s8),
                   Text(
-                    'Dev. Obi-Wan',
+                    'Dev. Michelle',
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                   Text(

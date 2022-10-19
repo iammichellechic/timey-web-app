@@ -49,7 +49,7 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   SizedBox(height: AppSize.s16),
                   Text(
-                    'Dev. Obi-Wan',
+                    'Dev. Michelle',
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                   SizedBox(height: AppSize.s8),
